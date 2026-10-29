@@ -12,6 +12,7 @@ The existing uncommitted implementation is being organized into independently ch
 - **Checkpoint 5:** Club creation, joining by code, concurrent duplicate protection, and organization isolation with tests.
 - **Checkpoint 6:** Own-membership views, administrator member search/filtering/pagination, and dashboard counts with tests.
 - **Checkpoint 8:** Account registration/login, protected routes, profile editing, reusable controls, and component tests.
+- **Checkpoint 9:** Club creation/joining screens, accessible club selection, and workspace navigation.
 
 **Verification:** each code checkpoint is checked from the isolated history checkout using only its committed feature set. Checks and test counts are recorded in the commit messages.
 
