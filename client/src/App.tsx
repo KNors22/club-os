@@ -11,7 +11,9 @@ import { useAuth } from "./contexts/auth-context";
 import { useClubs, OrganizationContext } from "./contexts/clubs-context";
 import { AuthPage } from "./pages/AuthPage";
 import { ClubsPage } from "./pages/ClubsPage";
-import { ClubSummaryPage } from "./pages/ClubSummaryPage";
+import { MembersPage } from "./pages/MembersPage";
+import { MembershipPage } from "./pages/MembershipPage";
+import { OverviewPage } from "./pages/OverviewPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { WorkspaceLayout } from "./components/WorkspaceLayout";
 import { ErrorState, Loading } from "./components/ui";
@@ -76,7 +78,9 @@ export function App() {
           <Route path="/clubs" element={<ClubsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/app/:orgId" element={<ClubBoundary />}>
-            <Route index element={<ClubSummaryPage />} />
+            <Route index element={<OverviewPage />} />
+            <Route path="members" element={<MembersPage />} />
+            <Route path="membership" element={<MembershipPage />} />
           </Route>
         </Route>
       </Route>

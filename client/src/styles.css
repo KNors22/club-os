@@ -1147,11 +1147,267 @@ fieldset {
   color: #6e7f5c;
 }
 /* Membership views */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 25px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 21px;
+}
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #7c8b6e;
+  font-size: 10px;
+}
+.stat-card > strong {
+  font-family: "Manrope", sans-serif;
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: #2e4831;
+  font-size: 35px;
+  display: block;
+  margin: 15px 0 10px;
+}
+.stat-card > small {
+  font-size: 8px;
+  color: #929b87;
+  display: block;
+  line-height: 1.6;
+}
+.stat-total {
+  background: #e9efdc;
+  border-color: #dfe8d2;
+}
+.stat-total .stat-top {
+  color: #60794a;
+}
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 22px;
+  margin-bottom: 25px;
+}
+.invite-panel {
+  padding: 26px;
+  display: flex;
+  gap: 18px;
+  border: 1px solid #e1e7d7;
+  background: #f0f3e8;
+  border-radius: 10px;
+}
+.invite-icon {
+  padding: 11px;
+  height: max-content;
+  display: flex;
+  border-radius: 10px;
+  background: #e4ebd6;
+  color: #738d51;
+}
+.invite-body {
+  flex: 1;
+  min-width: 0;
+}
+.invite-body h2 {
+  font-size: 17px;
+  letter-spacing: -0.4px;
+  color: #3b5335;
+}
+.invite-body > p {
+  font-size: 11px;
+  line-height: 1.7;
+  margin-top: 8px;
+  color: #859276;
+}
+.join-code-row {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.join-code-row code {
+  padding: 12px 13px;
+  border: 1px dashed #b5c69d;
+  border-radius: 5px;
+  background: #fafcf5;
+  letter-spacing: 2px;
+  font-size: 13px;
+  color: #476333;
+  user-select: all;
+}
+.join-code-row .button {
+  font-size: 10px;
+  padding: 10px 12px;
+  min-height: 38px;
+}
+.plan-card {
+  padding: 27px;
+}
+.plan-card .eyebrow {
+  font-size: 8px;
+}
+.plan-card h2 {
+  font-size: 29px;
+  font-weight: 550;
+  letter-spacing: -1px;
+  color: #3a5233;
+}
+.plan-card h2 > small {
+  font-family: "DM Sans", sans-serif;
+  letter-spacing: 0;
+  font-size: 9px;
+  font-weight: 400;
+  color: #8a947d;
+}
+.plan-card > p {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #8d9781;
+  margin-top: 9px;
+}
+.plan-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  color: #7d8c6b;
+  margin-top: 24px;
+  padding-top: 17px;
+  border-top: 1px solid #eef0e8;
+}
 .plan-dot {
   height: 6px;
   width: 6px;
   border-radius: 50%;
   background: #9fb57c;
+}
+.panel-heading {
+  padding: 23px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.panel-heading h2 {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.25px;
+  color: #3e5437;
+}
+.panel-heading p {
+  font-size: 10px;
+  color: #8c977f;
+  margin-top: 7px;
+  line-height: 1.7;
+}
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #587141;
+  white-space: nowrap;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.member-table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+}
+.member-table thead {
+  background: #f9faf6;
+}
+.member-table th {
+  padding: 13px 25px;
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+  color: #8a977e;
+  border-block: 1px solid #edf0e7;
+}
+.member-table td {
+  padding: 17px 25px;
+  border-bottom: 1px solid #eef1e9;
+  font-size: 10px;
+  color: #7e8b73;
+}
+.member-table tr:last-child td {
+  border-bottom: 0;
+}
+.table-person {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.table-person strong {
+  display: block;
+  color: #455c3a;
+  font-size: 11px;
+  font-weight: 600;
+}
+.table-person small {
+  display: block;
+  color: #919b85;
+  font-size: 9px;
+  margin-top: 5px;
+}
+.table-person .avatar {
+  width: 31px;
+  height: 31px;
+  font-size: 10px;
+  border-radius: 8px;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  border-radius: 4px;
+  padding: 5px 7px;
+  white-space: nowrap;
+}
+.status > span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-pending {
+  background: #fbf2dd;
+  color: #978243;
+}
+.status-active {
+  background: #edf4e5;
+  color: #6c8652;
+}
+.status-expired {
+  background: #f7eae6;
+  color: #a27969;
+}
+.heading-icon {
+  display: flex;
+  padding: 17px;
+  background: #eaf0df;
+  border-radius: 13px;
+  color: #819b60;
+}
+.member-toolbar {
+  padding: 22px 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
 }
 .search-input {
   position: relative;
@@ -1191,11 +1447,118 @@ fieldset {
   padding: 11px 28px 11px 10px;
   background: #fff;
 }
+.pagination {
+  padding: 18px 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid #edf0e7;
+  color: #8a977c;
+  font-size: 10px;
+}
+.pagination > div {
+  display: flex;
+  gap: 8px;
+}
+.pagination .button {
+  font-size: 10px;
+  min-height: 34px;
+  padding: 8px 13px;
+}
+.membership-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(350px, 1.1fr);
+  gap: 25px;
+  max-width: 1050px;
+}
+.membership-card {
+  background: #234935;
+  color: #eff6e6;
+  border-radius: 14px;
+  padding: 29px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 340px;
+}
+.membership-card:before {
+  content: "";
+  position: absolute;
+  width: 290px;
+  height: 290px;
+  border: 1px solid #d0e7a922;
+  border-radius: 50%;
+  right: -160px;
+  bottom: -100px;
+  box-shadow:
+    0 0 0 40px #d0e7a908,
+    0 0 0 80px #d0e7a905;
+}
+.membership-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  color: #c8dfab;
+}
+.membership-card-label {
+  font-size: 8px;
+  letter-spacing: 2px;
+}
+.membership-card-person {
+  padding: 30px 0;
+  flex: 1;
+}
+.membership-card-person .avatar {
+  background: #d7eea8;
+  color: #436237;
+}
+.membership-card-person h2 {
+  font-size: 25px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  overflow-wrap: anywhere;
+  margin-top: 19px;
+}
+.membership-card-person p {
+  font-size: 11px;
+  color: #c3d4b8;
+  margin-top: 7px;
+}
+.membership-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.membership-card-bottom > span:first-child {
+  font-size: 7px;
+  letter-spacing: 1.4px;
+  color: #b8cca8;
+}
+.membership-card-bottom strong {
+  font-family: "DM Sans", sans-serif;
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.1px;
+  font-weight: 400;
+  color: #e6f1db;
+  margin-top: 7px;
+}
 .card-symbol {
   font-size: 45px;
   line-height: 1;
   color: #c4de9f;
   font-family: Arial, sans-serif;
+}
+.membership-details {
+  padding: 26px;
+}
+.panel-heading.compact {
+  padding: 0 0 20px;
+  border-bottom: 1px solid #edf0e5;
 }
 .detail-list {
   margin: 8px 0 0;
@@ -1224,6 +1587,21 @@ fieldset {
   color: #5e7650;
   text-align: right;
   overflow-wrap: anywhere;
+}
+.membership-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 12px;
+  background: #f4f6ee;
+  padding: 14px;
+  border-radius: 7px;
+  color: #92a27b;
+}
+.membership-note p {
+  font-size: 10px;
+  line-height: 1.9;
+  color: #80916b;
 }
 .profile-panel {
   padding: 29px;
@@ -1295,8 +1673,38 @@ fieldset {
   .club-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .stats-grid {
+    gap: 12px;
+  }
+  .stat-card {
+    padding: 17px;
+  }
+  .stat-top {
+    font-size: 9px;
+    align-items: flex-start;
+  }
+  .overview-grid {
+    grid-template-columns: 1.3fr 1fr;
+  }
+  .invite-panel {
+    padding: 23px;
+    gap: 12px;
+  }
+  .invite-icon {
+    display: none;
+  }
+  .join-code-row {
+    gap: 10px;
+  }
   .page-heading h1 {
     font-size: 26px;
+  }
+  .membership-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .member-table td,
+  .member-table th {
+    padding-inline: 20px;
   }
   .workspace-footer {
     margin-inline: 29px;
@@ -1315,6 +1723,12 @@ fieldset {
   .topbar-label,
   .date-label {
     display: none;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .overview-grid {
+    grid-template-columns: 1fr;
   }
   .onboarding-grid {
     grid-template-columns: 1fr;
@@ -1357,6 +1771,16 @@ fieldset {
   .welcome-banner > div:first-child {
     position: relative;
     z-index: 1;
+  }
+  .membership-grid {
+    grid-template-columns: 1fr;
+  }
+  .membership-card {
+    min-height: 310px;
+    max-width: 500px;
+  }
+  .member-toolbar {
+    flex-wrap: wrap;
   }
   .search-input {
     max-width: none;
@@ -1516,8 +1940,50 @@ fieldset {
   .auth-bottom {
     padding-bottom: 10px;
   }
+  .stats-grid {
+    gap: 14px;
+  }
+  .stat-card {
+    padding: 20px;
+  }
+  .stat-top {
+    font-size: 11px;
+  }
+  .stat-card > small {
+    font-size: 9px;
+  }
+  .overview-grid {
+    grid-template-columns: 1.3fr 1fr;
+    gap: 16px;
+  }
+  .invite-panel {
+    padding: 23px;
+  }
+  .plan-card {
+    padding: 22px;
+  }
+  .membership-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 19px;
+  }
+  .membership-card {
+    padding: 24px;
+  }
+  .membership-card-person h2 {
+    font-size: 23px;
+  }
+  .membership-details {
+    padding: 22px;
+  }
   .detail-list > div {
     gap: 10px;
+  }
+  .panel-heading.compact {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .member-toolbar {
+    flex-wrap: nowrap;
   }
   .search-input {
     flex-basis: auto;
@@ -1635,9 +2101,88 @@ fieldset {
   .field textarea {
     font-size: 14px !important;
   }
+  .stats-grid {
+    gap: 12px;
+  }
+  .stat-card {
+    padding: 17px;
+  }
+  .stat-top {
+    font-size: 9px;
+  }
+  .stat-top svg {
+    width: 16px;
+    height: 16px;
+  }
+  .stat-card > strong {
+    font-size: 32px;
+    margin: 14px 0 7px;
+  }
+  .stat-card > small {
+    font-size: 8px;
+  }
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .plan-card {
+    padding: 23px;
+  }
+  .plan-card-footer {
+    margin-top: 18px;
+    padding-top: 14px;
+  }
+  .panel-heading {
+    padding: 22px 19px;
+    gap: 12px;
+  }
+  .panel-heading h2 {
+    font-size: 13px;
+  }
+  .panel-heading p {
+    font-size: 9px;
+  }
+  .text-link {
+    font-size: 9px;
+  }
+  .member-table td,
+  .member-table th {
+    padding-inline: 19px;
+  }
+  .table-person strong {
+    font-size: 11px;
+  }
+  .table-person small {
+    font-size: 10px;
+  }
+  .status {
+    font-size: 9px;
+  }
+  .membership-grid {
+    grid-template-columns: 1fr;
+  }
+  .membership-card {
+    max-width: none;
+    min-height: 310px;
+  }
+  .membership-card-person h2 {
+    font-size: 27px;
+  }
+  .membership-card-person p {
+    font-size: 13px;
+  }
+  .membership-card-bottom strong {
+    font-size: 12px;
+  }
   .detail-list dt,
   .detail-list dd {
     font-size: 12px;
+  }
+  .membership-note p {
+    font-size: 11px;
+  }
+  .member-toolbar {
+    flex-wrap: wrap;
+    padding: 19px;
   }
   .search-input {
     flex-basis: 100%;
@@ -1655,6 +2200,23 @@ fieldset {
     font-size: 12px;
     max-width: none;
   }
+  .pagination {
+    padding: 17px;
+    flex-wrap: wrap;
+  }
+  .pagination > span {
+    font-size: 10px;
+  }
+  .pagination .button {
+    font-size: 11px;
+  }
+  .heading-icon {
+    padding: 13px;
+  }
+  .heading-icon svg {
+    width: 23px;
+    height: 23px;
+  }
   .profile-panel {
     padding: 24px;
   }
@@ -1670,6 +2232,9 @@ fieldset {
   }
   .notice {
     font-size: 12px;
+  }
+  .join-code-row code {
+    font-size: 14px;
   }
 }
 /* Readable supporting text at every viewport size. */
@@ -1752,6 +2317,55 @@ fieldset {
 .role-pill {
   font-size: 10px;
 }
+.stat-top {
+  font-size: 12px;
+}
+.stat-card > small {
+  font-size: 10px;
+  color: #67745f;
+}
+.invite-body > p,
+.plan-card > p {
+  font-size: 12px;
+  color: #67745f;
+}
+.plan-card .eyebrow {
+  font-size: 10px;
+}
+.plan-card-footer {
+  font-size: 11px;
+}
+.join-code-row .button {
+  font-size: 12px;
+}
+.panel-heading h2 {
+  font-size: 16px;
+}
+.panel-heading p {
+  font-size: 12px;
+  color: #67745f;
+}
+.text-link {
+  font-size: 12px;
+}
+.member-table th {
+  font-size: 11px;
+  color: #67745f;
+}
+.member-table td {
+  font-size: 12px;
+  color: #67745f;
+}
+.table-person strong {
+  font-size: 13px;
+}
+.table-person small {
+  font-size: 11px;
+  color: #67745f;
+}
+.status {
+  font-size: 11px;
+}
 .search-input input,
 .filter-input select {
   font-size: 13px;
@@ -1765,6 +2379,10 @@ fieldset {
 }
 .detail-list dt {
   color: #68775f;
+}
+.membership-note p {
+  font-size: 12px;
+  color: #627351;
 }
 .profile-privacy p {
   font-size: 12px;
@@ -1818,6 +2436,21 @@ fieldset {
   }
   .page-heading p {
     font-size: 13px;
+  }
+  .stat-top {
+    font-size: 11px;
+  }
+  .stat-card > small {
+    font-size: 10px;
+  }
+  .panel-heading h2 {
+    font-size: 14px;
+  }
+  .panel-heading p {
+    font-size: 11px;
+  }
+  .text-link {
+    font-size: 11px;
   }
   .topbar-location {
     font-size: 10px;

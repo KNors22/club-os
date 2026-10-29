@@ -8,6 +8,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 - Account registration/login, protected routes, profile editing, reusable controls, and component tests.
 - Club creation/joining screens, accessible club selection, and workspace navigation.
+- Administrator dashboards, join-code copying, member management, and responsive personal membership views.
 
 ## [0.0.3] - 2026-10-29
 

@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import { AlertCircle, CheckCircle2, LoaderCircle } from "lucide-react";
+import type { MembershipStatus } from "../types";
 import { initials } from "../lib/format";
 
 export function Button({
@@ -121,6 +122,19 @@ export function Avatar({
       aria-hidden="true"
     >
       {initials(name)}
+    </span>
+  );
+}
+
+export function StatusBadge({ status }: { status: MembershipStatus }) {
+  return (
+    <span className={`status status-${status}`}>
+      <span aria-hidden="true" />
+      {status === "pending"
+        ? "Awaiting payment"
+        : status === "active"
+          ? "Active"
+          : "Expired"}
     </span>
   );
 }

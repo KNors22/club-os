@@ -7,7 +7,9 @@ import {
   Layers3,
   LogOut,
   Menu,
+  ShieldCheck,
   UserRound,
+  UsersRound,
   X,
 } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
@@ -88,6 +90,20 @@ export function WorkspaceLayout() {
                 <LayoutDashboard size={19} />
                 Overview
               </NavLink>
+              {organization.role === "admin" ? (
+                <NavLink to={`/app/${organization.id}/members`} onClick={close}>
+                  <UsersRound size={19} />
+                  Members
+                </NavLink>
+              ) : (
+                <NavLink
+                  to={`/app/${organization.id}/membership`}
+                  onClick={close}
+                >
+                  <ShieldCheck size={19} />
+                  My membership
+                </NavLink>
+              )}
             </>
           )}
           <NavLink to="/profile" onClick={close}>
