@@ -1,84 +1,47 @@
-# [PROJECT NAME]
+# ClubOS
 
-```
-[Add project description here.]
-```
+## Project Overview
 
-## Project Status
-
-```
-[Add project status here.]
-```
+Student club management inspired by McRUN administrative workflows. Current checkpoint: **development**. Features below reflect this commit; the architecture describes the complete planned Foundation milestone.
 
 ## Features
 
--
--
+- React/TypeScript and Express workspaces.
+- Node 24 setup, environment validation, MongoDB connectivity, and health endpoint.
 
-## Technologies
+## Installation Instructions
 
--
--
+Requires Node.js 24 and a running MongoDB 7+ instance.
 
-## Getting Started
+```bash
+nvm use
+npm ci
+npm run setup
+npm run dev
+```
 
-### Prerequisites
-
--
--
-
-### Installation
-
-1. Clone the repository and open the project folder:
-
-   ```bash
-   git clone https://github.com/KNors22/[REPO-NAME].git
-   cd [REPO-NAME]
-   ```
-
-2. Install the project dependencies:
-
-   ```bash
-   npm ci
-   ```
-
-3. Run the project:
-    
-    ```bash
-    npm start
-    ```
-
-4. ...
-
+Setup creates an ignored root `.env` without overwriting one. Set `MONGODB_URI` if needed. Open http://localhost:5173; API health is http://localhost:3000/api/health. Use the configured `APP_URL` origin for write requests. Startup never resets application data.
 
 ## Usage
 
-1.
-2.
+The frontend currently provides a workspace shell; use the available APIs until the UI checkpoints land.
 
+## Technologies Used
 
-## Project Structure
-Current repository contents:
+React, TypeScript, Vite, Node.js, Express, MongoDB, Mongoose, and Zod.
 
-```text
-[REPO-NAME]
-├── CHANGELOG.md
-├── LICENSE
-└── README.md
-...
-```
+## Development
+
+Run `npm run check` for the checks available at this checkpoint. Feature tests are introduced with their implementations. Tests use disposable data, never the application database.
+
+## Future Improvements
+
+Complete remaining Foundation screens and delivery checks, then add payments, renewals, events, attendance, and email.
 
 ## Development Notes
 
+See [architecture](docs/architecture.md), [devlog](docs/devlog.md), and [changelog](CHANGELOG.MD). Live hosting has not been provisioned.
 
-## Github Repository
+## Author and License
 
-
-## Author and Acknowledgements
-
-- Author: Andrey Gonzalez
-- 
-
-## License
-
-This project is licensed under the `[LICENSE NAME]`. See the LICENSE file for details.
+Andrey Gonzalez. [MIT License](LICENSE).

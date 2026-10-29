@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# debug
+npm-debug.*
+
+# macOS
+.DS_Store
+*.pem
+
+# env files
+.env
+!.env.example
+
+# Local configuration
+/.IGNORE
+.vscode
+
+# Build and test output
+dist/
+coverage/
+*.tsbuildinfo
+.env.*
+!.env.example
+.playwright/
+test-results/
