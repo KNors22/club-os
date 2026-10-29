@@ -52,3 +52,9 @@ export const joinSchema = z
 export const idSchema = z
   .string()
   .regex(/^[a-fA-F0-9]{24}$/, "Invalid record ID.");
+export const membershipQuerySchema = z.object({
+  search: z.string().trim().max(100).default(""),
+  status: z.enum(["all", "pending", "active", "expired"]).default("all"),
+  page: z.coerce.number().int().min(1).max(100000).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+});

@@ -10,6 +10,7 @@ The existing uncommitted implementation is being organized into independently ch
 - **Checkpoint 2:** React/Express workspaces, Node 24 configuration, local setup, MongoDB connectivity, and health checks.
 - **Checkpoint 4:** Secure account/profile APIs, password hashing, persistent sessions, and authentication safeguards with tests.
 - **Checkpoint 5:** Club creation, joining by code, concurrent duplicate protection, and organization isolation with tests.
+- **Checkpoint 6:** Own-membership views, administrator member search/filtering/pagination, and dashboard counts with tests.
 
 **Verification:** each code checkpoint is checked from the isolated history checkout using only its committed feature set. Checks and test counts are recorded in the commit messages.
 
