@@ -2,6 +2,7 @@ import express from "express";
 import session, { type Store } from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
+import { fileURLToPath } from "node:url";
 import type { AppConfig } from "./config.js";
 import { AppError, errorHandler } from "./errors.js";
 import { authRouter, sessionCookieName } from "./routes/auth.js";
@@ -73,6 +74,15 @@ export function createApp(config: AppConfig, store: Store) {
   app.use("/api", () => {
     throw new AppError(404, "NOT_FOUND", "API endpoint not found.");
   });
+  if (isProduction) {
+    const clientDist = fileURLToPath(
+      new URL("../../client/dist/", import.meta.url),
+    );
+    app.use(express.static(clientDist));
+    app.get("/{*path}", (_req, res) =>
+      res.sendFile("index.html", { root: clientDist }),
+    );
+  }
   app.use(errorHandler);
   return app;
 }
