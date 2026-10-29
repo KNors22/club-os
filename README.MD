@@ -11,6 +11,7 @@ Student club management inspired by McRUN administrative workflows. Current chec
 - Password authentication, Mongo-backed sessions, logout, and own-profile APIs.
 - Club creation, join codes, multi-club enrollment, and tenant isolation.
 - Membership status, member search/filtering/pagination, and administrator dashboard APIs.
+- Registration/login and profile screens with protected navigation.
 
 ## Installation Instructions
 
@@ -27,7 +28,7 @@ Setup creates an ignored root `.env` without overwriting one. Set `MONGODB_URI` 
 
 ## Usage
 
-The frontend currently provides a workspace shell; use the available APIs until the UI checkpoints land.
+Register or sign in, then use the screens currently available above. More club screens are introduced in subsequent commits.
 
 ## Technologies Used
 
