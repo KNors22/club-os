@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Student club management inspired by McRUN administrative workflows. Current checkpoint: **0.0.2**. Features below reflect this commit; the architecture describes the complete planned Foundation milestone.
+Student club management inspired by McRUN administrative workflows. Current checkpoint: **0.0.3**. Features below reflect this commit; the architecture describes the complete planned Foundation milestone.
 
 ## Features
 

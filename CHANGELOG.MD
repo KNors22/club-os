@@ -4,6 +4,8 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-10-29
+
 ### Added
 
 - Secure account/profile APIs, password hashing, persistent sessions, and authentication safeguards with tests.
