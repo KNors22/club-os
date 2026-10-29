@@ -14,6 +14,7 @@ The existing uncommitted implementation is being organized into independently ch
 - **Checkpoint 8:** Account registration/login, protected routes, profile editing, reusable controls, and component tests.
 - **Checkpoint 9:** Club creation/joining screens, accessible club selection, and workspace navigation.
 - **Checkpoint 10:** Administrator dashboards, join-code copying, member management, and responsive personal membership views.
+- **Checkpoint 11:** Chrome/Firefox acceptance workflow, disposable browser QA database, and desktop/mobile screenshots.
 
 **Verification:** each code checkpoint is checked from the isolated history checkout using only its committed feature set. Checks and test counts are recorded in the commit messages.
 

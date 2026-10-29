@@ -14,6 +14,7 @@ Student club management inspired by McRUN administrative workflows. Current chec
 - Registration/login and profile screens with protected navigation.
 - Club onboarding and workspace selection screens.
 - Responsive administrator/member dashboards and membership views.
+- Chrome/Firefox browser acceptance checks and screenshots.
 
 ## Installation Instructions
 

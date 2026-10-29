@@ -14,30 +14,75 @@ export let store: ReturnType<typeof createSessionStore>;
 let memory: MongoMemoryServer | undefined;
 beforeAll(async () => {
   let uri = process.env.TEST_MONGODB_URI;
-  if (uri && new URL(uri).pathname !== "/clubos_test") throw new Error("TEST_MONGODB_URI must select clubos_test");
+  if (uri && new URL(uri).pathname !== "/clubos_test")
+    throw new Error("TEST_MONGODB_URI must select clubos_test");
   if (!uri) {
-    const systemBinary = process.env.MONGOMS_SYSTEM_BINARY ?? (existsSync("/opt/homebrew/bin/mongod") ? "/opt/homebrew/bin/mongod" : undefined);
-    memory = await MongoMemoryServer.create({ binary: { version: "7.0.26", systemBinary }, instance: { dbName: "clubos_test" } });
+    const systemBinary =
+      process.env.MONGOMS_SYSTEM_BINARY ??
+      (existsSync("/opt/homebrew/bin/mongod")
+        ? "/opt/homebrew/bin/mongod"
+        : undefined);
+    memory = await MongoMemoryServer.create({
+      binary: { version: "7.0.26", systemBinary },
+      instance: { dbName: "clubos_test" },
+    });
     uri = memory.getUri("clubos_test");
   }
-  config = { nodeEnv: "test", port: 3000, appUrl: origin, mongoUri: uri, sessionSecret: "only-for-tests-this-is-a-long-enough-secret" };
+  config = {
+    nodeEnv: "test",
+    port: 3000,
+    appUrl: origin,
+    mongoUri: uri,
+    sessionSecret: "only-for-tests-this-is-a-long-enough-secret",
+  };
   await connectDatabase(uri);
 });
 beforeEach(async () => {
-  await Promise.all(Object.values(mongoose.models).map(model => model.deleteMany({})));
+  await Promise.all(
+    Object.values(mongoose.models).map((model) => model.deleteMany({})),
+  );
   await mongoose.connection.db!.collection("sessions").deleteMany({});
   store = createSessionStore(config);
   await store.collectionP;
   app = createApp(config, store);
 });
-afterEach(async () => { await store?.close(); });
-afterAll(async () => { await mongoose.disconnect(); await memory?.stop(); });
-export function signup(agent: ReturnType<typeof request.agent>, email = "alex@example.com", name = "Alex Morgan") {
-  return agent.post("/api/auth/register").set("Origin", origin).send({ name, email, password });
+afterEach(async () => {
+  await store?.close();
+});
+afterAll(async () => {
+  await mongoose.disconnect();
+  await memory?.stop();
+});
+export function signup(
+  agent: ReturnType<typeof request.agent>,
+  email = "alex@example.com",
+  name = "Alex Morgan",
+) {
+  return agent
+    .post("/api/auth/register")
+    .set("Origin", origin)
+    .send({ name, email, password });
 }
-export function createClub(agent: ReturnType<typeof request.agent>, name = "Campus Running Club") {
-  return agent.post("/api/organizations").set("Origin", origin).send({ name, description: "A place for every pace.", feeCents: 2000, termDays: 365 });
+export function createClub(
+  agent: ReturnType<typeof request.agent>,
+  name = "Campus Running Club",
+) {
+  return agent
+    .post("/api/organizations")
+    .set("Origin", origin)
+    .send({
+      name,
+      description: "A place for every pace.",
+      feeCents: 2000,
+      termDays: 365,
+    });
 }
-export function joinClub(agent: ReturnType<typeof request.agent>, joinCode: string) {
-  return agent.post("/api/organizations/join").set("Origin", origin).send({ joinCode });
+export function joinClub(
+  agent: ReturnType<typeof request.agent>,
+  joinCode: string,
+) {
+  return agent
+    .post("/api/organizations/join")
+    .set("Origin", origin)
+    .send({ joinCode });
 }

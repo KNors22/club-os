@@ -33,15 +33,12 @@ describe("authentication and profiles", () => {
     expect((await signup(agent, "ALEX@example.com")).status).toBe(409);
     expect(
       (
-        await agent
-          .post("/api/auth/register")
-          .set("Origin", origin)
-          .send({
-            name: "Bad Role",
-            email: "other@example.com",
-            password,
-            role: "admin",
-          })
+        await agent.post("/api/auth/register").set("Origin", origin).send({
+          name: "Bad Role",
+          email: "other@example.com",
+          password,
+          role: "admin",
+        })
       ).status,
     ).toBe(400);
     expect(

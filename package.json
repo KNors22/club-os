@@ -18,10 +18,13 @@
     "typecheck": "npm run typecheck --workspaces",
     "lint": "eslint . --max-warnings=0",
     "test": "npm run test --workspaces --if-present",
+    "dev:qa": "npm run dev:qa -w server",
+    "test:browser": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
+    "@playwright/test": "1.64.1",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.0",
     "eslint-plugin-react-hooks": "^7.0.1",
