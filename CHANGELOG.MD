@@ -7,6 +7,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 ### Added
 
 - Secure account/profile APIs, password hashing, persistent sessions, and authentication safeguards with tests.
+- Club creation, joining by code, concurrent duplicate protection, and organization isolation with tests.
 
 ## [0.0.2] - 2026-10-29
 

@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import type { AppConfig } from "./config.js";
 import { AppError, errorHandler } from "./errors.js";
 import { authRouter, sessionCookieName } from "./routes/auth.js";
+import { organizationRouter } from "./routes/organizations.js";
 import { profileRouter } from "./routes/profile.js";
 
 export function createApp(config: AppConfig, store: Store) {
@@ -68,6 +69,7 @@ export function createApp(config: AppConfig, store: Store) {
   );
   app.use("/api/auth", authRouter(isProduction));
   app.use("/api/me", profileRouter);
+  app.use("/api/organizations", organizationRouter);
   app.use("/api", () => {
     throw new AppError(404, "NOT_FOUND", "API endpoint not found.");
   });

@@ -24,3 +24,31 @@ export const loginSchema = z
   .object({ email, password: z.string().min(1).max(256) })
   .strict();
 export const profileSchema = z.object({ name }).strict();
+export const organizationSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, "Use at least 2 characters for the club name.")
+      .max(100),
+    description: z.string().trim().max(500).default(""),
+    feeCents: z
+      .number()
+      .int()
+      .min(1, "The membership fee must be positive.")
+      .max(1000000),
+    termDays: z.number().int().min(1).max(1095),
+  })
+  .strict();
+export const joinSchema = z
+  .object({
+    joinCode: z
+      .string()
+      .trim()
+      .toUpperCase()
+      .regex(/^[A-F0-9]{12}$/, "Enter a valid 12-character join code."),
+  })
+  .strict();
+export const idSchema = z
+  .string()
+  .regex(/^[a-fA-F0-9]{24}$/, "Invalid record ID.");

@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import type { AppConfig } from "./config.js";
 import { User } from "./models/User.js";
+import { Organization } from "./models/Organization.js";
+import { Membership } from "./models/Membership.js";
 
 export async function connectDatabase(uri: string) {
   await mongoose.connect(uri, { serverSelectionTimeoutMS: 10000 });
-  await User.init();
+  await Promise.all([User.init(), Organization.init(), Membership.init()]);
 }
 
 export function createSessionStore(config: AppConfig) {

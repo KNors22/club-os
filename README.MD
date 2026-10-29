@@ -9,6 +9,7 @@ Student club management inspired by McRUN administrative workflows. Current chec
 - React/TypeScript and Express workspaces.
 - Node 24 setup, environment validation, MongoDB connectivity, and health endpoint.
 - Password authentication, Mongo-backed sessions, logout, and own-profile APIs.
+- Club creation, join codes, multi-club enrollment, and tenant isolation.
 
 ## Installation Instructions
 

@@ -35,3 +35,9 @@ afterAll(async () => { await mongoose.disconnect(); await memory?.stop(); });
 export function signup(agent: ReturnType<typeof request.agent>, email = "alex@example.com", name = "Alex Morgan") {
   return agent.post("/api/auth/register").set("Origin", origin).send({ name, email, password });
 }
+export function createClub(agent: ReturnType<typeof request.agent>, name = "Campus Running Club") {
+  return agent.post("/api/organizations").set("Origin", origin).send({ name, description: "A place for every pace.", feeCents: 2000, termDays: 365 });
+}
+export function joinClub(agent: ReturnType<typeof request.agent>, joinCode: string) {
+  return agent.post("/api/organizations/join").set("Origin", origin).send({ joinCode });
+}
