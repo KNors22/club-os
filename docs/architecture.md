@@ -1,7 +1,5 @@
 # Foundation design
 
-Status: target design. Application features and verification are introduced by subsequent commits.
-
 ## Goal and boundaries
 
 Prove the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. Payments, events, attendance, and notifications belong to phase 2.

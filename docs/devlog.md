@@ -19,4 +19,18 @@ The existing uncommitted implementation is being organized into independently ch
 
 **Verification:** each code checkpoint is checked from the isolated history checkout using only its committed feature set. Checks and test counts are recorded in the commit messages.
 
-**Next:** complete the remaining planned Foundation checkpoints. Payments, events, attendance, and email are outside this milestone.
+**Results:** lint, TypeScript, component/API tests, production compilation, and the complete Chrome/Firefox workflow passed. The compiled-server smoke test verifies database health, direct application links, built assets, and API 404 responses.
+
+**Challenges and solutions:** progressive route wiring prevents missing future imports; unique indexes protect simultaneous joins; database-backed sessions survive application restarts; awaiting session-store initialization prevents TTL-index cleanup races. Browser checks run after builds to avoid Vite reload interference.
+
+**Learning:** tenant authorization must scope both queries and serialized responses.
+
+```ts
+membershipSchema.index({ organizationId: 1, userId: 1 }, { unique: true });
+```
+
+![Administrator overview](screenshots/foundation-desktop.png)
+
+![Mobile membership](screenshots/foundation-mobile.png)
+
+**Weekly summary:** Foundation establishes account → club → member workflows with verified access boundaries. Release history now contains setup, backend, and complete Foundation milestones. Live hosting remains pending Render/Atlas account setup.
