@@ -59,7 +59,7 @@ export async function recordPayment(
     throw new AppError(
       400,
       "FULL_PAYMENT_REQUIRED",
-      "Record the full membership fee in CAD. Partial payments are not supported.",
+      `Record the current full membership fee of ${(organization.feeCents / 100).toFixed(2)} CAD. Refresh this page if the fee has changed.`,
     );
   }
   const now = new Date();

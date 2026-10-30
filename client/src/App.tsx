@@ -10,6 +10,7 @@ import {
 import { useAuth } from "./contexts/auth-context";
 import { useClubs, OrganizationContext } from "./contexts/clubs-context";
 import { AuthPage } from "./pages/AuthPage";
+import { ClubSettingsPage } from "./pages/ClubSettingsPage";
 import { ClubsPage } from "./pages/ClubsPage";
 import { MembersPage } from "./pages/MembersPage";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
@@ -82,6 +83,7 @@ export function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/app/:orgId" element={<ClubBoundary />}>
             <Route index element={<OverviewPage />} />
+            <Route path="settings" element={<ClubSettingsPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route
               path="members/:membershipId"

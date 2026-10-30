@@ -27,5 +27,11 @@ export function useResource<T>(path: string | null) {
     error: path !== null && result.key === key ? result.error : "",
     loading: path !== null && result.key !== key,
     reload: () => setVersion((value) => value + 1),
+    update: (transform: (data: T) => T) =>
+      setResult((current) =>
+        current.key === key && current.data !== null
+          ? { ...current, data: transform(current.data) }
+          : current,
+      ),
   };
 }

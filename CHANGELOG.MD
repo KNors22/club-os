@@ -4,16 +4,24 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
-### Added
-
-- Administrators can update club fees through a validated API with stale-update protection. Existing payment history and membership dates are preserved; tests cover changed-fee renewals, saved-request retries, permissions, invalid input, and competing updates.
 ### Planned
 
 - Live Render/Atlas deployment, a verified public application URL, and production workflow checks.
 - Real confirmation delivery to the demo inbox using configured Resend credentials.
 - Fictional demo-data seed command and final submission documentation.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v0.4.0...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.5.0...HEAD)
+
+## [0.5.0] - 2026-10-30
+
+**Administrator fee management.**
+
+### Added
+
+- Administrator club settings provide fee editing in CAD, immediate shared-state updates, retained inputs on errors, and refresh controls for stale edits. Member access redirects safely, component tests cover saves and conflicts, and workspace versions align at v0.5.0.
+- Administrators can update club fees through a validated API with stale-update protection. Existing payment history and membership dates are preserved; tests cover changed-fee renewals, saved-request retries, permissions, invalid input, and competing updates.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.4.0...v0.5.0)
 
 ## [0.4.0] - 2026-10-30
 

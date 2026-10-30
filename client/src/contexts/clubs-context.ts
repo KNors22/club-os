@@ -7,6 +7,7 @@ export interface ClubsState {
   loading: boolean;
   error: string;
   reload: () => void;
+  updateOrganization: (organization: Organization) => void;
   selectOrganization: (id: string) => void;
 }
 export const ClubsContext = createContext<ClubsState | null>(null);

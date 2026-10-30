@@ -9,7 +9,7 @@ ClubOS is a student club management application inspired by administrative workf
 ## Features
 
 - Account registration, password login, logout, and MongoDB-backed sessions.
-- Club creation with one paid CAD membership plan and configurable term length.
+- Club creation with one paid CAD membership plan and configurable term length. Administrators can update future membership fees under **Club settings** without changing historical payments or current validity.
 - Joining multiple clubs through administrator-provided codes.
 - Administrator dashboard counts and searchable, paginated member records.
 - Membership status filters: active, expired, and awaiting payment.

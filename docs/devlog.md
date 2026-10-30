@@ -75,3 +75,5 @@ const periodStart = Math.max(now.getTime(), membership.expiresAt?.getTime() ?? 0
 These checkpoints record this session; deployment and real inbox delivery remain separate acceptance checks.
 
 - **Checkpoint 1:** Administrators can update club fees through a validated API with stale-update protection. Existing payment history and membership dates are preserved; tests cover changed-fee renewals, saved-request retries, permissions, invalid input, and competing updates.
+
+- **Checkpoint 2:** Administrator club settings provide fee editing in CAD, immediate shared-state updates, retained inputs on errors, and refresh controls for stale edits. Member access redirects safely, component tests cover saves and conflicts, and workspace versions align at v0.5.0.

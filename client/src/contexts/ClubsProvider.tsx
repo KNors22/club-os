@@ -30,6 +30,12 @@ export function ClubsProvider({ children }: { children: ReactNode }) {
         loading: resource.loading,
         error: resource.error,
         reload: resource.reload,
+        updateOrganization: (organization) =>
+          resource.update((data) => ({
+            organizations: data.organizations.map((club) =>
+              club.id === organization.id ? organization : club,
+            ),
+          })),
         selectOrganization: (id) => {
           setSelectedId(id);
           try {

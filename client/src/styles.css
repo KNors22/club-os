@@ -2714,3 +2714,12 @@ fieldset {
 .notification-banner .notice {
   font-size: 12px;
 }
+
+.settings-panel {
+  max-width: 42rem;
+}
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}

@@ -96,10 +96,22 @@ export function WorkspaceLayout() {
                 Events
               </NavLink>
               {organization.role === "admin" ? (
-                <NavLink to={`/app/${organization.id}/members`} onClick={close}>
-                  <UsersRound size={19} />
-                  Members
-                </NavLink>
+                <>
+                  <NavLink
+                    to={`/app/${organization.id}/settings`}
+                    onClick={close}
+                  >
+                    <ShieldCheck size={19} />
+                    Club settings
+                  </NavLink>
+                  <NavLink
+                    to={`/app/${organization.id}/members`}
+                    onClick={close}
+                  >
+                    <UsersRound size={19} />
+                    Members
+                  </NavLink>
+                </>
               ) : (
                 <NavLink
                   to={`/app/${organization.id}/membership`}

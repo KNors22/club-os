@@ -23,6 +23,7 @@ function renderClubs() {
     loading: false,
     error: "",
     reload: vi.fn(),
+    updateOrganization: vi.fn(),
     selectOrganization: vi.fn(),
   };
   render(
@@ -42,13 +43,11 @@ function renderClubs() {
 
 describe("club onboarding forms", () => {
   it("creates a club using integer cents and selects the new workspace", async () => {
-    const fetch = vi
-      .fn()
-      .mockResolvedValue(
-        new Response(JSON.stringify({ organization: { id: "new-club" } }), {
-          status: 201,
-        }),
-      );
+    const fetch = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ organization: { id: "new-club" } }), {
+        status: 201,
+      }),
+    );
     vi.stubGlobal("fetch", fetch);
     const clubs = renderClubs();
     const user = userEvent.setup();
