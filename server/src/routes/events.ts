@@ -1,0 +1,150 @@
+import { Router } from "express";
+import { Event } from "../models/Event.js";
+import { Membership } from "../models/Membership.js";
+import { requireAuth } from "../services/auth.js";
+import {
+  getOrganizationAccess,
+  requireAdmin,
+} from "../services/organizations.js";
+import {
+  cancelRegistration,
+  findEvent,
+  publicEvent,
+  registerForEvent,
+} from "../services/events.js";
+import {
+  emptyBodySchema,
+  eventInputSchema,
+  eventQuerySchema,
+  idSchema,
+} from "../validation.js";
+
+export function createEventRouter() {
+  const router = Router();
+  router.use(requireAuth);
+  router.get("/:orgId/events", async (req, res) => {
+    const { organization } = await getOrganizationAccess(
+      req.session.userId!,
+      req.params.orgId,
+    );
+    const query = eventQuerySchema.parse(req.query);
+    const filter = {
+      organizationId: organization._id,
+      ...(query.view === "upcoming" ? { startsAt: { $gt: new Date() } } : {}),
+    };
+    const [events, total, membership] = await Promise.all([
+      Event.find(filter)
+        .sort({ startsAt: 1, _id: 1 })
+        .skip((query.page - 1) * query.limit)
+        .limit(query.limit),
+      Event.countDocuments(filter),
+      Membership.findOne({
+        organizationId: organization._id,
+        userId: req.session.userId,
+      }).select("_id"),
+    ]);
+    res.json({
+      events: events.map((event) => publicEvent(event, membership?.id)),
+      pagination: {
+        total,
+        page: query.page,
+        limit: query.limit,
+        pages: Math.ceil(total / query.limit),
+      },
+    });
+  });
+  router.post("/:orgId/events", async (req, res) => {
+    const { organization, role } = await getOrganizationAccess(
+      req.session.userId!,
+      req.params.orgId,
+    );
+    requireAdmin(role);
+    const input = eventInputSchema.parse(req.body);
+    const event = await Event.create({
+      ...input,
+      startsAt: new Date(input.startsAt),
+      organizationId: organization._id,
+      createdBy: req.session.userId,
+    });
+    res.status(201).json({ event: publicEvent(event) });
+  });
+  router.get("/:orgId/events/:eventId", async (req, res) => {
+    const { organization } = await getOrganizationAccess(
+      req.session.userId!,
+      req.params.orgId,
+    );
+    const event = await findEvent(
+      organization.id,
+      idSchema.parse(req.params.eventId),
+    );
+    const membership = await Membership.findOne({
+      organizationId: organization._id,
+      userId: req.session.userId,
+    }).select("_id");
+    res.json({ event: publicEvent(event, membership?.id) });
+  });
+  router.get("/:orgId/events/:eventId/participants", async (req, res) => {
+    const { organization, role } = await getOrganizationAccess(
+      req.session.userId!,
+      req.params.orgId,
+    );
+    requireAdmin(role);
+    const event = await findEvent(
+      organization.id,
+      idSchema.parse(req.params.eventId),
+    );
+    const members = await Membership.find({
+      organizationId: organization._id,
+      _id: { $in: event.registrations.map((item) => item.membershipId) },
+    }).populate<{ userId: { name: string; email: string } }>(
+      "userId",
+      "name email",
+    );
+    res.json({
+      participants: event.registrations.map((registration) => {
+        const membership = members.find((member) =>
+          member._id.equals(registration.membershipId),
+        );
+        return {
+          membershipId: registration.membershipId.toString(),
+          name: membership?.userId?.name ?? "Unavailable member",
+          email: membership?.userId?.email ?? "",
+          registeredAt: registration.registeredAt,
+          checkedInAt: registration.checkedInAt,
+        };
+      }),
+    });
+  });
+  router.post("/:orgId/events/:eventId/registrations/me", async (req, res) => {
+    const { organization } = await getOrganizationAccess(
+      req.session.userId!,
+      req.params.orgId,
+    );
+    emptyBodySchema.parse(req.body);
+    const result = await registerForEvent(
+      organization.id,
+      idSchema.parse(req.params.eventId),
+      req.session.userId!,
+    );
+    res
+      .status(201)
+      .json({ event: publicEvent(result.event, result.membership.id) });
+  });
+  router.delete(
+    "/:orgId/events/:eventId/registrations/me",
+    async (req, res) => {
+      const { organization } = await getOrganizationAccess(
+        req.session.userId!,
+        req.params.orgId,
+      );
+      emptyBodySchema.parse(req.body);
+      const result = await cancelRegistration(
+        organization.id,
+        idSchema.parse(req.params.eventId),
+        req.session.userId!,
+      );
+      res.json({ event: publicEvent(result.event, result.membership?.id) });
+    },
+  );
+  return router;
+}

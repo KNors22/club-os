@@ -9,6 +9,7 @@ import { authRouter, sessionCookieName } from "./routes/auth.js";
 import { organizationRouter } from "./routes/organizations.js";
 import { profileRouter } from "./routes/profile.js";
 import { createPaymentRouter } from "./routes/payments.js";
+import { createEventRouter } from "./routes/events.js";
 
 export function createApp(config: AppConfig, store: Store) {
   const app = express();
@@ -71,6 +72,7 @@ export function createApp(config: AppConfig, store: Store) {
   app.use("/api/me", profileRouter);
   app.use("/api/organizations", organizationRouter);
   app.use("/api/organizations", createPaymentRouter());
+  app.use("/api/organizations", createEventRouter());
   app.use("/api", () => {
     throw new AppError(404, "NOT_FOUND", "API endpoint not found.");
   });

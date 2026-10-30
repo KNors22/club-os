@@ -74,3 +74,24 @@ export const paymentInputSchema = z
   })
   .strict();
 export type PaymentInput = z.infer<typeof paymentInputSchema>;
+
+export const eventInputSchema = z
+  .object({
+    title: z.string().trim().min(2).max(120),
+    description: z.string().trim().max(1000).default(""),
+    startsAt: z.iso
+      .datetime({ offset: true })
+      .refine(
+        (value) => new Date(value).getTime() > Date.now(),
+        "Choose a future event date.",
+      ),
+    location: z.string().trim().min(2).max(200),
+    capacity: z.number().int().min(1).max(10000),
+  })
+  .strict();
+export const eventQuerySchema = z.object({
+  view: z.enum(["upcoming", "all"]).default("upcoming"),
+  page: z.coerce.number().int().min(1).max(100000).default(1),
+  limit: z.coerce.number().int().min(1).max(50).default(12),
+});
+export const emptyBodySchema = z.object({}).strict();
