@@ -113,3 +113,8 @@ Dashboard aggregates are scoped by organization. They include confirmed payment 
 Notification services run after persistence and send plain-text HTTPS requests to Resend with a five-second timeout. The server overrides recipients with the configured demo inbox and uses persisted action identifiers as provider idempotency keys. Failure is returned as a separate delivery notice. Public configuration exposes only demo/disabled mode. Background queues, automatic retries, and delivery tracking are deferred.
 
 Phase 2 screens add member detail/payment forms, personal history, event creation/browsing/details, participant check-in, dashboard summaries, and notification notices. Browser QA covers both administrator and member roles on desktop and mobile in Chrome and Firefox using disposable data and separate QA ports.
+
+
+## Administrator fee changes
+
+`PATCH /api/organizations/:orgId` accepts only `{ feeCents, expectedFeeCents }` from the club administrator. Both are positive integer CAD cents up to 1,000,000. A conditional organization update rejects stale settings with 409. Other members receive 403 and unrelated accounts receive 404. Updating the fee never changes existing membership validity or historical payments. Subsequent new payment requests use the club fee read for that request; retrying an already-saved request still returns its original result even after a fee change. The settings screen is introduced in the next checkpoint.

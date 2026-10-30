@@ -12,9 +12,11 @@ import {
   listOrganizations,
   publicOrganization,
   requireAdmin,
+  updateOrganizationFee,
 } from "../services/organizations.js";
 import {
   joinSchema,
+  feeUpdateSchema,
   membershipQuerySchema,
   organizationSchema,
 } from "../validation.js";
@@ -45,6 +47,20 @@ organizationRouter.get("/:orgId", async (req, res) => {
   res.json({
     organization: publicOrganization(organization, req.session.userId!),
   });
+});
+organizationRouter.patch("/:orgId", async (req, res) => {
+  // Authorize before validating the patch to retain the same scoped 403/404 behavior.
+  const { role } = await getOrganizationAccess(
+    req.session.userId!,
+    req.params.orgId,
+  );
+  requireAdmin(role);
+  const organization = await updateOrganizationFee(
+    req.session.userId!,
+    req.params.orgId,
+    feeUpdateSchema.parse(req.body),
+  );
+  res.json({ organization });
 });
 organizationRouter.get("/:orgId/memberships/me", async (req, res) => {
   const { organization, role } = await getOrganizationAccess(

@@ -117,3 +117,31 @@ export function requireAdmin(role: ClubRole) {
       "Only club administrators can view this information.",
     );
 }
+
+export async function updateOrganizationFee(
+  userId: string,
+  organizationId: unknown,
+  input: { feeCents: number; expectedFeeCents: number },
+) {
+  const { organization, role } = await getOrganizationAccess(
+    userId,
+    organizationId,
+  );
+  requireAdmin(role);
+  const updated = await Organization.findOneAndUpdate(
+    {
+      _id: organization._id,
+      adminUserId: userId,
+      feeCents: input.expectedFeeCents,
+    },
+    { $set: { feeCents: input.feeCents } },
+    { new: true, runValidators: true },
+  ).select("+joinCode");
+  if (!updated)
+    throw new AppError(
+      409,
+      "FEE_CHANGED",
+      "The club fee changed. Refresh the club settings before saving again.",
+    );
+  return publicOrganization(updated, userId);
+}

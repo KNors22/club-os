@@ -68,3 +68,10 @@ const periodStart = Math.max(now.getTime(), membership.expiresAt?.getTime() ?? 0
 ![Club workflow dashboard](screenshots/club-workflows-dashboard.png)
 
 **Weekly update:** Foundation now supports the administrator/member club workflow through manual payments, renewals, events, and attendance. Unit/API checks and Chrome/Firefox acceptance pass; real email delivery and live hosting remain pending credentials and account setup.
+
+
+### October 30, 2026 — Validation and submission
+
+These checkpoints record this session; deployment and real inbox delivery remain separate acceptance checks.
+
+- **Checkpoint 1:** Administrators can update club fees through a validated API with stale-update protection. Existing payment history and membership dates are preserved; tests cover changed-fee renewals, saved-request retries, permissions, invalid input, and competing updates.
