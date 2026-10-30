@@ -50,6 +50,87 @@ describe("request safeguards", () => {
     expect(result.headers["set-cookie"][0]).toMatch(/HttpOnly/);
     expect(result.headers["content-security-policy"]).toBeDefined();
   });
+  it.each(["localhost", "127.0.0.1"])(
+    "accepts both local development origins when APP_URL uses %s",
+    async (hostname) => {
+      const development = createApp(
+        {
+          ...config,
+          nodeEnv: "development",
+          appUrl: `http://${hostname}:5173`,
+        },
+        store,
+      );
+      for (const allowed of [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+      ]) {
+        await request(development)
+          .post("/api/organizations")
+          .set("Origin", allowed)
+          .send({})
+          .expect(401);
+      }
+      for (const rejected of [
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "https://localhost:5173",
+        "http://localhost.untrusted.example:5173",
+        "http://127.0.0.1.untrusted.example:5173",
+        "http://localhost:5173@untrusted.example",
+        "null",
+      ]) {
+        const result = await request(development)
+          .post("/api/organizations")
+          .set("Origin", rejected)
+          .send({})
+          .expect(403);
+        expect(result.body.error.code).toBe("INVALID_ORIGIN");
+      }
+      await request(development)
+        .post("/api/organizations")
+        .send({})
+        .expect(403);
+    },
+  );
+  it.each(["test", "production"] as const)(
+    "requires the exact configured origin in %s",
+    async (nodeEnv) => {
+      const restricted = createApp(
+        { ...config, nodeEnv, appUrl: "https://localhost:5173" },
+        store,
+      );
+      await request(restricted)
+        .post("/api/organizations")
+        .set("Origin", "https://localhost:5173")
+        .send({})
+        .expect(401);
+      const result = await request(restricted)
+        .post("/api/organizations")
+        .set("Origin", "https://127.0.0.1:5173")
+        .send({})
+        .expect(403);
+      expect(result.body.error.code).toBe("INVALID_ORIGIN");
+    },
+  );
+  it("requires the configured origin for non-local development URLs", async () => {
+    const development = createApp(
+      { ...config, nodeEnv: "development", appUrl: "https://clubos.example" },
+      store,
+    );
+    await request(development)
+      .post("/api/organizations")
+      .set("Origin", "https://clubos.example")
+      .send({})
+      .expect(401);
+    for (const rejected of ["http://localhost:5173", "http://127.0.0.1:5173"]) {
+      await request(development)
+        .post("/api/organizations")
+        .set("Origin", rejected)
+        .send({})
+        .expect(403);
+    }
+  });
   it("throttles repeated authentication attempts", async () => {
     for (let index = 0; index < 20; index++)
       await request(app)

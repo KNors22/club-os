@@ -47,7 +47,7 @@ Start MongoDB using your installed database service, then run:
 npm run dev
 ```
 
-Open **http://localhost:5173**. Vite proxies `/api` to Express on port 3000. Use this exact origin unless you also change `APP_URL`; unsafe requests from other origins are rejected. `GET http://localhost:3000/api/health` checks database connectivity.
+Open **http://localhost:5173** or **http://127.0.0.1:5173**. Vite proxies `/api` to Express on port 3000. In development, a local `APP_URL` permits both hostnames with the same scheme and port. Use one consistently: browsers keep their sessions separate. Other origins are rejected, and production requires the exact configured `APP_URL`. `GET http://localhost:3000/api/health` checks database connectivity.
 
 Startup connects to MongoDB and creates required indexes before listening. It never seeds or resets application data.
 

@@ -6,7 +6,12 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Added
 
+- The existing local-origin fix is now committed with regression tests and setup documentation. Development permits localhost and 127.0.0.1 only at the configured scheme and port; production and non-local origins retain exact matching.
 - An explicit demo seed command creates fictional administrator/member accounts, membership states, payment history, events, and attendance in a dedicated database. Reruns preserve edited records and passwords, reserved-address collisions fail safely, and no startup seed or email side effects are introduced.
+### Fixed
+
+- Local development accepts both `localhost` and `127.0.0.1` with the configured scheme and port, preventing valid form submissions from failing origin validation. Production still requires the exact configured application origin.
+
 ### Planned
 
 - Live Render/Atlas deployment, a verified public application URL, and production workflow checks.

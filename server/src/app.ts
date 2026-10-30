@@ -14,6 +14,17 @@ import { createEventRouter } from "./routes/events.js";
 export function createApp(config: AppConfig, store: Store) {
   const app = express();
   const isProduction = config.nodeEnv === "production";
+  const allowedOrigins = new Set([config.appUrl]);
+  if (config.nodeEnv === "development") {
+    const localOrigin = new URL(config.appUrl);
+    if (["localhost", "127.0.0.1"].includes(localOrigin.hostname)) {
+      // Vite uses 127.0.0.1 while local setup defaults to localhost.
+      // Accept the other loopback hostname with the same scheme and port.
+      localOrigin.hostname =
+        localOrigin.hostname === "localhost" ? "127.0.0.1" : "localhost";
+      allowedOrigins.add(localOrigin.origin);
+    }
+  }
   app.disable("x-powered-by");
   if (isProduction) app.set("trust proxy", 1);
   app.use(
@@ -40,7 +51,7 @@ export function createApp(config: AppConfig, store: Store) {
   });
   app.use("/api", (req, _res, next) => {
     if (!["GET", "HEAD", "OPTIONS"].includes(req.method)) {
-      if (req.get("origin") !== config.appUrl)
+      if (!allowedOrigins.has(req.get("origin") ?? ""))
         throw new AppError(
           403,
           "INVALID_ORIGIN",
