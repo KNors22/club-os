@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { AppError } from "../errors.js";
 import { Event } from "../models/Event.js";
 import { Membership } from "../models/Membership.js";
 import { requireAuth } from "../services/auth.js";
@@ -144,6 +145,43 @@ export function createEventRouter() {
         req.session.userId!,
       );
       res.json({ event: publicEvent(result.event, result.membership?.id) });
+    },
+  );
+  router.post(
+    "/:orgId/events/:eventId/attendance/:membershipId",
+    async (req, res) => {
+      const { organization, role } = await getOrganizationAccess(
+        req.session.userId!,
+        req.params.orgId,
+      );
+      requireAdmin(role);
+      emptyBodySchema.parse(req.body);
+      const eventId = idSchema.parse(req.params.eventId);
+      const membershipId = idSchema.parse(req.params.membershipId);
+      const updated = await Event.findOneAndUpdate(
+        {
+          _id: eventId,
+          organizationId: organization._id,
+          registrations: { $elemMatch: { membershipId, checkedInAt: null } },
+        },
+        { $set: { "registrations.$.checkedInAt": new Date() } },
+        { new: true, runValidators: true },
+      );
+      const event = updated ?? (await findEvent(organization.id, eventId));
+      const registration = event.registrations.find(
+        (item) => item.membershipId.toString() === membershipId,
+      );
+      if (!registration)
+        throw new AppError(
+          404,
+          "NOT_REGISTERED",
+          "This member is not registered for this event.",
+        );
+      res.json({
+        event: publicEvent(event),
+        checkedInAt: registration.checkedInAt,
+        alreadyCheckedIn: !updated,
+      });
     },
   );
   return router;

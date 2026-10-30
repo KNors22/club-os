@@ -10,10 +10,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - Administrators can record verified payments from member details, while members can view their own payment and renewal history. Payment forms retain request IDs across retries and membership dates update after confirmation.
 - Club administrators can create events and view participants; active members can register or cancel. Atomic event updates enforce capacity and prevent duplicate registrations while participant identities stay restricted to administrators.
 - Responsive event screens support event creation, paginated browsing, membership-aware registration, cancellation, and administrator participant lists with loading and failure states.
+- Administrators can check in registered participants from event details. Check-in retries preserve the original timestamp, and atomic updates keep cancellation and attendance consistent under concurrent requests.
 
 ### Planned
 
-- Manual attendance check-in.
 - Payment, renewal, and event dashboard summaries.
 - Demo-inbox email confirmations.
 - Live Render/Atlas deployment and a verified public application URL.

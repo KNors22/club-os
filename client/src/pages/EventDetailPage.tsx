@@ -63,6 +63,28 @@ export function EventDetailPage() {
       setBusy(false);
     }
   }
+  async function checkIn(membershipId: string) {
+    setBusy(true);
+    setError("");
+    setNotice(null);
+    try {
+      const result = await api<{ alreadyCheckedIn: boolean }>(
+        `${path}/attendance/${membershipId}`,
+        { method: "POST", body: "{}" },
+      );
+      setNotice({
+        message: result.alreadyCheckedIn
+          ? "This member is already checked in."
+          : "Attendance recorded.",
+        tone: "success",
+      });
+      refresh();
+    } catch (error) {
+      setError(errorMessage(error));
+    } finally {
+      setBusy(false);
+    }
+  }
   const event = resource.data?.event;
   const closed = event ? new Date(event.startsAt).getTime() <= now : false;
   const active = ownMembership.data?.membership?.status === "active";
@@ -209,6 +231,7 @@ export function EventDetailPage() {
                         <tr>
                           <th scope="col">Member</th>
                           <th scope="col">Registered</th>
+                          <th scope="col">Attendance</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -224,6 +247,29 @@ export function EventDetailPage() {
                               </div>
                             </td>
                             <td>{dateTime(participant.registeredAt)}</td>
+                            <td>
+                              {participant.checkedInAt ? (
+                                <>
+                                  <span className="status status-active">
+                                    Checked in
+                                  </span>
+                                  <small className="table-secondary">
+                                    {dateTime(participant.checkedInAt)}
+                                  </small>
+                                </>
+                              ) : (
+                                <Button
+                                  variant="secondary"
+                                  disabled={busy}
+                                  onClick={() =>
+                                    void checkIn(participant.membershipId)
+                                  }
+                                  aria-label={`Check in ${participant.name}`}
+                                >
+                                  Check in
+                                </Button>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
