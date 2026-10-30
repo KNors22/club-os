@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { AppError } from "../errors.js";
+import type { AppConfig } from "../config.js";
+import { confirmRegistration } from "../services/notifications.js";
 import { Event } from "../models/Event.js";
 import { Membership } from "../models/Membership.js";
 import { requireAuth } from "../services/auth.js";
@@ -20,7 +22,7 @@ import {
   idSchema,
 } from "../validation.js";
 
-export function createEventRouter() {
+export function createEventRouter(config: AppConfig) {
   const router = Router();
   router.use(requireAuth);
   router.get("/:orgId/events", async (req, res) => {
@@ -127,9 +129,17 @@ export function createEventRouter() {
       idSchema.parse(req.params.eventId),
       req.session.userId!,
     );
-    res
-      .status(201)
-      .json({ event: publicEvent(result.event, result.membership.id) });
+    const notification = await confirmRegistration(
+      config.email,
+      organization,
+      result.event,
+      result.membership,
+      result.registration.registrationId,
+    );
+    res.status(201).json({
+      event: publicEvent(result.event, result.membership.id),
+      notification,
+    });
   });
   router.delete(
     "/:orgId/events/:eventId/registrations/me",

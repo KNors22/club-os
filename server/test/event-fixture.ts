@@ -3,10 +3,10 @@ import { randomUUID } from "node:crypto";
 import { app, origin, signup, createClub, joinClub } from "./setup.js";
 import { Membership } from "../src/models/Membership.js";
 
-export async function eventFixture(capacity = 1) {
-  const admin = request.agent(app),
-    member = request.agent(app),
-    second = request.agent(app);
+export async function eventFixture(capacity = 1, application = app) {
+  const admin = request.agent(application),
+    member = request.agent(application),
+    second = request.agent(application);
   await signup(admin);
   await signup(member, "member@example.com", "Jordan Lee");
   await signup(second, "second@example.com", "Taylor Kim");

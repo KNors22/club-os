@@ -9,8 +9,13 @@ import {
 } from "../services/organizations.js";
 import { membershipDetails, recordPayment } from "../services/payments.js";
 import { idSchema, paymentInputSchema } from "../validation.js";
+import type { AppConfig } from "../config.js";
+import {
+  confirmPayment,
+  notificationSkipped,
+} from "../services/notifications.js";
 
-export function createPaymentRouter() {
+export function createPaymentRouter(config: AppConfig) {
   const router = Router();
   router.use(requireAuth);
   router.get("/:orgId/memberships/:membershipId", async (req, res) => {
@@ -49,12 +54,19 @@ export function createPaymentRouter() {
         req.session.userId!,
         input,
       );
-      res
-        .status(result.replayed ? 200 : 201)
-        .json({
-          membership: membershipDetails(result.membership),
-          replayed: result.replayed,
-        });
+      const notification = result.replayed
+        ? notificationSkipped
+        : await confirmPayment(
+            config.email,
+            organization,
+            result.membership,
+            input.requestId,
+          );
+      res.status(result.replayed ? 200 : 201).json({
+        membership: membershipDetails(result.membership),
+        replayed: result.replayed,
+        notification,
+      });
     },
   );
   return router;

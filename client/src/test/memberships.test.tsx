@@ -49,20 +49,28 @@ describe("member experience", () => {
   it("shows a real pending membership with contact guidance and no administrator controls", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            membership: {
-              id: "membership",
-              joinedAt: "2026-10-29T12:00:00Z",
-              startsAt: null,
-              expiresAt: null,
-              status: "pending",
-            },
-          }),
-          { headers: { "Content-Type": "application/json" } },
+      vi
+        .fn()
+        .mockImplementation((path: string) =>
+          Promise.resolve(
+            new Response(
+              JSON.stringify(
+                path.endsWith("/config")
+                  ? { notifications: { mode: "disabled" } }
+                  : {
+                      membership: {
+                        id: "membership",
+                        joinedAt: "2026-10-29T12:00:00Z",
+                        startsAt: null,
+                        expiresAt: null,
+                        status: "pending",
+                      },
+                    },
+              ),
+              { headers: { "Content-Type": "application/json" } },
+            ),
+          ),
         ),
-      ),
     );
     render(
       <MemoryRouter>

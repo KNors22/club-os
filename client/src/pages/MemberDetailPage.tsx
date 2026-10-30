@@ -11,6 +11,7 @@ import {
 } from "../components/ui";
 import { PaymentForm } from "../components/PaymentForm";
 import { PaymentHistory } from "../components/PaymentHistory";
+import { NotificationBanner } from "../components/NotificationBanner";
 import { date } from "../lib/format";
 import type { Membership, NotificationResult } from "../types";
 
@@ -40,6 +41,7 @@ export function MemberDetailPage() {
   }
   return (
     <>
+      <NotificationBanner />
       <Link
         className="text-link back-link"
         to={`/app/${organization.id}/members`}

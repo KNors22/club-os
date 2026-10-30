@@ -2708,3 +2708,9 @@ fieldset {
     font-size: 23px;
   }
 }
+.notification-banner {
+  margin-bottom: 22px;
+}
+.notification-banner .notice {
+  font-size: 12px;
+}

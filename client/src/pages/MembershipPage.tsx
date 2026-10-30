@@ -11,6 +11,7 @@ import { useAuth } from "../contexts/auth-context";
 import { useResource } from "../hooks/useResource";
 import { Avatar, ErrorState, Loading, StatusBadge } from "../components/ui";
 import { PaymentHistory } from "../components/PaymentHistory";
+import { NotificationBanner } from "../components/NotificationBanner";
 import { date, money } from "../lib/format";
 import type { Membership } from "../types";
 
@@ -27,6 +28,7 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
   const membership = resource.data?.membership;
   return (
     <>
+      <NotificationBanner />
       <div className="page-heading">
         <div>
           <span className="eyebrow">YOU’RE PART OF SOMETHING GOOD</span>

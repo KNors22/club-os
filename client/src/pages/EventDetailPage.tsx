@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useOrganization } from "../contexts/clubs-context";
 import { useResource } from "../hooks/useResource";
 import { useNow } from "../hooks/useNow";
+import { NotificationBanner } from "../components/NotificationBanner";
 import { api, errorMessage } from "../lib/api";
 import { dateTime } from "../lib/format";
 import { Avatar, Button, ErrorState, Loading, Notice } from "../components/ui";
@@ -90,6 +91,7 @@ export function EventDetailPage() {
   const active = ownMembership.data?.membership?.status === "active";
   return (
     <>
+      <NotificationBanner />
       <Link
         className="text-link back-link"
         to={`/app/${organization.id}/events`}

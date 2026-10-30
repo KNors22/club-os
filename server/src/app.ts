@@ -29,6 +29,11 @@ export function createApp(config: AppConfig, store: Store) {
       database: connected ? "connected" : "disconnected",
     });
   });
+  app.get("/api/config", (_req, res) => {
+    res
+      .set("Cache-Control", "no-store")
+      .json({ notifications: { mode: config.email ? "demo" : "disabled" } });
+  });
   app.use("/api", (_req, res, next) => {
     res.set("Cache-Control", "no-store");
     next();
@@ -71,8 +76,8 @@ export function createApp(config: AppConfig, store: Store) {
   app.use("/api/auth", authRouter(isProduction));
   app.use("/api/me", profileRouter);
   app.use("/api/organizations", organizationRouter);
-  app.use("/api/organizations", createPaymentRouter());
-  app.use("/api/organizations", createEventRouter());
+  app.use("/api/organizations", createPaymentRouter(config));
+  app.use("/api/organizations", createEventRouter(config));
   app.use("/api", () => {
     throw new AppError(404, "NOT_FOUND", "API endpoint not found.");
   });
