@@ -16,9 +16,9 @@ const database = await MongoMemoryServer.create({
 });
 const config = {
   nodeEnv: "test" as const,
-  port: 3000,
+  port: 3100,
   mongoUri: database.getUri("clubos_browser_test"),
-  appUrl: "http://127.0.0.1:5173",
+  appUrl: "http://127.0.0.1:5174",
   sessionSecret: randomBytes(32).toString("hex"),
 };
 await connectDatabase(config.mongoUri);

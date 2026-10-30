@@ -1,8 +1,8 @@
-# Foundation design
+# ClubOS architecture
 
 ## Goal and boundaries
 
-Prove the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. Payments, events, attendance, and notifications belong to phase 2.
+Prove the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. Phase 2 extends this flow with received payments, renewals, capacity-limited events, manual attendance, and optional demo-inbox notifications.
 
 ## Architecture and state
 
@@ -30,17 +30,19 @@ erDiagram
   USER ||--o{ ORGANIZATION : administers
   USER ||--o{ MEMBERSHIP : holds
   ORGANIZATION ||--o{ MEMBERSHIP : contains
+  ORGANIZATION ||--o{ EVENT : hosts
 ```
 
 | Model | Fields and constraints |
 | --- | --- |
 | User | Name, unique normalized email, password hash excluded from default queries, timestamps |
 | Organization | Name, description, administrator reference, unique random 12-character join code, integer CAD fee in cents, term days, timestamps |
-| Membership | Organization/user references, validity dates, timestamps; unique `(organizationId, userId)` |
+| Membership | Organization/user references, validity dates, embedded payment/renewal history, timestamps; unique `(organizationId, userId)` |
+| Event | Organization/creator references, details, start time, capacity, embedded registrations and check-in timestamps |
 
 Clubs have one paid plan, with positive fees up to CAD 10,000 and terms of 1–1095 days. Creation does not enroll the administrator as a paid member. Joining inserts a pending membership. Null expiration means pending; expiration later than now means active; expiration at or before now means expired. Timestamps use UTC; dates display in the browser's time zone.
 
-Club creation and joining each require one document write. Database indexes prevent concurrent duplicate registrations and joins. Phase 2 will embed immutable payment/renewal entries in memberships and registrations/attendance in events; Foundation introduces no unused event/payment endpoints.
+Club creation and joining each require one document write. Database indexes prevent concurrent duplicate registrations and joins. Payments and validity changes share one membership document. Registrations and attendance share one event document. These additive fields default to empty arrays for existing records; startup does not reset data.
 
 ## API and authorization
 
@@ -59,6 +61,14 @@ Club creation and joining each require one document write. Database indexes prev
 | `GET /api/organizations/:orgId/memberships` | Administrator-only search/status/page/limit listing |
 | `GET /api/organizations/:orgId/dashboard` | Administrator-only total/active/expired/pending counts |
 | `GET /api/health` | Database readiness |
+| `GET /api/config` | Public notification mode only; no secrets or recipient address |
+| `GET /api/organizations/:orgId/memberships/:membershipId` | Administrator member details and payment history |
+| `POST /api/organizations/:orgId/memberships/:membershipId/payments` | Administrator records a received full-fee payment with request ID |
+| `GET/POST /api/organizations/:orgId/events` | Authorized paginated listing / administrator creation |
+| `GET /api/organizations/:orgId/events/:eventId` | Authorized event details |
+| `GET /api/organizations/:orgId/events/:eventId/participants` | Administrator participant list |
+| `POST/DELETE /api/organizations/:orgId/events/:eventId/registrations/me` | Active-member registration / own cancellation |
+| `POST /api/organizations/:orgId/events/:eventId/attendance/:membershipId` | Administrator idempotent check-in |
 
 Every scoped read checks organization ownership/membership on the server. Unrelated accounts receive 404; known members requesting administrator information receive 403. Owning one club grants no privileges in another. Member responses exclude other members' records and join codes.
 
@@ -90,3 +100,16 @@ CLUB WORKSPACE
 ```
 
 The Your Clubs page lists accessible clubs and provides creation/join forms. Mobile navigation uses a labeled menu; cards stack and tables scroll inside their container. Inputs have labels, errors remain visible, focus is visible, and reduced-motion preferences are respected. There are no fake operational statistics or inactive feature links.
+
+
+## Phase 2 consistency and delivery
+
+Payment requests contain a UUID, amount, method, optional reference, and payment date. The amount must match the club's full fee. A payment updates membership dates and appends history together under Mongoose optimistic concurrency. Repeating the same UUID and payload returns the saved result; reusing it for different input returns a conflict. Concurrent distinct renewals conflict rather than silently overwriting each other. Validity starts from the later of recording time and the current expiration. A backdated paid-at date is retained as receipt metadata; future payment dates are rejected.
+
+Registration requires current active membership and an upcoming event. One conditional MongoDB update checks the capacity and absence of that member before inserting a registration. Cancellation and check-in use conditional atomic updates; checked-in registrations cannot be cancelled. Repeated check-in preserves the first timestamp. Administrator participant responses contain identities; member event responses expose only counts and their own registration.
+
+Dashboard aggregates are scoped by organization. They include confirmed payment totals, pending initial fees, active memberships expiring within 30 days, event registrations, and attendance. Pending initial fees do not assume expired members owe a renewal.
+
+Notification services run after persistence and send plain-text HTTPS requests to Resend with a five-second timeout. The server overrides recipients with the configured demo inbox and uses persisted action identifiers as provider idempotency keys. Failure is returned as a separate delivery notice. Public configuration exposes only demo/disabled mode. Background queues, automatic retries, and delivery tracking are deferred.
+
+Phase 2 screens add member detail/payment forms, personal history, event creation/browsing/details, participant check-in, dashboard summaries, and notification notices. Browser QA covers both administrator and member roles on desktop and mobile in Chrome and Firefox using disposable data and separate QA ports.

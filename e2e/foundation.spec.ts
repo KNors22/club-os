@@ -39,7 +39,7 @@ test("administrator and member complete the isolated Foundation workflow", async
   const otherClubId = new URL(page.url()).pathname.split("/")[2];
 
   const memberContext = await browser.newContext({
-    baseURL: "http://127.0.0.1:5173",
+    baseURL: testInfo.project.use.baseURL,
   });
   try {
     const member = await memberContext.newPage();

@@ -6,7 +6,7 @@ export default defineConfig({
   workers: 1,
   timeout: 60000,
   reporter: "list",
-  use: { baseURL: "http://127.0.0.1:5173", trace: "retain-on-failure" },
+  use: { baseURL: "http://127.0.0.1:5174", trace: "retain-on-failure" },
   projects: [
     {
       name: "chrome",
@@ -23,13 +23,14 @@ export default defineConfig({
   webServer: [
     {
       command: "npm run dev:qa",
-      url: "http://127.0.0.1:3000/api/health",
+      url: "http://127.0.0.1:3100/api/health",
       timeout: 120000,
       reuseExistingServer: false,
     },
     {
-      command: "npm run dev -w client",
-      url: "http://127.0.0.1:5173",
+      command: "npm run dev -w client -- --port 5174",
+      env: { API_PROXY_TARGET: "http://127.0.0.1:3100" },
+      url: "http://127.0.0.1:5174",
       timeout: 30000,
       reuseExistingServer: false,
     },

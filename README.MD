@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: Foundation milestone v0.1.0 implemented.** Payments, renewals, events, attendance, and email delivery belong to phase 2. The [GitHub repository](https://github.com/KNors22/club-os) is public. This implementation has not yet been deployed to production.
+**Status: Foundation v0.1.0 and phase 2 club workflows implemented.** Phase 2 changes are tracked under Unreleased until the next version is published. The [GitHub repository](https://github.com/KNors22/club-os) is public. This implementation has not yet been deployed to production.
 
 ## Features
 
@@ -15,8 +15,12 @@ ClubOS is a student club management application inspired by administrative workf
 - Membership status filters: active, expired, and awaiting payment.
 - Personal membership details and profile-name updates.
 - Club-scoped permissions and responsive, accessible navigation.
+- Administrator recording of received payments, membership activation/renewal, and payment history.
+- Events with capacity limits, active-member registration, cancellation, and manual check-in.
+- Club-scoped payment, renewal, event, and attendance dashboard summaries.
+- Optional Resend confirmations routed exclusively to a configured demo inbox; delivery failures preserve successful changes.
 
-The creator is a club's sole administrator and is not automatically enrolled as a paid member. Joining creates an unpaid membership. Recording payments and activating/renewing memberships will be added in phase 2.
+The creator is a club's sole administrator and is not automatically enrolled as a paid member. Joining creates an unpaid membership. An administrator records the full membership fee after receiving it. Active memberships extend from their expiration; pending or expired memberships start when the administrator records the payment. Each payment request has an identifier to prevent a retry from renewing twice. ClubOS records manual payments; it does not collect money online.
 
 ## Installation Instructions
 
@@ -49,15 +53,28 @@ Startup connects to MongoDB and creates required indexes before listening. It ne
 
 ## Usage
 
-1. Create an account and choose **Create club**. Set the club name, fee, and term.
-2. Copy its join code from the overview.
-3. In a private browser window, register a second account and join with that code.
-4. Inspect the second account's **Awaiting payment** membership.
-5. Return to the administrator and search/filter the **Members** list.
-6. Update the member's name under **My account**, then refresh the member list.
-7. Create another club and confirm the member cannot access its records.
+There are no seeded accounts or shared passwords. Register two accounts to try both roles:
 
-Dashboard values come from MongoDB. Empty screens reflect actual data. Payment/event controls are deferred until their features are implemented.
+1. Register an administrator, choose **Create club**, and set its name, fee, and term.
+2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
+3. As administrator, open **Members**, select the member, and record the received payment, method, date, and optional reference. Confirm that you received the full fee.
+4. Refresh the member's **Membership** page to see active status and payment history. Record another payment to demonstrate renewal.
+5. As administrator, open **Events** and create an upcoming event with a capacity.
+6. As member, open the event and register. Try cancellation and registration again.
+7. As administrator, open the event's participant list and choose **Check in**. Refresh the overview to see payment, membership, registration, and attendance totals.
+8. Update a name under **My account**. Create another club and confirm unrelated accounts cannot access its records.
+
+### Demo email setup
+
+Set these optional root `.env` values and restart the API:
+
+```dotenv
+RESEND_API_KEY=your_private_resend_api_key
+EMAIL_DEMO_TO=your_verified_account_owner_email
+EMAIL_FROM=onboarding@resend.dev
+```
+
+Set both the key and recipient, or leave both empty to disable delivery. Resend's default test sender delivers to the account owner's inbox. The application displays a demo-mode notice and always sends to `EMAIL_DEMO_TO`, even when a member has a different address. A successful payment or registration persists before the bounded email request. Disabled, failed, or timed-out delivery produces a notice without undoing the action; there are no automatic retries. Payment-request retries do not send again. Provider behavior is covered with mocks; real inbox delivery still needs verification with your credentials.
 
 ## Development and Testing
 
@@ -72,11 +89,11 @@ Dashboard values come from MongoDB. Empty screens reflect actual data. Payment/e
 | `npm start` | Run compiled Express; production also serves the frontend |
 | `npm run check` | Run lint, types, tests, builds, and production smoke checks |
 | `npm run test:production` | Build and smoke-test compiled routes and assets |
-| `npm run test:browser` | Run the complete two-account flow in installed Chrome |
+| `npm run test:browser` | Run Foundation and club-workflow acceptance tests in installed Chrome |
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. Stop existing servers on ports 3000/5173 before running them. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots.
 
 ## Technologies Used
 
@@ -84,7 +101,7 @@ Browser tests start their own disposable database and servers. Stop existing ser
 - **Backend:** Node.js, Express, Zod, bcryptjs, express-session, connect-mongo, Helmet, express-rate-limit.
 - **Database:** MongoDB and Mongoose, with unique account and membership indexes.
 - **Validation:** Vitest, Supertest, Testing Library, Playwright.
-- **Delivery:** GitHub Actions and a Render deployment blueprint.
+- **Delivery:** Resend HTTPS API, GitHub Actions, and a Render deployment blueprint.
 
 ## Project Structure
 
@@ -114,9 +131,8 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 
 ## Future Improvements
 
-- Full payment recording and renewals with duplicate-submission protection.
-- Event creation, capacity-limited registration, and manual attendance.
-- Resend confirmation emails delivered to the configured demo inbox.
+- Live Render/Atlas hosting and verification of demo-inbox delivery.
+- An explicit fictional demo-data seed command and final submission materials.
 - QR cards/check-in, exports, announcements, scheduled reminders, and multiple plans.
 - Administrator invitations and password recovery.
 

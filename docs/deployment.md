@@ -1,4 +1,4 @@
-# Foundation deployment
+# ClubOS deployment
 
 ## Current state
 
@@ -39,6 +39,9 @@ The blueprint specifies `autoDeployTrigger: checksPass`. Use the GitHub provider
 | `MONGODB_URI` | Private Atlas connection URI |
 | `SESSION_SECRET` | Random secret of at least 32 characters; blueprint generates one |
 | `PORT` | Render supplies it; server listens on `0.0.0.0` |
+| `RESEND_API_KEY` | Optional private Resend API key; configure with `EMAIL_DEMO_TO` |
+| `EMAIL_DEMO_TO` | Optional account-owner inbox; all confirmations route here |
+| `EMAIL_FROM` | Optional sender; defaults to `onboarding@resend.dev` |
 
 Set `APP_URL` to the service's final assigned HTTPS origin before smoke testing, then redeploy if it changed after creation. An incorrect origin blocks write requests. Production requires HTTPS for secure session cookies behind Render's TLS proxy.
 
@@ -51,11 +54,14 @@ Set `APP_URL` to the service's final assigned HTTPS origin before smoke testing,
 5. Search the member list and confirm the administrator dashboard updates.
 6. Create a second club and verify the member cannot access it.
 7. Load `/app/<club-id>/members` directly as administrator to verify SPA routing.
-8. Sign out and check protected-page redirects. Redeploy and confirm stored records/sessions survive.
+8. Record a full payment from member details; verify activation, history, dashboard totals, and a demo-inbox confirmation when configured. Repeat with a renewal and check the extended expiration.
+9. Create an upcoming event, register the member, cancel, and register again. Check in the member from the administrator participant list; verify attendance and membership restrictions.
+10. Confirm email-disabled/provider-failure notices preserve changes. Verify real inbox delivery separately; local mocked tests do not prove this.
+11. Sign out and check protected-page redirects. Redeploy and confirm stored records/sessions survive.
 
 Add the live URL to the README and record deployment success only after this test. Passing local checks alone does not prove hosting works.
 
-Render Free sleeps after 15 minutes without traffic and can take about a minute to resume. Document the first-load delay for the capstone. Future email delivery uses HTTPS because free services block SMTP ports.
+Render Free sleeps after 15 minutes without traffic and can take about a minute to resume. Document the first-load delay for the capstone. Resend email delivery uses HTTPS because free services block SMTP ports.
 
 ## References
 
