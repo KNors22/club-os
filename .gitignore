@@ -24,3 +24,5 @@ coverage/
 !.env.example
 .playwright/
 test-results/
+
+playwright-report/

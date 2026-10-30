@@ -52,11 +52,8 @@ describe("explicit fictional demonstration data", () => {
       "+passwordHash",
     );
     expect(await compare(password, admin!.passwordHash)).toBe(true);
-    // updatedAt metadata can advance on upsert checks; business fields must stay unchanged.
-    const business = (records: Record<string, unknown>[]) =>
-      records.map(({ updatedAt: _updatedAt, ...record }) => record);
-    expect(business(await Membership.find().lean())).toEqual(business(before));
-    expect(business(await Event.find().lean())).toEqual(business(events));
+    expect(await Membership.find().lean()).toEqual(before);
+    expect(await Event.find().lean()).toEqual(events);
   });
   it("refuses reserved-address collisions before creating or changing accounts", async () => {
     await User.create({

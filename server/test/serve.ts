@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import { seedDemoData } from "../src/services/demo-data.js";
 import { createApp } from "../src/app.js";
 import { connectDatabase, createSessionStore } from "../src/database.js";
 
@@ -22,6 +23,7 @@ const config = {
   sessionSecret: randomBytes(32).toString("hex"),
 };
 await connectDatabase(config.mongoUri);
+await seedDemoData("Browser-Only-Demo-2026!");
 const store = createSessionStore(config);
 await store.collectionP;
 const server = createApp(config, store).listen(config.port, "127.0.0.1", () =>

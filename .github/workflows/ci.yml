@@ -1,4 +1,4 @@
-name: Foundation checks
+name: ClubOS checks
 
 on:
   push:
@@ -39,3 +39,21 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run smoke -w server
+
+      - name: Install browser dependencies
+        run: npx playwright install --with-deps chromium firefox
+      - name: Chrome and Firefox acceptance
+        run: npm run test:browser
+        env:
+          PLAYWRIGHT_CHANNEL: chromium
+          PLAYWRIGHT_FIREFOX: "1"
+      - name: Upload browser verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-verification
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

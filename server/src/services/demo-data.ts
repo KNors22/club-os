@@ -78,12 +78,14 @@ export async function seedDemoData(password: string, now = new Date()) {
       { _id: account.id },
       {
         $setOnInsert: {
+          createdAt: now,
+          updatedAt: now,
           name: account.name,
           email: account.email,
           passwordHash,
         },
       },
-      { upsert: true, runValidators: true },
+      { upsert: true, runValidators: true, timestamps: false },
     );
     createdUsers += result.upsertedCount;
   }
@@ -92,6 +94,8 @@ export async function seedDemoData(password: string, now = new Date()) {
     { _id: clubId },
     {
       $setOnInsert: {
+        createdAt: now,
+        updatedAt: now,
         name: "Demo Running Club",
         description: "Fictional records for the capstone walkthrough.",
         adminUserId: oid(demoAccounts[0].id),
@@ -101,12 +105,14 @@ export async function seedDemoData(password: string, now = new Date()) {
         termDays: 365,
       },
     },
-    { upsert: true, runValidators: true },
+    { upsert: true, runValidators: true, timestamps: false },
   );
   await Organization.updateOne(
     { _id: oid("c10000000000000000000002") },
     {
       $setOnInsert: {
+        createdAt: now,
+        updatedAt: now,
         name: "Demo Art Club",
         description: "Separate fictional organization for access checks.",
         adminUserId: oid(demoAccounts[4].id),
@@ -116,7 +122,7 @@ export async function seedDemoData(password: string, now = new Date()) {
         termDays: 365,
       },
     },
-    { upsert: true, runValidators: true },
+    { upsert: true, runValidators: true, timestamps: false },
   );
   const memberIds = [
     "c20000000000000000000001",
@@ -158,6 +164,8 @@ export async function seedDemoData(password: string, now = new Date()) {
       { _id: oid(memberIds[index]) },
       {
         $setOnInsert: {
+          createdAt: now,
+          updatedAt: now,
           organizationId: clubId,
           userId: oid(demoAccounts[index + 1].id),
           startsAt,
@@ -165,7 +173,7 @@ export async function seedDemoData(password: string, now = new Date()) {
           payments,
         },
       },
-      { upsert: true, runValidators: true },
+      { upsert: true, runValidators: true, timestamps: false },
     );
   }
   for (const upcoming of [true, false]) {
@@ -178,6 +186,8 @@ export async function seedDemoData(password: string, now = new Date()) {
       },
       {
         $setOnInsert: {
+          createdAt: now,
+          updatedAt: now,
           organizationId: clubId,
           createdBy: oid(demoAccounts[0].id),
           title: upcoming ? "Demo community run" : "Demo welcome run",
@@ -198,7 +208,7 @@ export async function seedDemoData(password: string, now = new Date()) {
           ],
         },
       },
-      { upsert: true, runValidators: true },
+      { upsert: true, runValidators: true, timestamps: false },
     );
   }
   return {

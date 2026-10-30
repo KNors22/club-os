@@ -62,6 +62,23 @@ test("club payment, renewal, event, and attendance workflow", async ({
         .getByRole("table", { name: "Membership payment history" })
         .getByRole("row"),
     ).toHaveCount(2);
+    const memberDetailsPath = new URL(page.url()).pathname;
+    await page.goto(`/app/${clubId}/settings`);
+    await page.getByLabel("Membership fee (CAD)").fill("25.50");
+    await page.getByRole("button", { name: "Save fee", exact: true }).click();
+    await expect(page.getByRole("status")).toContainText(
+      "Membership fee updated",
+    );
+    if (
+      process.env.CAPTURE_SCREENSHOTS === "1" &&
+      testInfo.project.name === "chrome"
+    )
+      await page.screenshot({
+        path: "docs/screenshots/club-settings-desktop.png",
+        fullPage: true,
+      });
+    await page.goto(memberDetailsPath);
+    await expect(page.getByText("$25.50 CAD", { exact: true })).toBeVisible();
     await page.getByLabel("Transaction reference").fill("DEMO-RENEWAL");
     await page.getByRole("checkbox").check();
     await page
@@ -144,9 +161,9 @@ test("club payment, renewal, event, and attendance workflow", async ({
     const summaries = page.getByRole("region", {
       name: "Club workflow summaries",
     });
-    await expect(summaries.getByText("$40.00", { exact: true })).toBeVisible();
+    await expect(summaries.getByText("$45.50", { exact: true })).toBeVisible();
     await expect(
-      summaries.getByText("1 members checked in", { exact: true }),
+      summaries.getByText("1 member checked in", { exact: true }),
     ).toBeVisible();
     if (
       process.env.CAPTURE_SCREENSHOTS === "1" &&

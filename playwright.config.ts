@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   timeout: 60000,
-  reporter: "list",
+  reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: { baseURL: "http://127.0.0.1:5174", trace: "retain-on-failure" },
   projects: [
     {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet, useMatch, useNavigate } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -28,6 +28,47 @@ export function WorkspaceLayout() {
   );
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const sidebar = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const opener = menuButton.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sidebar.current
+      ?.querySelector<HTMLButtonElement>(
+        'button[aria-label="Close navigation"]',
+      )
+      ?.focus();
+    function keydown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const controls = Array.from(
+        sidebar.current?.querySelectorAll<HTMLElement>(
+          "a[href],button:not([disabled])",
+        ) ?? [],
+      ).filter((element) => element.getClientRects().length > 0);
+      const first = controls[0],
+        last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
+    document.addEventListener("keydown", keydown);
+    return () => {
+      document.removeEventListener("keydown", keydown);
+      document.body.style.overflow = previousOverflow;
+      opener?.focus();
+    };
+  }, [open]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   async function signOut() {
@@ -51,12 +92,18 @@ export function WorkspaceLayout() {
       {open && (
         <button
           className="sidebar-backdrop"
+          tabIndex={-1}
+          aria-hidden="true"
           onClick={close}
           aria-label="Close navigation"
         />
       )}
       <aside
         id="workspace-nav"
+        ref={sidebar}
+        role={open ? "dialog" : undefined}
+        aria-modal={open ? true : undefined}
+        aria-label={open ? "Workspace navigation" : undefined}
         className={`sidebar${open ? " sidebar-open" : ""}`}
       >
         <div className="sidebar-brand">
@@ -156,12 +203,13 @@ export function WorkspaceLayout() {
           </button>
         </div>
       </aside>
-      <div className="workspace-main">
+      <div className="workspace-main" inert={open}>
         <header className="topbar">
           <div className="topbar-location">
             <button
               className="icon-button mobile-only"
               onClick={() => setOpen(true)}
+              ref={menuButton}
               aria-label="Open navigation"
               aria-expanded={open}
               aria-controls="workspace-nav"

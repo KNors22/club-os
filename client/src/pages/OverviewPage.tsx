@@ -109,12 +109,19 @@ function AdminOverview() {
           <div className="panel metric-card">
             <span>Upcoming events</span>
             <strong>{counts.data.events.upcoming}</strong>
-            <small>{counts.data.events.total} events in total</small>
+            <small>
+              {counts.data.events.total}{" "}
+              {counts.data.events.total === 1 ? "event" : "events"} in total
+            </small>
           </div>
           <div className="panel metric-card">
             <span>Event registrations</span>
             <strong>{counts.data.events.registrations}</strong>
-            <small>{counts.data.events.attendance} members checked in</small>
+            <small>
+              {counts.data.events.attendance}{" "}
+              {counts.data.events.attendance === 1 ? "member" : "members"}{" "}
+              checked in
+            </small>
           </div>
         </section>
       )}
