@@ -58,3 +58,19 @@ export const membershipQuerySchema = z.object({
   page: z.coerce.number().int().min(1).max(100000).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(20),
 });
+
+export const paymentInputSchema = z
+  .object({
+    requestId: z.uuid(),
+    amountCents: z.number().int().min(1).max(1000000),
+    method: z.enum(["cash", "e-transfer", "other"]),
+    reference: z.string().trim().max(120).default(""),
+    paidAt: z.iso
+      .datetime({ offset: true })
+      .refine(
+        (value) => new Date(value).getTime() <= Date.now(),
+        "Payment date cannot be in the future.",
+      ),
+  })
+  .strict();
+export type PaymentInput = z.infer<typeof paymentInputSchema>;

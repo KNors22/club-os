@@ -3,6 +3,7 @@ import { Membership } from "../models/Membership.js";
 import { User } from "../models/User.js";
 import { requireAuth } from "../services/auth.js";
 import { membershipSummary } from "../services/memberships.js";
+import { membershipDetails } from "../services/payments.js";
 import {
   createOrganization,
   getOrganizationAccess,
@@ -31,11 +32,9 @@ organizationRouter.post("/", async (req, res) => {
 });
 organizationRouter.post("/join", async (req, res) => {
   const { joinCode } = joinSchema.parse(req.body);
-  res
-    .status(201)
-    .json({
-      organization: await joinOrganization(req.session.userId!, joinCode),
-    });
+  res.status(201).json({
+    organization: await joinOrganization(req.session.userId!, joinCode),
+  });
 });
 organizationRouter.get("/:orgId", async (req, res) => {
   const { organization } = await getOrganizationAccess(
@@ -56,7 +55,7 @@ organizationRouter.get("/:orgId/memberships/me", async (req, res) => {
     userId: req.session.userId,
   });
   res.json({
-    membership: membership ? membershipSummary(membership) : null,
+    membership: membership ? membershipDetails(membership) : null,
     role,
   });
 });

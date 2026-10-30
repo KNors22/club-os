@@ -8,6 +8,7 @@ import { AppError, errorHandler } from "./errors.js";
 import { authRouter, sessionCookieName } from "./routes/auth.js";
 import { organizationRouter } from "./routes/organizations.js";
 import { profileRouter } from "./routes/profile.js";
+import { createPaymentRouter } from "./routes/payments.js";
 
 export function createApp(config: AppConfig, store: Store) {
   const app = express();
@@ -22,12 +23,10 @@ export function createApp(config: AppConfig, store: Store) {
   );
   app.get("/api/health", (_req, res) => {
     const connected = mongoose.connection.readyState === 1;
-    res
-      .status(connected ? 200 : 503)
-      .json({
-        status: connected ? "ok" : "unavailable",
-        database: connected ? "connected" : "disconnected",
-      });
+    res.status(connected ? 200 : 503).json({
+      status: connected ? "ok" : "unavailable",
+      database: connected ? "connected" : "disconnected",
+    });
   });
   app.use("/api", (_req, res, next) => {
     res.set("Cache-Control", "no-store");
@@ -71,6 +70,7 @@ export function createApp(config: AppConfig, store: Store) {
   app.use("/api/auth", authRouter(isProduction));
   app.use("/api/me", profileRouter);
   app.use("/api/organizations", organizationRouter);
+  app.use("/api/organizations", createPaymentRouter());
   app.use("/api", () => {
     throw new AppError(404, "NOT_FOUND", "API endpoint not found.");
   });

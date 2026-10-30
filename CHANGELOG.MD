@@ -4,6 +4,21 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- Manual payment APIs activate and renew memberships, preserve payment history, and prevent duplicate or concurrent payment submissions using request IDs and optimistic concurrency.
+
+### Planned
+
+- Administrator payment forms and member history.
+- Events, registration, and cancellation.
+- Event browsing and registration screens.
+- Manual attendance check-in.
+- Payment, renewal, and event dashboard summaries.
+- Demo-inbox email confirmations.
+- Live Render/Atlas deployment and a verified public application URL.
+- Fictional demo-data seed command and final submission documentation.
+
 ## [0.1.0] - 2026-10-29
 
 ### Added

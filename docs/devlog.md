@@ -34,3 +34,12 @@ membershipSchema.index({ organizationId: 1, userId: 1 }, { unique: true });
 ![Mobile membership](screenshots/foundation-mobile.png)
 
 **Weekly summary:** Foundation establishes account → club → member workflows with verified access boundaries. Release history now contains setup, backend, and complete Foundation milestones. Live hosting remains pending Render/Atlas account setup.
+
+
+### October 30, 2026 — Club workflows
+
+Changes were implemented and verified in focused commits:
+
+- Manual payment APIs activate and renew memberships, preserve payment history, and prevent duplicate or concurrent payment submissions using request IDs and optimistic concurrency.
+
+Each code commit passes lint, TypeScript, unit/API tests, builds, and compiled-server smoke checks before it is committed. Provider delivery is tested with mocks; actual email requires the configured Resend API key and demo inbox.
