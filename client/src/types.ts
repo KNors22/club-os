@@ -20,6 +20,22 @@ export interface Membership {
   startsAt: string | null;
   expiresAt: string | null;
   status: MembershipStatus;
+  payments?: Payment[];
+}
+export interface Payment {
+  id: string;
+  requestId: string;
+  amountCents: number;
+  method: "cash" | "e-transfer" | "other";
+  reference: string;
+  paidAt: string;
+  recordedAt: string;
+  periodStart: string;
+  periodEnd: string;
+}
+export interface NotificationResult {
+  status: "sent" | "failed" | "disabled" | "skipped";
+  message: string;
 }
 export interface MemberRow extends Membership {
   user: { name: string; email: string };

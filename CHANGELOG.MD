@@ -7,10 +7,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 ### Added
 
 - Manual payment APIs activate and renew memberships, preserve payment history, and prevent duplicate or concurrent payment submissions using request IDs and optimistic concurrency.
+- Administrators can record verified payments from member details, while members can view their own payment and renewal history. Payment forms retain request IDs across retries and membership dates update after confirmation.
 
 ### Planned
 
-- Administrator payment forms and member history.
 - Events, registration, and cancellation.
 - Event browsing and registration screens.
 - Manual attendance check-in.

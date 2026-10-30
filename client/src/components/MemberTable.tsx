@@ -1,8 +1,15 @@
 import type { MemberRow } from "../types";
 import { date } from "../lib/format";
 import { Avatar, StatusBadge } from "./ui";
+import { Link } from "react-router-dom";
 
-export function MemberTable({ members }: { members: MemberRow[] }) {
+export function MemberTable({
+  members,
+  organizationId,
+}: {
+  members: MemberRow[];
+  organizationId: string;
+}) {
   return (
     <div className="table-scroll">
       <table className="member-table">
@@ -22,7 +29,13 @@ export function MemberTable({ members }: { members: MemberRow[] }) {
                 <div className="table-person">
                   <Avatar name={member.user.name} />
                   <div>
-                    <strong>{member.user.name}</strong>
+                    <Link
+                      className="member-name-link"
+                      to={`/app/${organizationId}/members/${member.id}`}
+                      aria-label={`Manage membership for ${member.user.name}`}
+                    >
+                      <strong>{member.user.name}</strong>
+                    </Link>
                     <small>{member.user.email}</small>
                   </div>
                 </div>

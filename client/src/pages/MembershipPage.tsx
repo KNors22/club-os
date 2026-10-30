@@ -10,6 +10,7 @@ import { useOrganization } from "../contexts/clubs-context";
 import { useAuth } from "../contexts/auth-context";
 import { useResource } from "../hooks/useResource";
 import { Avatar, ErrorState, Loading, StatusBadge } from "../components/ui";
+import { PaymentHistory } from "../components/PaymentHistory";
 import { date, money } from "../lib/format";
 import type { Membership } from "../types";
 
@@ -116,6 +117,7 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
               </p>
             </div>
           </section>
+          <PaymentHistory payments={membership.payments} />
         </div>
       )}
     </>

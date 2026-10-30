@@ -82,7 +82,10 @@ export function MembersPage() {
           <ErrorState message={resource.error} retry={resource.reload} />
         ) : resource.data?.memberships.length ? (
           <>
-            <MemberTable members={resource.data.memberships} />
+            <MemberTable
+              members={resource.data.memberships}
+              organizationId={organization.id}
+            />
             <div className="pagination">
               <span>
                 {resource.data.pagination.total}{" "}

@@ -119,7 +119,10 @@ function AdminOverview() {
         ) : members.error ? (
           <ErrorState message={members.error} retry={members.reload} />
         ) : members.data?.memberships.length ? (
-          <MemberTable members={members.data.memberships} />
+          <MemberTable
+            members={members.data.memberships}
+            organizationId={organization.id}
+          />
         ) : (
           <div className="empty-state">
             <UsersRound size={30} />
