@@ -50,3 +50,29 @@ export interface DashboardCounts {
   expired: number;
   pending: number;
 }
+export interface ClubEvent {
+  id: string;
+  title: string;
+  description: string;
+  startsAt: string;
+  location: string;
+  capacity: number;
+  registrationCount: number;
+  attendanceCount: number;
+  registration: {
+    registrationId: string;
+    registeredAt: string;
+    checkedInAt: string | null;
+  } | null;
+}
+export interface Participant {
+  membershipId: string;
+  name: string;
+  email: string;
+  registeredAt: string;
+  checkedInAt: string | null;
+}
+export interface EventList {
+  events: ClubEvent[];
+  pagination: { total: number; page: number; limit: number; pages: number };
+}

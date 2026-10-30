@@ -11,6 +11,7 @@ import {
   UserRound,
   UsersRound,
   X,
+  CalendarDays,
 } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
 import { useClubs } from "../contexts/clubs-context";
@@ -89,6 +90,10 @@ export function WorkspaceLayout() {
               <NavLink to={`/app/${organization.id}`} end onClick={close}>
                 <LayoutDashboard size={19} />
                 Overview
+              </NavLink>
+              <NavLink to={`/app/${organization.id}/events`} onClick={close}>
+                <CalendarDays size={19} />
+                Events
               </NavLink>
               {organization.role === "admin" ? (
                 <NavLink to={`/app/${organization.id}/members`} onClick={close}>

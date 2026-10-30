@@ -16,6 +16,8 @@ import { MemberDetailPage } from "./pages/MemberDetailPage";
 import { MembershipPage } from "./pages/MembershipPage";
 import { OverviewPage } from "./pages/OverviewPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { EventsPage } from "./pages/EventsPage";
+import { EventDetailPage } from "./pages/EventDetailPage";
 import { WorkspaceLayout } from "./components/WorkspaceLayout";
 import { ErrorState, Loading } from "./components/ui";
 import { Brand } from "./components/Brand";
@@ -86,6 +88,8 @@ export function App() {
               element={<MemberDetailPage />}
             />
             <Route path="membership" element={<MembershipPage />} />
+            <Route path="events" element={<EventsPage />} />
+            <Route path="events/:eventId" element={<EventDetailPage />} />
           </Route>
         </Route>
       </Route>

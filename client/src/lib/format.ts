@@ -23,3 +23,14 @@ export function initials(name: string) {
     .join("")
     .toUpperCase();
 }
+export function dateTime(value: string) {
+  return new Intl.DateTimeFormat("en-CA", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(new Date(value));
+}
+export function localDateTime(value: Date) {
+  return new Date(value.getTime() - value.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+}
