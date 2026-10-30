@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: Foundation v0.1.0 and phase 2 club workflows implemented.** Phase 2 changes are tracked under Unreleased until the next version is published. The [GitHub repository](https://github.com/KNors22/club-os) is public. This implementation has not yet been deployed to production.
+**Status: club workflows, administrator fee editing, and local validation are implemented.** The [GitHub repository](https://github.com/KNors22/club-os) is public. Live Render/Atlas hosting and actual demo-inbox delivery remain pending connected accounts; no production URL is claimed. See the [submission guide](docs/submission.md) and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -53,12 +53,12 @@ Startup connects to MongoDB and creates required indexes before listening. It ne
 
 ## Usage
 
-There are no seeded accounts or shared passwords. Register two accounts to try both roles:
+Register two accounts to try both roles, or create the optional [fictional demo accounts](docs/demo-data.md). There is no shared default password; the explicit seed command generates one or uses your private `DEMO_PASSWORD`.
 
 1. Register an administrator, choose **Create club**, and set its name, fee, and term.
 2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
 3. As administrator, open **Members**, select the member, and record the received payment, method, date, and optional reference. Confirm that you received the full fee.
-4. Refresh the member's **Membership** page to see active status and payment history. Record another payment to demonstrate renewal.
+4. Refresh the member's **Membership** page to see active status and payment history. Optionally update the fee under **Club settings**, then record a renewal at the new fee. Historical payments and current validity remain unchanged by the fee edit itself.
 5. As administrator, open **Events** and create an upcoming event with a capacity.
 6. As member, open the event and register. Try cancellation and registration again.
 7. As administrator, open the event's participant list and choose **Check in**. Refresh the overview to see payment, membership, registration, and attendance totals.
@@ -82,6 +82,7 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 | --- | --- |
 | `npm run setup` | Create a local environment file without overwriting one |
 | `npm run dev` | Run the API and frontend with reload support |
+| `npm run seed:demo` | Explicitly seed fictional data in the dedicated `clubos_demo` database |
 | `npm run lint` | Lint application, test, and configuration code |
 | `npm run typecheck` | Check both TypeScript workspaces |
 | `npm test` | Run component and API tests |
@@ -89,11 +90,13 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 | `npm start` | Run compiled Express; production also serves the frontend |
 | `npm run check` | Run lint, types, tests, builds, and production smoke checks |
 | `npm run test:production` | Build and smoke-test compiled routes and assets |
-| `npm run test:browser` | Run Foundation and club-workflow acceptance tests in installed Chrome |
+| `npm run test:browser` | Run Foundation, club workflows, and keyboard/responsive acceptance in installed Chrome |
+| `npm run verify:live -- <https-origin>` | Read-only readiness check of a deployed app |
+| `APP_LIVE_URL=<https-origin> npm run test:live` | Run two-account browser acceptance against a live app, creating fictional records |
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. Local verification passed 59 component/API tests and six Chrome/Firefox scenarios. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
 
 ## Technologies Used
 
@@ -123,7 +126,7 @@ club-os/
 
 Prepared for one Render Free service and MongoDB Atlas Free. Production requires an HTTPS application URL, MongoDB URI, and random session secret. Express serves the built frontend and API together, including direct client-route links.
 
-Follow the [deployment guide](docs/deployment.md). No production URL is claimed until account setup and live smoke tests have completed.
+Follow the [deployment guide](docs/deployment.md), then run the read-only readiness probe and live browser workflow. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
 
 ## Development Notes
 
@@ -132,7 +135,6 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 ## Future Improvements
 
 - Live Render/Atlas hosting and verification of demo-inbox delivery.
-- An explicit fictional demo-data seed command and final submission materials.
 - QR cards/check-in, exports, announcements, scheduled reminders, and multiple plans.
 - Administrator invitations and password recovery.
 
