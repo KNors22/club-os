@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: club workflows, administrator fee editing, and local validation are implemented.** The [GitHub repository](https://github.com/KNors22/club-os) is public. Live Render/Atlas hosting and actual demo-inbox delivery remain pending connected accounts; no production URL is claimed. See the [submission guide](docs/submission.md) and [validation evidence](docs/validation.md).
+**Status: v0.6.0-rc.1 validation and submission candidate.** Club workflows, administrator fee editing, and local validation are implemented. The [GitHub repository](https://github.com/KNors22/club-os) is public. Live Render/Atlas hosting and actual demo-inbox delivery remain pending connected accounts; no production URL is claimed. See the [submission guide](docs/submission.md) and [validation evidence](docs/validation.md).
 
 ## Features
 

@@ -4,24 +4,32 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Planned
+
+- Live Render/Atlas deployment, a verified public application URL, and production workflow checks.
+- Real confirmation delivery to the demo inbox using configured Resend credentials.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.1...HEAD)
+
+## [0.6.0-rc.1] - 2026-10-30
+
+**Validation and submission candidate.**
+
 ### Added
 
+- The validation/submission candidate aligns all workspace and lockfile versions at v0.6.0-rc.1, consolidates completed changelog entries into a dated release, and includes release notes. Clean installation and full local checks pass; live hosting, production browser acceptance, and real inbox delivery remain explicitly pending connected accounts.
 - The submission guide links required deliverables, records the five-minute administrator/member and fee-change walkthrough, and separates verified local evidence from pending hosting/inbox acceptance. README setup/usage, fictional-account instructions, example seed settings, screenshots, and the truthful weekly devlog are complete; local documentation links are validated.
 - Compiled production smoke checks cover secure sessions, fee changes, payments/renewals, organization isolation, registration/cancellation, repeated attendance, dashboard totals, and logout with scoped cleanup. Read-only live readiness and explicit live browser commands are documented; public hosting and actual inbox delivery remain pending connected accounts.
 - Six Chrome/Firefox scenarios pass across desktop and mobile, including changed-fee renewals, seeded access, keyboard menu containment/Escape, failure recovery, and member restrictions. Mobile focus, dashboard labels, and seed timestamp preservation are corrected; CI runs browser acceptance with reports/traces, refreshed screenshots, and validation evidence.
 - The existing local-origin fix is now committed with regression tests and setup documentation. Development permits localhost and 127.0.0.1 only at the configured scheme and port; production and non-local origins retain exact matching.
 - An explicit demo seed command creates fictional administrator/member accounts, membership states, payment history, events, and attendance in a dedicated database. Reruns preserve edited records and passwords, reserved-address collisions fail safely, and no startup seed or email side effects are introduced.
 
+
 ### Fixed
 
 - Local development accepts both `localhost` and `127.0.0.1` with the configured scheme and port, preventing valid form submissions from failing origin validation. Production still requires the exact configured application origin.
 
-### Planned
-
-- Live Render/Atlas deployment, a verified public application URL, and production workflow checks.
-- Real confirmation delivery to the demo inbox using configured Resend credentials.
-
-[Full Changelog](https://github.com/KNors22/club-os/compare/v0.5.0...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.5.0...v0.6.0-rc.1)
 
 ## [0.5.0] - 2026-10-30
 
