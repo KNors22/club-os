@@ -3,6 +3,7 @@ import { Membership } from "../models/Membership.js";
 import { User } from "../models/User.js";
 import { requireAuth } from "../services/auth.js";
 import { membershipSummary } from "../services/memberships.js";
+import { dashboardSummary } from "../services/dashboard.js";
 import { membershipDetails } from "../services/payments.js";
 import {
   createOrganization,
@@ -109,13 +110,5 @@ organizationRouter.get("/:orgId/dashboard", async (req, res) => {
     req.params.orgId,
   );
   requireAdmin(role);
-  const base = { organizationId: organization._id };
-  const now = new Date();
-  const [total, active, expired, pending] = await Promise.all([
-    Membership.countDocuments(base),
-    Membership.countDocuments({ ...base, expiresAt: { $gt: now } }),
-    Membership.countDocuments({ ...base, expiresAt: { $ne: null, $lte: now } }),
-    Membership.countDocuments({ ...base, expiresAt: null }),
-  ]);
-  res.json({ counts: { total, active, expired, pending } });
+  res.json(await dashboardSummary(organization));
 });

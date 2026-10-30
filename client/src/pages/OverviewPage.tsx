@@ -13,7 +13,7 @@ import { JoinCode } from "../components/JoinCode";
 import { MemberTable } from "../components/MemberTable";
 import { money } from "../lib/format";
 import { MembershipPage } from "./MembershipPage";
-import type { DashboardCounts, MemberList } from "../types";
+import type { DashboardData, MemberList } from "../types";
 
 export function OverviewPage() {
   const organization = useOrganization();
@@ -26,7 +26,7 @@ export function OverviewPage() {
 
 function AdminOverview() {
   const organization = useOrganization();
-  const counts = useResource<{ counts: DashboardCounts }>(
+  const counts = useResource<DashboardData>(
     `/organizations/${organization.id}/dashboard`,
   );
   const members = useResource<MemberList>(
@@ -89,6 +89,34 @@ function AdminOverview() {
             ))}
           </div>
         )
+      )}
+      {counts.data?.payments && (
+        <section className="metrics-grid" aria-label="Club workflow summaries">
+          <div className="panel metric-card">
+            <span>Payments received</span>
+            <strong>{money(counts.data.payments.totalCents)}</strong>
+            <small>
+              {counts.data.payments.transactions} confirmed transactions · CAD
+            </small>
+          </div>
+          <div className="panel metric-card">
+            <span>Upcoming renewals</span>
+            <strong>{counts.data.renewals.dueSoon}</strong>
+            <small>
+              Expiring within {counts.data.renewals.windowDays} days
+            </small>
+          </div>
+          <div className="panel metric-card">
+            <span>Upcoming events</span>
+            <strong>{counts.data.events.upcoming}</strong>
+            <small>{counts.data.events.total} events in total</small>
+          </div>
+          <div className="panel metric-card">
+            <span>Event registrations</span>
+            <strong>{counts.data.events.registrations}</strong>
+            <small>{counts.data.events.attendance} members checked in</small>
+          </div>
+        </section>
       )}
       <div className="overview-grid">
         <JoinCode code={organization.joinCode!} />

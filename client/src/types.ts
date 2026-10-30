@@ -50,6 +50,22 @@ export interface DashboardCounts {
   expired: number;
   pending: number;
 }
+export interface DashboardData {
+  counts: DashboardCounts;
+  payments: {
+    totalCents: number;
+    transactions: number;
+    awaitingInitialPaymentCents: number;
+    currency: "CAD";
+  };
+  renewals: { dueSoon: number; windowDays: number };
+  events: {
+    total: number;
+    upcoming: number;
+    registrations: number;
+    attendance: number;
+  };
+}
 export interface ClubEvent {
   id: string;
   title: string;

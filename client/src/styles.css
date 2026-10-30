@@ -2666,3 +2666,45 @@ fieldset {
     grid-template-columns: 1fr;
   }
 }
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 25px;
+}
+.metric-card {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.metric-card > span {
+  font-size: 12px;
+  color: #66795a;
+}
+.metric-card > strong {
+  font-family: Manrope, sans-serif;
+  font-size: 27px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  color: #2d4c31;
+}
+.metric-card > small {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #6c7a61;
+}
+@media (max-width: 1050px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 390px) {
+  .metric-card {
+    padding: 17px;
+  }
+  .metric-card > strong {
+    font-size: 23px;
+  }
+}
