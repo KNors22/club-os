@@ -21,7 +21,8 @@
     "dev:qa": "npm run dev:qa -w server",
     "test:browser": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run smoke -w server",
-    "test:production": "npm run build && npm run smoke -w server"
+    "test:production": "npm run build && npm run smoke -w server",
+    "seed:demo": "npm run seed:demo -w server"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",

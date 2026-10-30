@@ -4,11 +4,14 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- An explicit demo seed command creates fictional administrator/member accounts, membership states, payment history, events, and attendance in a dedicated database. Reruns preserve edited records and passwords, reserved-address collisions fail safely, and no startup seed or email side effects are introduced.
 ### Planned
 
 - Live Render/Atlas deployment, a verified public application URL, and production workflow checks.
 - Real confirmation delivery to the demo inbox using configured Resend credentials.
-- Fictional demo-data seed command and final submission documentation.
+- Final submission documentation and live acceptance evidence.
 
 [Full Changelog](https://github.com/KNors22/club-os/compare/v0.5.0...HEAD)
 
