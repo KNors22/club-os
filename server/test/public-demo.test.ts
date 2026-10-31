@@ -26,10 +26,12 @@ describe("public demo account discovery", () => {
     await admin
       .post("/api/auth/login")
       .set("Origin", origin)
-      .send({ email: "admin@clubos.example", password: PUBLIC_DEMO_PASSWORD })
+      .send({ email: "alex@clubos", password: PUBLIC_DEMO_PASSWORD })
       .expect(200);
     expect(
-      (await admin.get("/api/organizations")).body.organizations[0].role,
+      (await admin.get("/api/organizations")).body.organizations.find(
+        (club: { id: string }) => club.id === "c10000000000000000000001",
+      ).role,
     ).toBe("admin");
   });
   it("does not advertise demo credentials when public mode is disabled", async () => {

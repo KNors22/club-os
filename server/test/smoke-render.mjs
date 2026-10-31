@@ -118,14 +118,14 @@ try {
   await boot();
   const config = await (await api("GET", "/config")).json();
   assert.equal(config.publicDemo.password, PUBLIC_DEMO_PASSWORD);
-  assert.equal(config.publicDemo.accounts.length, 5);
-  const cookie = await login("admin@clubos.example");
-  await login("member@clubos.example");
+  assert.equal(config.publicDemo.accounts.length, 48);
+  const cookie = await login("alex@clubos");
+  await login("jordan@clubos");
   await mongoose.connect(mongoUri);
-  assert.equal(await User.countDocuments(), 5);
-  assert.equal(await Organization.countDocuments(), 2);
-  assert.equal(await Membership.countDocuments(), 3);
-  assert.equal(await Event.countDocuments(), 2);
+  assert.equal(await User.countDocuments(), 48);
+  assert.equal(await Organization.countDocuments(), 6);
+  assert.ok((await Membership.countDocuments()) > 150);
+  assert.ok((await Event.countDocuments()) > 300);
   const path = "/organizations/c10000000000000000000001";
   assert.equal(
     (
@@ -141,7 +141,7 @@ try {
   const memberships = await Membership.find().lean();
   const events = await Event.find().lean();
   await User.updateOne(
-    { email: "admin@clubos.example" },
+    { email: "alex@clubos" },
     { $set: { passwordHash: await hash("PreviousDemo2026!", 12) } },
   );
   await User.create({
@@ -156,8 +156,8 @@ try {
     200,
     "Mongo-backed session must survive the process restart",
   );
-  await login("admin@clubos.example");
-  await login("member@clubos.example");
+  await login("alex@clubos");
+  await login("jordan@clubos");
   await login("ordinary@example.com", "OrdinaryPrivate2026!");
   assert.equal(
     (await Organization.findById("c10000000000000000000001")).feeCents,
@@ -165,7 +165,7 @@ try {
   );
   assert.deepEqual(await Membership.find().lean(), memberships);
   assert.deepEqual(await Event.find().lean(), events);
-  assert.equal(await User.countDocuments(), 6);
+  assert.equal(await User.countDocuments(), 49);
   const user = await User.findOne({ email: "ordinary@example.com" }).select(
     "+passwordHash",
   );

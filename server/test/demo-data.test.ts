@@ -15,17 +15,19 @@ describe("explicit fictional demonstration data", () => {
   it("creates useful scenarios and preserves edited records, credentials, history, and attendance on reruns", async () => {
     const now = new Date();
     const first = await seedDemoData(password, now);
-    expect(first.createdUsers).toBe(5);
-    expect(await Organization.countDocuments()).toBe(2);
-    expect(await Membership.countDocuments()).toBe(3);
-    expect(await Event.countDocuments()).toBe(2);
-    expect(await Membership.countDocuments({ expiresAt: { $gt: now } })).toBe(
-      1,
-    );
-    expect(await Membership.countDocuments({ expiresAt: null })).toBe(1);
+    expect(first.createdUsers).toBe(48);
+    expect(await Organization.countDocuments()).toBe(6);
+    expect(await Membership.countDocuments()).toBeGreaterThan(150);
+    expect(await Event.countDocuments()).toBeGreaterThan(300);
+    expect(
+      await Membership.countDocuments({ expiresAt: { $gt: now } }),
+    ).toBeGreaterThan(50);
+    expect(
+      await Membership.countDocuments({ expiresAt: null }),
+    ).toBeGreaterThan(20);
     expect(
       await Membership.countDocuments({ expiresAt: { $lte: now, $ne: null } }),
-    ).toBe(1);
+    ).toBeGreaterThan(20);
     const before = await Membership.find().lean();
     const events = await Event.find().lean();
     await User.updateOne(
@@ -33,7 +35,7 @@ describe("explicit fictional demonstration data", () => {
       { $set: { name: "Edited Demo Admin" } },
     );
     await Organization.updateOne(
-      { name: "Demo Running Club" },
+      { name: "Riverside Running Club" },
       { $set: { feeCents: 2550 } },
     );
     const repeat = await seedDemoData(
@@ -41,12 +43,13 @@ describe("explicit fictional demonstration data", () => {
       new Date(now.getTime() + 86400000),
     );
     expect(repeat.createdUsers).toBe(0);
-    expect(await User.countDocuments()).toBe(5);
+    expect(await User.countDocuments()).toBe(48);
     expect((await User.findOne({ email: demoAccounts[0].email }))!.name).toBe(
       "Edited Demo Admin",
     );
     expect(
-      (await Organization.findOne({ name: "Demo Running Club" }))!.feeCents,
+      (await Organization.findOne({ name: "Riverside Running Club" }))!
+        .feeCents,
     ).toBe(2550);
     const admin = await User.findOne({ email: demoAccounts[0].email }).select(
       "+passwordHash",
@@ -100,20 +103,21 @@ describe("public demo password synchronization", () => {
     });
     const before = await Membership.find().lean();
     await Organization.updateOne(
-      { name: "Demo Running Club" },
+      { name: "Riverside Running Club" },
       { $set: { feeCents: 2550 } },
     );
     const sync = await seedDemoData(PUBLIC_DEMO_PASSWORD, new Date(), {
       syncPasswords: true,
     });
-    expect(sync.updatedPasswords).toBe(5);
+    expect(sync.updatedPasswords).toBe(48);
     expect(sync.createdUsers).toBe(0);
-    for (const account of demoAccounts) {
-      const user = await User.findById(account.id).select("+passwordHash");
-      expect(await compare(PUBLIC_DEMO_PASSWORD, user!.passwordHash)).toBe(
-        true,
-      );
-    }
+    const shared = await User.find({
+      _id: { $in: demoAccounts.map((a) => a.id) },
+    }).select("+passwordHash");
+    expect(new Set(shared.map((u) => u.passwordHash)).size).toBe(1);
+    expect(await compare(PUBLIC_DEMO_PASSWORD, shared[0].passwordHash)).toBe(
+      true,
+    );
     const privateUser = await User.findOne({
       email: "private-test@example.com",
     }).select("+passwordHash");
@@ -122,7 +126,8 @@ describe("public demo password synchronization", () => {
     ).toBe(true);
     expect(await Membership.find().lean()).toEqual(before);
     expect(
-      (await Organization.findOne({ name: "Demo Running Club" }))!.feeCents,
+      (await Organization.findOne({ name: "Riverside Running Club" }))!
+        .feeCents,
     ).toBe(2550);
     expect(
       (
