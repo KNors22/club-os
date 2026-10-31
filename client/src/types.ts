@@ -50,8 +50,25 @@ export interface DashboardCounts {
   expired: number;
   pending: number;
 }
+export interface MonthlyActivity {
+  month: string;
+  joins: number;
+  members: number;
+  attendance: number;
+  revenueCents: number;
+}
+export interface UpcomingDashboardEvent {
+  id: string;
+  title: string;
+  startsAt: string;
+  location: string;
+  capacity: number;
+  registrationCount: number;
+}
 export interface DashboardData {
   counts: DashboardCounts;
+  analytics: { timeZone: string; monthly: MonthlyActivity[] };
+  upcomingEvents: UpcomingDashboardEvent[];
   payments: {
     totalCents: number;
     transactions: number;

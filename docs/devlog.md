@@ -152,3 +152,5 @@ The first hosted run of the new release identified a missing `SESSION_SECRET`. A
 The release extends the existing club data and preserves membership/payment workflows. Each checkpoint is verified before publication.
 
 - **V1 checkpoint 1:** The administrator dashboard now supplies twelve Eastern-time calendar months of joins, membership totals, attendance, and received payments, plus the next four events with capacity counts. Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
+
+- **V1 checkpoint 2:** The administrator overview now includes real membership-status, growth, attendance/payment charts, active-member share, and upcoming-event capacity. Six/twelve-month controls, focus/hover values, readable data tables, and explicit empty states keep the responsive SVG charts useful without adding chart dependencies.

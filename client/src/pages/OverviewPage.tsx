@@ -1,14 +1,15 @@
 import {
   ArrowUpRight,
+  CalendarDays,
   CircleCheck,
-  Clock3,
+  CreditCard,
   UsersRound,
-  UserX,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useOrganization } from "../contexts/clubs-context";
 import { useResource } from "../hooks/useResource";
 import { ErrorState, Loading } from "../components/ui";
+import { DashboardCharts } from "../components/DashboardCharts";
 import { JoinCode } from "../components/JoinCode";
 import { MemberTable } from "../components/MemberTable";
 import { money } from "../lib/format";
@@ -32,32 +33,6 @@ function AdminOverview() {
   const members = useResource<MemberList>(
     `/organizations/${organization.id}/memberships?limit=5`,
   );
-  const stats = [
-    {
-      key: "total" as const,
-      label: "Total members",
-      icon: UsersRound,
-      detail: "Your community, together",
-    },
-    {
-      key: "active" as const,
-      label: "Active memberships",
-      icon: CircleCheck,
-      detail: "Ready for what’s next",
-    },
-    {
-      key: "pending" as const,
-      label: "Awaiting payment",
-      icon: Clock3,
-      detail: "A little follow-up goes a long way",
-    },
-    {
-      key: "expired" as const,
-      label: "Expired memberships",
-      icon: UserX,
-      detail: "Time to reconnect",
-    },
-  ];
   return (
     <>
       <div className="page-heading">
@@ -76,54 +51,14 @@ function AdminOverview() {
         <ErrorState message={counts.error} retry={counts.reload} />
       ) : (
         counts.data && (
-          <div className="stats-grid">
-            {stats.map(({ key, label, icon: Icon, detail }) => (
-              <section className={`stat-card stat-${key}`} key={key}>
-                <div className="stat-top">
-                  <span>{label}</span>
-                  <Icon size={19} />
-                </div>
-                <strong>{counts.data!.counts[key]}</strong>
-                <small>{detail}</small>
-              </section>
-            ))}
-          </div>
+          <>
+            <DashboardMetrics data={counts.data} />
+            <DashboardCharts
+              data={counts.data}
+              organizationId={organization.id}
+            />
+          </>
         )
-      )}
-      {counts.data?.payments && (
-        <section className="metrics-grid" aria-label="Club workflow summaries">
-          <div className="panel metric-card">
-            <span>Payments received</span>
-            <strong>{money(counts.data.payments.totalCents)}</strong>
-            <small>
-              {counts.data.payments.transactions} confirmed transactions · CAD
-            </small>
-          </div>
-          <div className="panel metric-card">
-            <span>Upcoming renewals</span>
-            <strong>{counts.data.renewals.dueSoon}</strong>
-            <small>
-              Expiring within {counts.data.renewals.windowDays} days
-            </small>
-          </div>
-          <div className="panel metric-card">
-            <span>Upcoming events</span>
-            <strong>{counts.data.events.upcoming}</strong>
-            <small>
-              {counts.data.events.total}{" "}
-              {counts.data.events.total === 1 ? "event" : "events"} in total
-            </small>
-          </div>
-          <div className="panel metric-card">
-            <span>Event registrations</span>
-            <strong>{counts.data.events.registrations}</strong>
-            <small>
-              {counts.data.events.attendance}{" "}
-              {counts.data.events.attendance === 1 ? "member" : "members"}{" "}
-              checked in
-            </small>
-          </div>
-        </section>
       )}
       <div className="overview-grid">
         <JoinCode code={organization.joinCode!} />
@@ -167,5 +102,77 @@ function AdminOverview() {
         )}
       </section>
     </>
+  );
+}
+
+function DashboardMetrics({ data }: { data: DashboardData }) {
+  const rate = data.counts.total
+    ? Math.round((data.counts.active / data.counts.total) * 100)
+    : 0;
+  return (
+    <section className="dashboard-kpis" aria-label="Club workflow summaries">
+      <div className="panel dashboard-kpi">
+        <div className="kpi-heading">
+          <span className="kpi-icon">
+            <UsersRound size={20} />
+          </span>
+          <span>Total members</span>
+        </div>
+        <strong>{data.counts.total}</strong>
+        <small>
+          {data.counts.pending} awaiting payment · {data.counts.expired} expired
+        </small>
+      </div>
+      <div className="panel dashboard-kpi">
+        <div className="kpi-heading">
+          <span className="kpi-icon">
+            <CircleCheck size={20} />
+          </span>
+          <span>Active members</span>
+        </div>
+        <strong>{data.counts.active}</strong>
+        <small>
+          {rate}% of total · {data.renewals.dueSoon} expiring soon
+        </small>
+        <div
+          className="active-share-track"
+          role="meter"
+          aria-label="Active membership share"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={rate}
+          aria-valuetext={`${data.counts.active} of ${data.counts.total} members active`}
+        >
+          <span style={{ width: `${rate}%` }} />
+        </div>
+      </div>
+      <div className="panel dashboard-kpi">
+        <div className="kpi-heading">
+          <span className="kpi-icon">
+            <CalendarDays size={20} />
+          </span>
+          <span>Upcoming events</span>
+        </div>
+        <strong>{data.events.upcoming}</strong>
+        <small>
+          {data.events.registrations} registrations · {data.events.total} total
+          events
+        </small>
+        <small>
+          {data.events.attendance}{" "}
+          {data.events.attendance === 1 ? "member" : "members"} checked in
+        </small>
+      </div>
+      <div className="panel dashboard-kpi">
+        <div className="kpi-heading">
+          <span className="kpi-icon">
+            <CreditCard size={20} />
+          </span>
+          <span>Payments received</span>
+        </div>
+        <strong>{money(data.payments.totalCents)}</strong>
+        <small>{data.payments.transactions} confirmed transactions · CAD</small>
+      </div>
+    </section>
   );
 }
