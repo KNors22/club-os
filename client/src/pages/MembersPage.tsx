@@ -1,6 +1,6 @@
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue } from "react";
 import { Search, UsersRound } from "lucide-react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { useOrganization } from "../contexts/clubs-context";
 import { useResource } from "../hooks/useResource";
 import { Button, ErrorState, Loading } from "../components/ui";
@@ -9,10 +9,39 @@ import type { MemberList } from "../types";
 
 export function MembersPage() {
   const organization = useOrganization();
-  const [search, setSearch] = useState("");
+  const [parameters, setParameters] = useSearchParams();
+  const search = (parameters.get("search") ?? "").slice(0, 100);
   const deferredSearch = useDeferredValue(search);
-  const [status, setStatus] = useState("all");
-  const [page, setPage] = useState(1);
+  const requestedStatus = parameters.get("status");
+  const status = ["active", "pending", "expired"].includes(
+    requestedStatus ?? "",
+  )
+    ? requestedStatus!
+    : "all";
+  const requestedPage = Number(parameters.get("page") ?? 1);
+  const page =
+    Number.isSafeInteger(requestedPage) &&
+    requestedPage >= 1 &&
+    requestedPage <= 100000
+      ? requestedPage
+      : 1;
+  function updateFilter(key: "search" | "status" | "page", value: string) {
+    setParameters(
+      (previous) => {
+        const next = new URLSearchParams(previous);
+        if (
+          !value ||
+          (key === "status" && value === "all") ||
+          (key === "page" && value === "1")
+        )
+          next.delete(key);
+        else next.set(key, value);
+        if (key !== "page") next.delete("page");
+        return next;
+      },
+      { replace: key === "search" },
+    );
+  }
   const query = new URLSearchParams({
     search: deferredSearch,
     status,
@@ -52,8 +81,7 @@ export function MembersPage() {
               id="member-search"
               value={search}
               onChange={(event) => {
-                setSearch(event.target.value);
-                setPage(1);
+                updateFilter("search", event.target.value);
               }}
               placeholder="Search by name or email…"
               maxLength={100}
@@ -65,8 +93,7 @@ export function MembersPage() {
               id="member-status"
               value={status}
               onChange={(event) => {
-                setStatus(event.target.value);
-                setPage(1);
+                updateFilter("status", event.target.value);
               }}
             >
               <option value="all">All memberships</option>
@@ -96,14 +123,14 @@ export function MembersPage() {
                 <Button
                   variant="secondary"
                   disabled={page <= 1}
-                  onClick={() => setPage((value) => value - 1)}
+                  onClick={() => updateFilter("page", String(page - 1))}
                 >
                   Previous
                 </Button>
                 <Button
                   variant="secondary"
                   disabled={page >= resource.data!.pagination.pages}
-                  onClick={() => setPage((value) => value + 1)}
+                  onClick={() => updateFilter("page", String(page + 1))}
                 >
                   Next
                 </Button>

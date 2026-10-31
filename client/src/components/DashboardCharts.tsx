@@ -12,6 +12,7 @@ function monthLabel(month: string, long = false) {
   }).format(new Date(`${month}-15T12:00:00Z`));
 }
 type Metric = "attendance" | "members" | "revenueCents";
+export type ActivityMetric = Exclude<Metric, "members">;
 function LineChart({
   rows,
   metric,
@@ -313,14 +314,21 @@ function MembershipChart({
 export function DashboardCharts({
   data,
   organizationId,
+  activity: selectedActivity,
+  onActivityChange,
 }: {
   data: DashboardData;
   organizationId: string;
+  activity?: ActivityMetric;
+  onActivityChange?: (activity: ActivityMetric) => void;
 }) {
   const [period, setPeriod] = useState(6),
-    [activity, setActivity] = useState<"attendance" | "revenueCents">(
-      "attendance",
-    );
+    [localActivity, setLocalActivity] = useState<ActivityMetric>("attendance");
+  const activity = selectedActivity ?? localActivity;
+  function chooseActivity(value: ActivityMetric) {
+    if (selectedActivity === undefined) setLocalActivity(value);
+    onActivityChange?.(value);
+  }
   const monthly = data.analytics?.monthly ?? [];
   const rows = monthly.slice(-period);
   const events = data.upcomingEvents ?? [];
@@ -366,7 +374,7 @@ export function DashboardCharts({
               aria-label="Activity metric"
               value={activity}
               onChange={(event) =>
-                setActivity(event.target.value as "attendance" | "revenueCents")
+                chooseActivity(event.target.value as ActivityMetric)
               }
             >
               <option value="attendance">Attendance</option>

@@ -5,11 +5,15 @@ import {
   CreditCard,
   UsersRound,
 } from "lucide-react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useOrganization } from "../contexts/clubs-context";
 import { useResource } from "../hooks/useResource";
 import { ErrorState, Loading } from "../components/ui";
-import { DashboardCharts } from "../components/DashboardCharts";
+import {
+  DashboardCharts,
+  type ActivityMetric,
+} from "../components/DashboardCharts";
 import { JoinCode } from "../components/JoinCode";
 import { MemberTable } from "../components/MemberTable";
 import { money } from "../lib/format";
@@ -27,6 +31,20 @@ export function OverviewPage() {
 
 function AdminOverview() {
   const organization = useOrganization();
+  const [activity, setActivity] = useState<ActivityMetric>("attendance");
+  const insights = useRef<HTMLElement>(null);
+  function showPayments() {
+    setActivity("revenueCents");
+    const section = insights.current;
+    if (!section) return;
+    section.focus({ preventScroll: true });
+    section.scrollIntoView({
+      behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "start",
+    });
+  }
   const counts = useResource<DashboardData>(
     `/organizations/${organization.id}/dashboard`,
   );
@@ -52,11 +70,25 @@ function AdminOverview() {
       ) : (
         counts.data && (
           <>
-            <DashboardMetrics data={counts.data} />
-            <DashboardCharts
+            <DashboardMetrics
               data={counts.data}
               organizationId={organization.id}
+              onShowPayments={showPayments}
             />
+            <section
+              ref={insights}
+              id="club-insights"
+              className="club-insights"
+              tabIndex={-1}
+              aria-label="Club insights"
+            >
+              <DashboardCharts
+                data={counts.data}
+                organizationId={organization.id}
+                activity={activity}
+                onActivityChange={setActivity}
+              />
+            </section>
           </>
         )
       )}
@@ -105,32 +137,50 @@ function AdminOverview() {
   );
 }
 
-function DashboardMetrics({ data }: { data: DashboardData }) {
+function DashboardMetrics({
+  data,
+  organizationId,
+  onShowPayments,
+}: {
+  data: DashboardData;
+  organizationId: string;
+  onShowPayments: () => void;
+}) {
   const rate = data.counts.total
     ? Math.round((data.counts.active / data.counts.total) * 100)
     : 0;
   return (
     <section className="dashboard-kpis" aria-label="Club workflow summaries">
-      <div className="panel dashboard-kpi">
+      <Link
+        className="panel dashboard-kpi dashboard-kpi-action"
+        to={`/app/${organizationId}/members`}
+        aria-label="Total members"
+        aria-describedby="total-members-count"
+      >
         <div className="kpi-heading">
           <span className="kpi-icon">
             <UsersRound size={20} />
           </span>
           <span>Total members</span>
         </div>
-        <strong>{data.counts.total}</strong>
+        <strong id="total-members-count">{data.counts.total}</strong>
         <small>
           {data.counts.pending} awaiting payment · {data.counts.expired} expired
         </small>
-      </div>
-      <div className="panel dashboard-kpi">
+      </Link>
+      <Link
+        className="panel dashboard-kpi dashboard-kpi-action"
+        to={`/app/${organizationId}/members?status=active`}
+        aria-label="Active members"
+        aria-describedby="active-members-count"
+      >
         <div className="kpi-heading">
           <span className="kpi-icon">
             <CircleCheck size={20} />
           </span>
           <span>Active members</span>
         </div>
-        <strong>{data.counts.active}</strong>
+        <strong id="active-members-count">{data.counts.active}</strong>
         <small>
           {rate}% of total · {data.renewals.dueSoon} expiring soon
         </small>
@@ -145,15 +195,20 @@ function DashboardMetrics({ data }: { data: DashboardData }) {
         >
           <span style={{ width: `${rate}%` }} />
         </div>
-      </div>
-      <div className="panel dashboard-kpi">
+      </Link>
+      <Link
+        className="panel dashboard-kpi dashboard-kpi-action"
+        to={`/app/${organizationId}/events`}
+        aria-label="Upcoming events"
+        aria-describedby="upcoming-events-count"
+      >
         <div className="kpi-heading">
           <span className="kpi-icon">
             <CalendarDays size={20} />
           </span>
           <span>Upcoming events</span>
         </div>
-        <strong>{data.events.upcoming}</strong>
+        <strong id="upcoming-events-count">{data.events.upcoming}</strong>
         <small>
           {data.events.registrations} registrations · {data.events.total} total
           events
@@ -162,17 +217,26 @@ function DashboardMetrics({ data }: { data: DashboardData }) {
           {data.events.attendance}{" "}
           {data.events.attendance === 1 ? "member" : "members"} checked in
         </small>
-      </div>
-      <div className="panel dashboard-kpi">
-        <div className="kpi-heading">
+      </Link>
+      <button
+        type="button"
+        className="panel dashboard-kpi dashboard-kpi-action"
+        onClick={onShowPayments}
+        aria-label="Payments received"
+        aria-describedby="payments-received-value"
+        aria-controls="club-insights"
+      >
+        <span className="kpi-heading">
           <span className="kpi-icon">
             <CreditCard size={20} />
           </span>
           <span>Payments received</span>
-        </div>
-        <strong>{money(data.payments.totalCents)}</strong>
+        </span>
+        <strong id="payments-received-value">
+          {money(data.payments.totalCents)}
+        </strong>
         <small>{data.payments.transactions} confirmed transactions · CAD</small>
-      </div>
+      </button>
     </section>
   );
 }

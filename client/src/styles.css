@@ -3293,3 +3293,25 @@ fieldset {
   font: inherit;
   font-size: 12px;
 }
+
+.dashboard-kpi-action {
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+.dashboard-kpi-action:hover {
+  border-color: #91b774;
+  box-shadow: 0 4px 16px #23493512;
+}
+.club-insights {
+  scroll-margin-top: 90px;
+  border-radius: 14px;
+}
+.club-insights:focus-visible {
+  outline: 3px solid #91b774;
+  outline-offset: 6px;
+}

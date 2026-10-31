@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- Administrator summary cards open all members, active-only members and upcoming events. Payments received selects the payments graph, moves focus to Club insights and scrolls it into view with reduced-motion support. Member search, status and pagination are URL-based for sharing, refresh and Back navigation.
+
 ### Planned
 
 - Verify real confirmation delivery to the demo inbox with private Resend credentials.

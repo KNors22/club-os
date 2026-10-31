@@ -102,6 +102,40 @@ describe("club insights dashboard", () => {
       "href",
       "/app/club/events/event",
     );
+    expect(
+      within(region).getByRole("link", { name: "Total members" }),
+    ).toHaveAttribute("href", "/app/club/members");
+    expect(
+      within(region).getByRole("link", { name: "Active members" }),
+    ).toHaveAttribute("href", "/app/club/members?status=active");
+    expect(
+      within(region).getByRole("link", { name: "Upcoming events" }),
+    ).toHaveAttribute("href", "/app/club/events");
+    const insights = screen.getByRole("region", { name: "Club insights" });
+    const scroll = vi.fn();
+    Object.defineProperty(insights, "scrollIntoView", { value: scroll });
+    const user = userEvent.setup();
+    const payments = within(region).getByRole("button", {
+      name: "Payments received",
+    });
+    await user.click(payments);
+    expect(
+      screen.getByRole("combobox", { name: "Activity metric" }),
+    ).toHaveValue("revenueCents");
+    expect(insights).toHaveFocus();
+    expect(scroll).toHaveBeenCalledWith(
+      expect.objectContaining({ block: "start" }),
+    );
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: "Activity metric" }),
+      "attendance",
+    );
+    payments.focus();
+    await user.keyboard("{Enter}");
+    expect(
+      screen.getByRole("combobox", { name: "Activity metric" }),
+    ).toHaveValue("revenueCents");
+    expect(scroll).toHaveBeenCalledTimes(2);
   });
   it("switches real activity metrics and periods and provides a readable table", async () => {
     render(

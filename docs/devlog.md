@@ -247,3 +247,8 @@ const state = await SeedState.findOneAndUpdate(
 ![Populated club dashboard](screenshots/sample-data-dashboard.png)
 
 ![Renewals beginning in 2010](screenshots/sample-data-history.png)
+
+
+### October 31, 2026 — Version 1.3 actionable overview
+
+- **Navigation checkpoint 1:** The four overview cards now open scoped member/event views or select and scroll to the payments graph. Active-member filtering is carried in the URL, alongside search/pagination; changes reset pagination and browser Back restores earlier filters. Native links/buttons provide keyboard access, focus moves to insights for the payments action, and reduced-motion preferences are respected. Existing staged wording edits remain separate.
