@@ -87,3 +87,8 @@ Cards contain static membership information and expiration, with no scan flow. F
 ## Version 1.2 historical sample data
 
 98 component/API tests (26 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Coverage includes first-name login, 2010 history, renewal continuity, membership states, registration/attendance chronology, collision checks, conditional migration, existing membership reuse, date anchoring and missing-record recovery. Browser workflows inspect real fixture history and populated analytics. Local tests use disposable databases. Atlas connectivity is verified; hosted initialization follows publication of compatible code.
+
+
+## Version 1.3 dashboard actions
+
+100 component/API tests (28 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Checks cover all four card actions, active-filter requests and reload/Back behavior, invalid URL filters, payments graph selection/focus/scroll, keyboard operation, reduced motion, mobile layout and exactly eight advertised sample identities. Atlas has the expanded 48-person/six-club dataset; a private backup confirms 212 memberships, 465 events, 1,150 payments and 2010 history. Live UI verification follows publication.

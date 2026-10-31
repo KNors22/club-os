@@ -254,3 +254,14 @@ const state = await SeedState.findOneAndUpdate(
 - **Navigation checkpoint 1:** The four overview cards now open scoped member/event views or select and scroll to the payments graph. Active-member filtering is carried in the URL, alongside search/pagination; changes reset pagination and browser Back restores earlier filters. Native links/buttons provide keyboard access, focus moves to insights for the payments action, and reduced-motion preferences are respected. Existing staged wording edits remain separate.
 
 - **Navigation checkpoint 2:** The public configuration advertises only alex, jordan, taylor, morgan, maya, noah, olivia and ethan with @clubos addresses. The seed retains its full member dataset. Chrome/Firefox acceptance checks cover all four dashboard actions, active-filter refresh, payment-chart focus/scroll and the exact eight-account selector. The v1.2 code was observed on the public service while work continued. The seed expansion and the selected sign-in choices are now separate concerns; restricting the advertised list does not remove club records.
+
+
+#### Version 1.3 milestone — October 31
+
+**Progress:** overview cards now open all members, active members or events. Payments received selects the payment graph, focuses Club insights and scrolls to it. Native links/buttons preserve browser and keyboard behavior. Member filters and pagination live in the URL, so reload and Back restore the view. Public account choices are exactly alex, jordan, taylor, morgan, maya, noah, olivia and ethan.
+
+**Challenges and solutions:** changing only the filter dropdown's initial state would lose it on later navigation. The URL is now authoritative and changes reset pagination. Payment-graph selection is controlled by the overview, so the shortcut still works after switching back to attendance. Reduced motion uses immediate scrolling. Restricting public configuration separates the eight sign-in choices from the 48 seeded member records. An isolated Git index keeps the user's staged wording changes outside these commits.
+
+**Verification:** 100 component/API tests, lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Browser checks cover every card, active-only records after refresh, keyboard activation, graph focus/scroll, mobile layout and the exact selector list. Atlas access is working: a private snapshot confirms 48 people, six clubs, 212 memberships, 465 events, 1,150 payments, first payment in 2010, natural names and first-name addresses. The v1.2 data was already present on the hosted service while this minor release was being completed; v1.3 UI verification follows publication.
+
+**Learning:** navigation should carry its state with it. URL filters and a graph action with explicit focus/scroll behavior make dashboard shortcuts useful across mouse, keyboard and browser history.

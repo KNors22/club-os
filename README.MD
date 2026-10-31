@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v1.2.0 historical club records.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render configuration](render.yaml), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v1.3.0 actionable dashboard.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render configuration](render.yaml), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -55,7 +55,7 @@ Startup connects to MongoDB and creates indexes before listening. Public demo mo
 
 ## Usage
 
-For the public sample data, sign in as **`alex@clubos`** or **`jordan@clubos`**, both with **`ClubOSDemo2026!`**. The login page provides role shortcuts and an **Explore another account** selector for all 48 people. These are shared fictional accounts; visitor edits are shared. See [all sample accounts and clubs](docs/sample-data.md). You can also register separate accounts to try both roles:
+For the public sample data, sign in as **`alex@clubos`** or **`jordan@clubos`**, both with **`ClubOSDemo2026!`**. The login page provides role shortcuts and an **Explore another account** selector limited to **alex, jordan, taylor, morgan, maya, noah, olivia and ethan** (all `@clubos`). These are shared fictional accounts; visitor edits are shared. See [all sample accounts and clubs](docs/sample-data.md). You can also register separate accounts to try both roles:
 
 1. Register an administrator, choose **Create club**, and set its name, fee, and term.
 2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
@@ -83,6 +83,8 @@ Cards become available after the administrator activates membership. Expired mem
 See the [sample PNG](docs/screenshots/membership-card.png) and [member page](docs/screenshots/membership-card-desktop.png).
 
 ### Dashboard charts
+
+The administrator overview cards open **Total members**, **Active members** (with the active filter applied), or **Upcoming events**. **Payments received** selects Payments in the insights graph and scrolls/focuses that section. Cards work with the keyboard, and scrolling respects reduced-motion preferences. Member search, status and page are in the URL so refresh and Back preserve the current view.
 
 Administrators can select the last six or twelve calendar months, switch attendance/payment activity, focus or point to chart values, and expand the monthly data tables. Membership status and active share reflect current validity. The member-growth line counts joined records over time, including members from before the displayed period. Attendance uses recorded check-in dates; payment trends use received dates. Monthly totals use Eastern Time. Upcoming-event rows show the next four events and their registration capacity. Empty clubs show explicit zero-data states.
 

@@ -4,16 +4,28 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Planned
+
+- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.3.0...HEAD)
+
+## [1.3.0] - 2026-10-31
+
+**Actionable dashboard and selected sample accounts.**
+
 ### Added
 
 - The public configuration advertises only alex, jordan, taylor, morgan, maya, noah, olivia and ethan with @clubos addresses. The seed retains its full member dataset. Chrome/Firefox acceptance checks cover all four dashboard actions, active-filter refresh, payment-chart focus/scroll and the exact eight-account selector.
 - Administrator summary cards open all members, active-only members and upcoming events. Payments received selects the payments graph, moves focus to Club insights and scrolls it into view with reduced-motion support. Member search, status and pagination are URL-based for sharing, refresh and Back navigation.
 
-### Planned
+### Release and verification
 
-- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+- Root/client/server and lockfile versions align at 1.3.0. README, release notes and devlog describe the actions and login choices.
+- 100 component/API tests (28 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass from isolated snapshots.
+- The v1.2 dataset is present in Atlas: 48 people, six clubs, 212 memberships, 465 events and 1,150 payments, beginning in 2010. Local access and a private backup were verified. Version 1.3 changes the advertised account list without removing these records. Live UI verification follows publication.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v1.2.0...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.2.0...v1.3.0)
 
 ## [1.2.0] - 2026-10-31
 
