@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- The membership page stacks payment history directly beneath the content-sized membership details beside the downloadable card, removing the stretched empty panel space. Smaller screens retain the card, details, then history order with consistent gaps and contained table scrolling.
+
 ### Planned
 
 - Verify real confirmation delivery to the demo inbox with private Resend credentials.

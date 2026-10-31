@@ -1470,8 +1470,17 @@ fieldset {
 .membership-grid {
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(350px, 1.1fr);
+  align-items: start;
   gap: 25px;
   max-width: 1050px;
+}
+.membership-records {
+  display: grid;
+  gap: inherit;
+  min-width: 0;
+}
+.membership-records > .history-panel {
+  margin-top: 0;
 }
 .card-download-panel {
   min-width: 0;

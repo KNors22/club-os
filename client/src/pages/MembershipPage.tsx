@@ -58,60 +58,62 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
               resource.update(() => ({ membership: updated }))
             }
           />
-          <section className="panel membership-details">
-            <div className="panel-heading compact">
-              <h2>Your membership</h2>
-              <StatusBadge status={membership.status} />
-            </div>
-            <dl className="detail-list">
-              <div>
-                <dt>
-                  <UsersRound size={17} />
-                  Club
-                </dt>
-                <dd>{organization.name}</dd>
+          <div className="membership-records">
+            <section className="panel membership-details">
+              <div className="panel-heading compact">
+                <h2>Your membership</h2>
+                <StatusBadge status={membership.status} />
               </div>
-              <div>
-                <dt>
-                  <ShieldCheck size={17} />
-                  Membership fee
-                </dt>
-                <dd>{money(organization.feeCents)} CAD</dd>
+              <dl className="detail-list">
+                <div>
+                  <dt>
+                    <UsersRound size={17} />
+                    Club
+                  </dt>
+                  <dd>{organization.name}</dd>
+                </div>
+                <div>
+                  <dt>
+                    <ShieldCheck size={17} />
+                    Membership fee
+                  </dt>
+                  <dd>{money(organization.feeCents)} CAD</dd>
+                </div>
+                <div>
+                  <dt>
+                    <Clock3 size={17} />
+                    Term
+                  </dt>
+                  <dd>{organization.termDays} days</dd>
+                </div>
+                <div>
+                  <dt>
+                    <CalendarDays size={17} />
+                    Valid from
+                  </dt>
+                  <dd>{date(membership.startsAt)}</dd>
+                </div>
+                <div>
+                  <dt>
+                    <CalendarDays size={17} />
+                    Expires
+                  </dt>
+                  <dd>{date(membership.expiresAt)}</dd>
+                </div>
+              </dl>
+              <div className="membership-note">
+                <Mail size={20} />
+                <p>
+                  {membership.status === "pending"
+                    ? "Contact your club administrator to confirm payment and activate your membership."
+                    : membership.status === "expired"
+                      ? "Ready for another chapter? Contact your administrator about renewing your membership."
+                      : "You’re all set. Your club administrator can help with any membership questions."}
+                </p>
               </div>
-              <div>
-                <dt>
-                  <Clock3 size={17} />
-                  Term
-                </dt>
-                <dd>{organization.termDays} days</dd>
-              </div>
-              <div>
-                <dt>
-                  <CalendarDays size={17} />
-                  Valid from
-                </dt>
-                <dd>{date(membership.startsAt)}</dd>
-              </div>
-              <div>
-                <dt>
-                  <CalendarDays size={17} />
-                  Expires
-                </dt>
-                <dd>{date(membership.expiresAt)}</dd>
-              </div>
-            </dl>
-            <div className="membership-note">
-              <Mail size={20} />
-              <p>
-                {membership.status === "pending"
-                  ? "Contact your club administrator to confirm payment and activate your membership."
-                  : membership.status === "expired"
-                    ? "Ready for another chapter? Contact your administrator about renewing your membership."
-                    : "You’re all set. Your club administrator can help with any membership questions."}
-              </p>
-            </div>
-          </section>
-          <PaymentHistory payments={membership.payments} />
+            </section>
+            <PaymentHistory payments={membership.payments} />
+          </div>
         </div>
       )}
     </>

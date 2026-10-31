@@ -208,3 +208,10 @@ const status = membershipStatus(membership.expiresAt, issuedAt);
 ![Membership page with a save control](screenshots/membership-card-desktop.png)
 
 ![Saved membership card](screenshots/membership-card.png)
+
+
+### October 31, 2026 — Membership layout refinement
+
+The membership-details panel stretched to the height of the taller card-download panel, leaving unused space below its contact note. Details and payment history now share a column that sizes each panel to its content. The outer grid aligns columns at the top; mobile retains card → details → history, and the table scrolls inside its panel. This is a focused layout fix under Unreleased rather than another milestone tag.
+
+Validation covers lint, types, existing component/API tests, production builds/smoke checks, and desktop/mobile Chrome/Firefox inspection, including saving a card and checking spacing and horizontal overflow. Existing user-staged README, LICENSE, and documentation changes remain separate.
