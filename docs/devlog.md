@@ -265,3 +265,8 @@ const state = await SeedState.findOneAndUpdate(
 **Verification:** 100 component/API tests, lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Browser checks cover every card, active-only records after refresh, keyboard activation, graph focus/scroll, mobile layout and the exact selector list. Atlas access is working: a private snapshot confirms 48 people, six clubs, 212 memberships, 465 events, 1,150 payments, first payment in 2010, natural names and first-name addresses. The v1.2 data was already present on the hosted service while this minor release was being completed; v1.3 UI verification follows publication.
 
 **Learning:** navigation should carry its state with it. URL filters and a graph action with explicit focus/scroll behavior make dashboard shortcuts useful across mouse, keyboard and browser history.
+
+
+### October 31, 2026 — Final validation cleanup
+
+**Test correction:** the notification configuration test loaded the local `.env`, allowing `DEMO_MODE=true` to conflict with its intentionally isolated `clubos_test` URI. The test now passes an explicit environment fixture to `parseConfig`, preserving assertions for missing and valid recipient settings. Runtime configuration and the private `.env` are unchanged. Both five-test notification runs pass with public mode enabled and disabled. The default `npm run check` now passes all 100 component/API tests (28 frontend, 72 backend), lint, types, production builds and both compiled smoke checks, without environment overrides.

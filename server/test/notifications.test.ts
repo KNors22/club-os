@@ -5,7 +5,7 @@ import { config, store, origin } from "./setup.js";
 import { eventFixture } from "./event-fixture.js";
 import { Membership } from "../src/models/Membership.js";
 import { Event } from "../src/models/Event.js";
-import { loadConfig } from "../src/config.js";
+import { parseConfig } from "../src/config.js";
 import { sendConfirmation } from "../src/services/notifications.js";
 const email = {
   apiKey: "re_test_only",
@@ -134,19 +134,20 @@ describe("confirmation delivery", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
   it("requires paired sender credentials and a demo inbox at startup", () => {
-    vi.stubEnv("NODE_ENV", "test");
-    vi.stubEnv("MONGODB_URI", "mongodb://127.0.0.1:27017/clubos_test");
-    vi.stubEnv(
-      "SESSION_SECRET",
-      "test-session-secret-at-least-32-characters-long",
-    );
-    vi.stubEnv("APP_URL", "http://localhost:5173");
-    vi.stubEnv("PORT", "3000");
-    vi.stubEnv("EMAIL_FROM", "onboarding@resend.dev");
-    vi.stubEnv("RESEND_API_KEY", "re_test_only");
-    vi.stubEnv("EMAIL_DEMO_TO", undefined);
-    expect(() => loadConfig()).toThrow(/EMAIL_DEMO_TO/);
-    vi.stubEnv("EMAIL_DEMO_TO", "owner@example.com");
-    expect(loadConfig().email?.demoTo).toBe("owner@example.com");
+    const environment = {
+      NODE_ENV: "test",
+      MONGODB_URI: "mongodb://127.0.0.1:27017/clubos_test",
+      SESSION_SECRET: "test-session-secret-at-least-32-characters-long",
+      APP_URL: "http://localhost:5173",
+      PORT: "3000",
+      DEMO_MODE: "false",
+      EMAIL_FROM: "onboarding@resend.dev",
+      RESEND_API_KEY: "re_test_only",
+    };
+    expect(() => parseConfig(environment)).toThrow(/EMAIL_DEMO_TO/);
+    expect(
+      parseConfig({ ...environment, EMAIL_DEMO_TO: "owner@example.com" }).email
+        ?.demoTo,
+    ).toBe("owner@example.com");
   });
 });
