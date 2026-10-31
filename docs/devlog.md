@@ -154,3 +154,5 @@ The release extends the existing club data and preserves membership/payment work
 - **V1 checkpoint 1:** The administrator dashboard now supplies twelve Eastern-time calendar months of joins, membership totals, attendance, and received payments, plus the next four events with capacity counts. Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
 
 - **V1 checkpoint 2:** The administrator overview now includes real membership-status, growth, attendance/payment charts, active-member share, and upcoming-event capacity. Six/twelve-month controls, focus/hover values, readable data tables, and explicit empty states keep the responsive SVG charts useful without adding chart dependencies.
+
+- **V1 checkpoint 3:** The sidebar is wider on desktop and wraps complete club names, including long unbroken text, with a scrollable mobile drawer. Workspace and sign-in footers now credit Andrey Gonzalez with the current year and GitHub profile, and header names wrap without truncation.

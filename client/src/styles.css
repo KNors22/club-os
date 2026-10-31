@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&display=swap");
 
 :root {
+  --sidebar-width: 288px;
   font-family: "DM Sans", sans-serif;
   color: #263b35;
   background: #f6f7f3;
@@ -564,7 +565,7 @@ fieldset {
   display: flex;
 }
 .sidebar {
-  width: 242px;
+  width: var(--sidebar-width);
   flex-shrink: 0;
   background: #19382d;
   color: #adbfac;
@@ -600,7 +601,7 @@ fieldset {
 }
 .club-switcher > span:nth-child(2) {
   flex: 1;
-  overflow: hidden;
+  min-width: 0;
 }
 .club-switcher small {
   display: block;
@@ -611,9 +612,9 @@ fieldset {
 }
 .club-switcher strong {
   display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
   font-size: 12px;
   font-weight: 500;
   color: #f2f4e8;
@@ -735,20 +736,20 @@ fieldset {
   padding: 6px;
 }
 .workspace-main {
-  margin-left: 242px;
+  margin-left: var(--sidebar-width);
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 .topbar {
-  height: 73px;
+  min-height: 73px;
   border-bottom: 1px solid var(--line);
   background: #ffffff87;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 37px;
+  padding: 12px 37px;
   gap: 20px;
 }
 .topbar-location {
@@ -764,9 +765,9 @@ fieldset {
 .topbar-location strong {
   color: #4c5b49;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
 }
 .breadcrumb-divider {
   color: #bac2b5;
@@ -1657,12 +1658,14 @@ fieldset {
   }
 }
 @media (max-width: 1200px) {
+  :root {
+    --sidebar-width: 260px;
+  }
   .sidebar {
-    width: 220px;
     padding-inline: 14px;
   }
   .workspace-main {
-    margin-left: 220px;
+    margin-left: var(--sidebar-width);
   }
   .page-content {
     padding: 29px;
@@ -1828,7 +1831,7 @@ fieldset {
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.2s;
-    width: 260px;
+    width: min(320px, calc(100vw - 32px));
   }
   .sidebar-open {
     transform: translateX(0);
@@ -1849,7 +1852,7 @@ fieldset {
     display: inline-flex;
   }
   .topbar {
-    height: 65px;
+    min-height: 65px;
     padding-inline: 19px;
   }
   .topbar-location {
@@ -3223,5 +3226,68 @@ fieldset {
   }
   .insights-toolbar h2 {
     font-size: 20px;
+  }
+}
+
+/* Readable club navigation and author credits. */
+.sidebar {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sidebar-brand,
+.club-switcher,
+.nav-label,
+.main-nav,
+.sidebar-user {
+  flex-shrink: 0;
+}
+.topbar-location > .icon-button {
+  flex-shrink: 0;
+}
+.app-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px 20px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: #718265;
+}
+.footer-credits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+}
+.footer-credits a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: #456b3f;
+}
+.footer-credits a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.app-footer-auth {
+  border-top: 1px solid #e7ece1;
+  padding-top: 18px;
+  margin-top: auto;
+}
+@media (max-width: 740px) {
+  .app-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 11px;
+    gap: 6px;
+  }
+  .app-footer-auth {
+    margin-top: 18px;
+  }
+  .topbar-location > span:first-of-type,
+  .topbar-location .breadcrumb-divider {
+    display: none;
   }
 }

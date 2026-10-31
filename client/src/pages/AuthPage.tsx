@@ -9,6 +9,7 @@ import {
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
 import { PublicDemoPanel } from "../components/PublicDemoPanel";
+import { AppFooter } from "../components/AppFooter";
 import { Brand } from "../components/Brand";
 import { Button, Field, Notice } from "../components/ui";
 import { errorMessage } from "../lib/api";
@@ -170,9 +171,7 @@ export function AuthPage({ register = false }: { register?: boolean }) {
             Your club’s information stays within your club.
           </p>
         </div>
-        <div className="auth-bottom">
-          Bring people together. We’ll help with the rest.
-        </div>
+        <AppFooter variant="auth" />
       </main>
     </div>
   );

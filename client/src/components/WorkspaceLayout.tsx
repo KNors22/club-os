@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
 import { useClubs } from "../contexts/clubs-context";
+import { AppFooter } from "./AppFooter";
 import { Brand } from "./Brand";
 import { Avatar, Notice } from "./ui";
 import { errorMessage } from "../lib/api";
@@ -229,12 +230,7 @@ export function WorkspaceLayout() {
           {error && <Notice>{error}</Notice>}
           <Outlet />
         </main>
-        <footer className="workspace-footer">
-          <span>ClubOS · A little less admin. A lot more club.</span>
-          <span>
-            Made for student communities <span aria-hidden="true">↗</span>
-          </span>
-        </footer>
+        <AppFooter />
       </div>
     </div>
   );
