@@ -215,3 +215,8 @@ const status = membershipStatus(membership.expiresAt, issuedAt);
 The membership-details panel stretched to the height of the taller card-download panel, leaving unused space below its contact note. Details and payment history now share a column that sizes each panel to its content. The outer grid aligns columns at the top; mobile retains card → details → history, and the table scrolls inside its panel. This is a focused layout fix under Unreleased rather than another milestone tag.
 
 Validation covers lint, types, existing component/API tests, production builds/smoke checks, and desktop/mobile Chrome/Firefox inspection, including saving a card and checking spacing and horizontal overflow. Existing user-staged README, LICENSE, and documentation changes remain separate.
+
+
+### October 31, 2026 — Version 1.2 historical club data
+
+- **Data checkpoint 1:** Authentication accepts normalized first-name addresses in the reserved @clubos namespace while retaining standard email validation. API tests verify registration, login/session lookup, and malformed or unrelated single-label addresses. The expanded dataset and safe migration of reserved starter addresses follow in the next checkpoint.

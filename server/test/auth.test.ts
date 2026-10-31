@@ -3,7 +3,45 @@ import { describe, expect, it } from "vitest";
 import { app, config, store, origin, password, signup } from "./setup.js";
 import { User } from "../src/models/User.js";
 import { createApp } from "../src/app.js";
+import { registerSchema } from "../src/validation.js";
 describe("authentication and profiles", () => {
+  it("normalizes ClubOS first-name addresses and supports the normal account/session flow", async () => {
+    const agent = request.agent(app);
+    const registered = await signup(
+      agent,
+      "  Maya@CLUBOS  ",
+      "Maya Desai",
+    ).expect(201);
+    expect(registered.body.user.email).toBe("maya@clubos");
+    await agent
+      .post("/api/auth/logout")
+      .set("Origin", origin)
+      .send({})
+      .expect(204);
+    await agent
+      .post("/api/auth/login")
+      .set("Origin", origin)
+      .send({ email: "MAYA@CLUBOS", password })
+      .expect(200);
+    expect((await agent.get("/api/me").expect(200)).body.user.name).toBe(
+      "Maya Desai",
+    );
+  });
+  it("rejects malformed and unrelated single-label email addresses", () => {
+    for (const email of [
+      "maya",
+      "@clubos",
+      "maya@@clubos",
+      "maya@other",
+      "maya smith@clubos",
+      "maya@clubos/",
+      "maya@clubos.",
+    ])
+      expect(
+        registerSchema.safeParse({ name: "Maya Desai", email, password })
+          .success,
+      ).toBe(false);
+  });
   it("registers with a hashed password and restores a Mongo-backed session in a new app instance", async () => {
     const agent = request.agent(app);
     const result = await signup(agent, "  Alex@EXAMPLE.COM  ");

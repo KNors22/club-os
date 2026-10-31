@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- Authentication accepts normalized first-name addresses in the reserved @clubos namespace while retaining standard email validation. API tests verify registration, login/session lookup, and malformed or unrelated single-label addresses.
+
 ### Fixed
 
 - The membership page stacks payment history directly beneath the content-sized membership details beside the downloadable card, removing the stretched empty panel space. Smaller screens retain the card, details, then history order with consistent gaps and contained table scrolling.

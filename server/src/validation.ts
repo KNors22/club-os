@@ -9,7 +9,12 @@ const email = z
   .string()
   .trim()
   .toLowerCase()
-  .pipe(z.email("Enter a valid email address.").max(254));
+  .max(254)
+  .refine(
+    (value) =>
+      /^[a-z]+@clubos$/.test(value) || z.email().safeParse(value).success,
+    "Enter a valid email address.",
+  );
 const password = z
   .string()
   .min(10, "Use at least 10 characters for your password.")
