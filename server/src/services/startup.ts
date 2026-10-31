@@ -18,7 +18,7 @@ export async function prepareDatabase(config: AppConfig) {
       }),
     );
     console.log(
-      `Public demo ready: ${result.createdUsers} accounts added; ${result.updatedPasswords} demo passwords synchronized. Existing club records were preserved.`,
+      `Sample data ready: ${result.createdUsers} accounts, ${result.createdClubs} clubs, ${result.createdMemberships} memberships and ${result.createdEvents} events added; ${result.updatedPasswords} shared passwords synchronized. Existing club records were preserved.`,
     );
   }
 }

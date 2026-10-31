@@ -11,8 +11,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "smoke": "node test/smoke-production.mjs",
-    "seed:demo": "tsx src/seed.ts",
-    "smoke:render": "node test/smoke-render.mjs"
+    "seed:demo": "npm run seed",
+    "smoke:render": "node test/smoke-render.mjs",
+    "seed": "tsx src/seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",

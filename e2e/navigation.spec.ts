@@ -6,7 +6,7 @@ test("seeded accounts support keyboard navigation, responsive settings, error re
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/login");
-  await page.getByLabel("Email address").fill("admin@clubos.example");
+  await page.getByLabel("Email address").fill("alex@clubos");
   await page.getByLabel("Password").fill("ClubOSDemo2026!");
   await page.getByLabel("Password").press("Enter");
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();
@@ -75,10 +75,12 @@ test("seeded accounts support keyboard navigation, responsive settings, error re
   fail = false;
   await page.getByRole("button", { name: "Try again" }).click();
   await expect(
-    page.getByRole("link", { name: "Demo community run", exact: true }),
+    page
+      .getByRole("link", { name: "Riverside community run", exact: true })
+      .first(),
   ).toBeVisible();
   await page.getByRole("button", { name: "Sign out" }).click();
-  await page.getByLabel("Email address").fill("pending@clubos.example");
+  await page.getByLabel("Email address").fill("taylor@clubos");
   await page.getByLabel("Password").fill("ClubOSDemo2026!");
   await page.getByLabel("Password").press("Enter");
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();

@@ -39,9 +39,11 @@ test("v1 charts, full club names, and author credits work on desktop and mobile"
     .getByRole("combobox", { name: "Activity metric" })
     .selectOption("attendance");
   await expect(
-    page.getByRole("progressbar", {
-      name: "Demo community run registration capacity",
-    }),
+    page
+      .getByRole("progressbar", {
+        name: "Riverside community run registration capacity",
+      })
+      .first(),
   ).toHaveAttribute("aria-valuenow", "1");
   const footer = page.getByRole("contentinfo");
   await expect(footer).toContainText(

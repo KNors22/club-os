@@ -102,8 +102,9 @@ describe("public demo sign-in", () => {
             publicDemo: {
               password: "ClubOSDemo2026!",
               accounts: [
-                { email: "admin@clubos.example", role: "Administrator" },
-                { email: "member@clubos.example", role: "Member" },
+                { email: "alex@clubos", role: "Administrator" },
+                { email: "jordan@clubos", role: "Member" },
+                { email: "maya@clubos", role: "Outdoor club administrator" },
               ],
             },
           }),
@@ -121,17 +122,17 @@ describe("public demo sign-in", () => {
     await userEvent.click(
       await screen.findByRole("button", { name: "Try administrator" }),
     );
-    expect(screen.getByLabelText("Email address")).toHaveValue(
-      "admin@clubos.example",
-    );
+    expect(screen.getByLabelText("Email address")).toHaveValue("alex@clubos");
     expect(screen.getByLabelText("Password")).toHaveValue("ClubOSDemo2026!");
+    await userEvent.selectOptions(
+      screen.getByLabelText("Explore another account"),
+      "maya@clubos",
+    );
+    expect(screen.getByLabelText("Email address")).toHaveValue("maya@clubos");
     await userEvent.click(
       screen.getByRole("button", { name: /sign in to clubos/i }),
     );
-    expect(login).toHaveBeenCalledWith(
-      "admin@clubos.example",
-      "ClubOSDemo2026!",
-    );
+    expect(login).toHaveBeenCalledWith("maya@clubos", "ClubOSDemo2026!");
   });
   it("keeps public credentials hidden when the service disables demo mode", async () => {
     vi.stubGlobal(
@@ -150,7 +151,7 @@ describe("public demo sign-in", () => {
       </MemoryRouter>,
     );
     expect(
-      screen.queryByRole("region", { name: "Public demo accounts" }),
+      screen.queryByRole("region", { name: "Public sample accounts" }),
     ).not.toBeInTheDocument();
   });
 });

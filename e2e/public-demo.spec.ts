@@ -7,8 +7,11 @@ test("public visitors can sign in, save current membership cards, and identify e
   browser,
 }, testInfo) => {
   await page.goto("/login");
-  const demo = page.getByRole("region", { name: "Public demo accounts" });
+  const demo = page.getByRole("region", { name: "Public sample accounts" });
   await expect(demo).toContainText("ClubOSDemo2026!");
+  await expect(
+    demo.getByLabel("Explore another account").locator("option"),
+  ).toHaveCount(49);
   const capture =
     process.env.CAPTURE_PUBLIC_DEMO === "1" &&
     testInfo.project.name === "chrome";
@@ -26,9 +29,7 @@ test("public visitors can sign in, save current membership cards, and identify e
     ),
   ).toBe(true);
   await demo.getByRole("button", { name: "Try member" }).click();
-  await expect(page.getByLabel("Email address")).toHaveValue(
-    "member@clubos.example",
-  );
+  await expect(page.getByLabel("Email address")).toHaveValue("jordan@clubos");
   if (capture)
     await demo.screenshot({
       path: "docs/screenshots/public-demo-mobile.png",
@@ -36,9 +37,7 @@ test("public visitors can sign in, save current membership cards, and identify e
     });
   await page.setViewportSize({ width: 1280, height: 720 });
   await demo.getByRole("button", { name: "Try administrator" }).click();
-  await expect(page.getByLabel("Email address")).toHaveValue(
-    "admin@clubos.example",
-  );
+  await expect(page.getByLabel("Email address")).toHaveValue("alex@clubos");
   await expect(page.getByLabel("Password")).toHaveValue("ClubOSDemo2026!");
   await page.getByRole("button", { name: "Sign in to ClubOS" }).click();
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();
@@ -46,6 +45,58 @@ test("public visitors can sign in, save current membership cards, and identify e
   await expect(
     page.getByRole("heading", { name: "Club settings." }),
   ).toBeVisible();
+  const samplePath = "/api/organizations/c10000000000000000000001";
+  const stats = await (
+    await page.request.get(`${samplePath}/dashboard`)
+  ).json();
+  expect(stats.counts.total).toBeGreaterThan(25);
+  expect(
+    stats.analytics.monthly.some(
+      (month: { revenueCents: number }) => month.revenueCents > 0,
+    ),
+  ).toBe(true);
+  expect(
+    stats.analytics.monthly.some(
+      (month: { attendance: number }) => month.attendance > 0,
+    ),
+  ).toBe(true);
+  const maya = (
+    await (
+      await page.request.get(`${samplePath}/memberships?search=maya`)
+    ).json()
+  ).memberships[0];
+  const history = (
+    await (
+      await page.request.get(`${samplePath}/memberships/${maya.id}`)
+    ).json()
+  ).membership;
+  expect(history.payments.length).toBeGreaterThanOrEqual(15);
+  expect(history.payments[0].paidAt).toMatch(/^2010-/);
+  await page.goto(`/app/c10000000000000000000001/members/${maya.id}`);
+  await expect(
+    page.getByRole("heading", { name: "Maya Desai", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("table", { name: "Membership payment history" }),
+  ).toContainText("2010");
+  if (
+    process.env.CAPTURE_SAMPLE_DATA === "1" &&
+    testInfo.project.name === "chrome"
+  ) {
+    mkdirSync("docs/screenshots", { recursive: true });
+    await page.screenshot({
+      path: "docs/screenshots/sample-data-history.png",
+      fullPage: true,
+    });
+    await page.goto("/app/c10000000000000000000001");
+    await expect(
+      page.getByRole("img", { name: "Attendance trend", exact: true }),
+    ).toBeVisible();
+    await page.screenshot({
+      path: "docs/screenshots/sample-data-dashboard.png",
+      fullPage: true,
+    });
+  }
   const context = await browser.newContext({
     baseURL: testInfo.project.use.baseURL,
   });

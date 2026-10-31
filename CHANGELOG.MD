@@ -6,6 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Added
 
+- The login page offers all 48 sample accounts alongside administrator/member shortcuts. npm run seed initializes the same dataset locally and on Render, with a compatibility alias for the old command. Chrome/Firefox workflows verify first-name logins, populated analytics, and a member history reaching 2010; the sample-data guide catalogs clubs, credentials, safe upgrades and repeat runs.
 - A repeatable dataset adds 48 naturally named people, six clubs, 212 memberships, 465 events and 1,150 payment records on a fresh October 31, 2026 database, with history from 2010. A saved anchor, insert-only bulk writes, reserved-identity checks, and conditional starter-label/address migration preserve edits, existing relationships, credentials, histories and attendance.
 - Authentication accepts normalized first-name addresses in the reserved @clubos namespace while retaining standard email validation. API tests verify registration, login/session lookup, and malformed or unrelated single-label addresses.
 

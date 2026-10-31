@@ -22,9 +22,10 @@
     "test:browser": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run smoke -w server && npm run smoke:render -w server",
     "test:production": "npm run build && npm run smoke -w server && npm run smoke:render -w server",
-    "seed:demo": "npm run seed:demo -w server",
+    "seed:demo": "npm run seed",
     "verify:live": "node scripts/verify-live.mjs",
-    "test:live": "playwright test --config playwright.live.config.ts"
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "seed": "npm run seed -w server"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",
