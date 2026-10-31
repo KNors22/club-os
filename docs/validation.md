@@ -55,3 +55,13 @@ The compiled-server smoke test covers the full manual-payment/fee/event workflow
 ### October 31 — hosted verification and diagnostic follow-up
 
 After Render's private session secret and Atlas network-access entries were configured, live health, public administrator/member login, secure cookies/logout, seeded membership/history, and the deployed frontend passed verification. The diagnostic follow-up adds seven failure-path tests (75 component/API tests total) and retains passing production/startup-restart smoke checks. Browser behavior is unchanged from the eight verified Chrome/Firefox scenarios. Actual hosted Chrome checks also passed administrator settings and mobile member history without runtime errors or horizontal overflow. Actual Resend inbox delivery remains separate.
+
+## Version 1 dashboard and navigation
+
+The v1 browser suite passes ten scenarios across installed Chrome and Firefox. The new scenario verifies six/twelve-month chart controls, attendance/payment selection, monthly data tables, actual event capacity, author/year/profile footer credits, zero-data club views, and complete long club names on desktop and mobile. It also checks keyboard Escape/focus restoration and horizontal overflow.
+
+The analytics integration tests cover Eastern-time month boundaries, prior-window membership baselines, zero-filled months, chronological event limits, and organization isolation. Current membership status is a snapshot; the member-growth line shows cumulative joined records, not historical active status.
+
+- [Desktop dashboard](screenshots/v1-dashboard-desktop.png)
+- [Mobile dashboard](screenshots/v1-dashboard-mobile.png)
+- [Mobile sidebar with a long club name](screenshots/v1-sidebar-mobile.png)
