@@ -156,7 +156,7 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 ## Author and Acknowledgements
 
 - Andrey Gonzalez
-- Teacher: Martin Lee
+- Instructor: Martin Lee
 
 ## License
 
