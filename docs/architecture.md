@@ -123,3 +123,10 @@ Phase 2 screens add member detail/payment forms, personal history, event creatio
 ## Version 1 dashboard analytics
 
 The administrator-only dashboard response includes twelve zero-filled calendar months in `America/Toronto`: recorded joins, cumulative membership records (including the pre-window baseline), actual check-in timestamps, and payments grouped by received date. These are joined-record totals rather than a reconstruction of historical active status. Current membership status still derives from expiration at request time. Upcoming events are the next four future events with registration counts/capacity; participant identities are omitted. All facets begin with the same organization filter. The administrator UI renders the response as membership status, membership growth, attendance/payment trends, and upcoming-event capacity. Six/twelve-month selection uses the same fetched data. SVG point readouts are keyboard accessible and monthly tables provide a textual representation.
+
+
+## Membership card snapshots
+
+`GET /api/organizations/:orgId/memberships/me/card` requires an authenticated club member and reads only that user's membership. It returns `{ card, membership }` with the current profile name, club name, membership ID, validity dates, current status, and issue time. The refreshed membership includes its existing payment history for the page; the card DTO excludes email, join codes, and payment information. Unpaid memberships receive 409 until activated; expired memberships retain their real dates and expired status. Administrators without a membership receive 404. Responses inherit API `Cache-Control: no-store`.
+
+The next client checkpoint will use this snapshot to produce a downloadable proof card. Cards will be static records of issuance; saving after renewal will fetch current dates.

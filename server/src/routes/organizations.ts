@@ -5,6 +5,7 @@ import { requireAuth } from "../services/auth.js";
 import { membershipSummary } from "../services/memberships.js";
 import { dashboardSummary } from "../services/dashboard.js";
 import { membershipDetails } from "../services/payments.js";
+import { membershipCardSnapshot } from "../services/membership-cards.js";
 import {
   createOrganization,
   getOrganizationAccess,
@@ -75,6 +76,9 @@ organizationRouter.get("/:orgId/memberships/me", async (req, res) => {
     membership: membership ? membershipDetails(membership) : null,
     role,
   });
+});
+organizationRouter.get("/:orgId/memberships/me/card", async (req, res) => {
+  res.json(await membershipCardSnapshot(res.locals.user, req.params.orgId));
 });
 organizationRouter.get("/:orgId/memberships", async (req, res) => {
   const { organization, role } = await getOrganizationAccess(

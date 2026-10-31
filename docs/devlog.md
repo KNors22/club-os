@@ -179,3 +179,8 @@ let totalMembers = [...joins]
 ![Full long club name in the mobile drawer](screenshots/v1-sidebar-mobile.png)
 
 - **V1 checkpoint 5:** Version 1.0.0 aligns workspace/lockfile versions and publishes the chart, navigation, and author-footer milestone with release notes, usage guidance, screenshots, and a dated devlog. Final checks cover 79 component/API tests, production/startup-restart smoke tests, and ten Chrome/Firefox acceptance scenarios.
+
+
+### October 31, 2026 — Version 1.1 membership cards
+
+- **Card checkpoint 1:** Added an authenticated own-membership snapshot endpoint. It reads the latest profile and validity dates, rejects unactivated memberships, identifies expired records, and excludes private account/payment fields from the card. Four API tests cover activation, updated names/renewals, expiration, authentication, and cross-club/member isolation. The client download remains planned for the next checkpoint. Removed a duplicated leftover changelog paragraph/link from the previous release.

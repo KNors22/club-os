@@ -4,6 +4,10 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- Authenticated membership-card snapshots use the current member name, club, validity, expiration, status, and issue time. Cards require activation, retain expired status honestly, and restrict access to the signed-in member. Four API tests cover activation, renewal/profile freshness, expiration, and organization/account isolation.
+
 ### Planned
 
 - Verify real confirmation delivery to the demo inbox with private Resend credentials.
@@ -23,12 +27,6 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 - The administrator dashboard now supplies twelve Eastern-time calendar months of joins, membership totals, attendance, and received payments, plus the next four events with capacity counts. Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
 
 [Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.3...v1.0.0)
- Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
-### Planned
-
-- Verify real confirmation delivery to the demo inbox with private Resend credentials.
-
-[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.3...HEAD)
 
 ## [0.6.0-rc.3] - 2026-10-31
 
