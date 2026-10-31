@@ -4,11 +4,12 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v1.1.0 downloadable membership cards.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v1.2.0 historical club records.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render configuration](render.yaml), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
 - Account registration, password login, logout, and MongoDB-backed sessions.
+- Historical sample data: 48 people with `firstname@clubos` addresses, six clubs, 212 memberships, 465 events and 1,150 payments on a fresh October 31, 2026 seed. History starts in 2010; existing records and edits are preserved.
 - Club creation with one paid CAD membership plan and configurable term length. Administrators can update future membership fees under **Club settings** without changing historical payments or current validity.
 - Joining multiple clubs through administrator-provided codes.
 - Administrator dashboard with membership-status, member-growth, attendance/payment charts, upcoming-event capacity, and searchable member records.
@@ -50,11 +51,11 @@ npm run dev
 
 Open **http://localhost:5173** or **http://127.0.0.1:5173**. Vite proxies `/api` to Express on port 3000. In development, a local `APP_URL` permits both hostnames with the same scheme and port. Use one consistently: browsers keep their sessions separate. Other origins are rejected, and production requires the exact configured `APP_URL`. `GET http://localhost:3000/api/health` checks database connectivity.
 
-Startup connects to MongoDB and creates indexes before listening. Public demo mode also inserts missing fictional demo records and synchronizes only reserved demo-account passwords; it preserves edited records and ordinary accounts. Public demo mode defaults on in Render and is opt-in locally through `DEMO_MODE=true`.
+Startup connects to MongoDB and creates indexes before listening. Public demo mode also inserts missing fictional sample records and synchronizes only reserved account passwords; it preserves edited records and ordinary accounts. Public demo mode defaults on in Render and is opt-in locally through `DEMO_MODE=true`.
 
 ## Usage
 
-For the public demo, sign in as **`admin@clubos.example`** or **`member@clubos.example`**, both with **`ClubOSDemo2026!`**. The login page provides role shortcuts. These are shared fictional accounts; visitor edits are shared. See [all demo accounts](docs/demo-data.md). You can also register separate accounts to try both roles:
+For the public sample data, sign in as **`alex@clubos`** or **`jordan@clubos`**, both with **`ClubOSDemo2026!`**. The login page provides role shortcuts and an **Explore another account** selector for all 48 people. These are shared fictional accounts; visitor edits are shared. See [all sample accounts and clubs](docs/sample-data.md). You can also register separate accounts to try both roles:
 
 1. Register an administrator, choose **Create club**, and set its name, fee, and term.
 2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
@@ -64,6 +65,14 @@ For the public demo, sign in as **`admin@clubos.example`** or **`member@clubos.e
 6. As member, open the event and register. Try cancellation and registration again.
 7. As administrator, open the event's participant list and choose **Check in**. Refresh the overview to see payment, membership, registration, and attendance totals.
 8. Update a name under **My account**. Create another club and confirm unrelated accounts cannot access its records.
+
+### Historical sample data
+
+Run `npm run seed` using the configured `MONGODB_URI`, then `npm run dev`. The local project and Render see the same records when they use the same Atlas database. Render initializes missing sample records on startup in its existing public mode; the older seed command remains an alias.
+
+Use `alex@clubos` to open Riverside Running Club, then find **Maya Desai** under **Members** to inspect renewals dating to 2010. Other accounts administer the arts, outdoors, cycling, books and makers clubs. The original five identities keep their IDs, with first-name addresses replacing their old addresses. Configured passwords stay compatible.
+
+See the [sample-data guide](docs/sample-data.md), [populated dashboard](docs/screenshots/sample-data-dashboard.png), and [historical payments](docs/screenshots/sample-data-history.png). Shared `@clubos` addresses are sign-in identities, not mailboxes; seeding sends no email.
 
 ### Demo email setup
 
@@ -97,7 +106,7 @@ See [desktop](docs/screenshots/v1-dashboard-desktop.png) and [mobile](docs/scree
 | --- | --- |
 | `npm run setup` | Create a local environment file without overwriting one |
 | `npm run dev` | Run the API and frontend with reload support |
-| `npm run seed:demo` | Explicitly seed fictional data in the `ClubOS-DB` database |
+| `npm run seed` | Seed historical fictional data in the `ClubOS-DB` database |
 | `npm run lint` | Lint application, test, and configuration code |
 | `npm run typecheck` | Check both TypeScript workspaces |
 | `npm test` | Run component and API tests |
@@ -141,7 +150,7 @@ club-os/
 
 Configured for one Render Free web service and MongoDB Atlas. Production requires a private MongoDB URI selecting `ClubOS-DB` and a random session secret. The app uses Render's supplied HTTPS URL unless `APP_URL` explicitly overrides it. Express serves the built frontend and API together, including direct client-route links.
 
-Follow the [deployment guide](docs/deployment.md), then run the readiness probe and live browser workflow against `https://andreys-club-os.onrender.com`. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
+Follow the [Render configuration](render.yaml), then run the readiness probe and live browser workflow against `https://andreys-club-os.onrender.com`. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
 
 ## Development Notes
 

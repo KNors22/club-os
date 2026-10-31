@@ -4,6 +4,16 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Planned
+
+- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.2.0...HEAD)
+
+## [1.2.0] - 2026-10-31
+
+**Historical club records.**
+
 ### Added
 
 - The login page offers all 48 sample accounts alongside administrator/member shortcuts. npm run seed initializes the same dataset locally and on Render, with a compatibility alias for the old command. Chrome/Firefox workflows verify first-name logins, populated analytics, and a member history reaching 2010; the sample-data guide catalogs clubs, credentials, safe upgrades and repeat runs.
@@ -14,11 +24,13 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 - The membership page stacks payment history directly beneath the content-sized membership details beside the downloadable card, removing the stretched empty panel space. Smaller screens retain the card, details, then history order with consistent gaps and contained table scrolling.
 
-### Planned
+### Release and verification
 
-- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+- Root/client/server and lockfile versions align at 1.2.0; the sample-data catalog, README, screenshots and devlog document the data and upgrade.
+- 98 component/API tests (26 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass from isolated snapshots.
+- Atlas connectivity is verified. Hosted initialization follows compatible-code publication so the previous application is not left with new addresses it cannot validate. Existing records, edits and histories are preserved.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v1.1.0...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.1.0...v1.2.0)
 
 ## [1.1.0] - 2026-10-31
 

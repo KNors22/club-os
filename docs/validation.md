@@ -82,3 +82,8 @@ Cards contain static membership information and expiration, with no scan flow. F
 
 
 **V1.1 release checks:** 88 component/API tests (26 frontend, 62 backend), lint, type checks, production builds, and both compiled production and Render startup/restart smoke checks pass. All ten browser scenarios pass in installed Chrome and Firefox. Workspace/lockfile versions align at 1.1.0. Live rollout verification follows publication.
+
+
+## Version 1.2 historical sample data
+
+98 component/API tests (26 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Coverage includes first-name login, 2010 history, renewal continuity, membership states, registration/attendance chronology, collision checks, conditional migration, existing membership reuse, date anchoring and missing-record recovery. Browser workflows inspect real fixture history and populated analytics. Local tests use disposable databases. Atlas connectivity is verified; hosted initialization follows publication of compatible code.

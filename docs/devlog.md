@@ -224,3 +224,26 @@ Validation covers lint, types, existing component/API tests, production builds/s
 - **Data checkpoint 2:** A repeatable dataset adds 48 naturally named people, six clubs, 212 memberships, 465 events and 1,150 payment records on a fresh October 31, 2026 database, with history from 2010. A saved anchor, insert-only bulk writes, reserved-identity checks, and conditional starter-label/address migration preserve edits, existing relationships, credentials, histories and attendance. Integration coverage checks chronology, member/event relationships, active/pending/expired states, collision handling, migrations, missing-record recovery, and repeat runs across years. Atlas access was restored after updating its network allowlist; the existing database contains five accounts, two clubs, three memberships, and two events. Hosted records will be expanded only after the compatible application is published.
 
 - **Data checkpoint 3:** The login page offers all 48 sample accounts alongside administrator/member shortcuts. npm run seed initializes the same dataset locally and on Render, with a compatibility alias for the old command. Chrome/Firefox workflows verify first-name logins, populated analytics, and a member history reaching 2010; the sample-data guide catalogs clubs, credentials, safe upgrades and repeat runs. Ten full browser scenarios pass with the expanded fixture, including card downloads, fees, event workflows, member restrictions and responsive navigation. Screenshots show actual seeded analytics and Maya Desai’s history. The existing public password/environment names stay compatible with Render; the new account names, clubs, event titles and payment references do not use the old display label.
+
+
+#### Version 1.2 milestone — October 31
+
+**Progress:** a fresh database receives 48 people, six clubs, 212 memberships, 465 events and 1,150 payments. Annual histories begin in 2010, alongside active, unpaid and expired states, recent activities, registrations and attendance. First-name addresses use normal authentication. The login selector and account catalog expose each club through its administrator. Names and record labels are natural; public password/environment settings remain compatible.
+
+**Challenges and solutions:** a persisted reference date prevents reruns from moving events or validity. Insert-only writes recover missing records without resetting edits. Preflight checks protect reserved addresses, ownership and join codes. Existing joined relationships are reused. A regression test found that rebuilding the fixture after preflight lost those reused IDs; rebuilding now occurs only if another initializer supplied a different reference date. Known starter identities migrate conditionally. Atlas access was restored after the current IP was allowed.
+
+**Verification:** 98 component/API tests, lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass in isolated snapshots. Browser workflows inspect actual 2010 history and populated analytics. The hosted database initially has five accounts/two clubs/three memberships/two events; compatible-code publication precedes its address migration. Deployment uses a private backup and live verification. Existing local example-environment edits remain separate.
+
+**Learning:** realistic samples need coherent relationships and dates, plus upgrade behavior for records people already edited. Idempotence includes stable timestamps and missing-record recovery, alongside stable row counts.
+
+```ts
+const state = await SeedState.findOneAndUpdate(
+  { _id: "sample-data-v1.2" },
+  { $setOnInsert: { anchorAt: now } },
+  { upsert: true, new: true },
+);
+```
+
+![Populated club dashboard](screenshots/sample-data-dashboard.png)
+
+![Renewals beginning in 2010](screenshots/sample-data-history.png)
