@@ -148,7 +148,7 @@ export function MembershipCardPanel({
       {error && <Notice>{error}</Notice>}
       {saved && (
         <Notice tone="success">
-          Your PNG is ready. Check your browser’s downloads.
+          Your PNG is ready. Check your browser's downloads.
         </Notice>
       )}
       <Button onClick={save} busy={busy} disabled={!preview}>

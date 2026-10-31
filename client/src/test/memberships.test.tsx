@@ -131,7 +131,7 @@ describe("member experience", () => {
       </MemoryRouter>,
     );
     expect(
-      await screen.findByText("This club isn’t available."),
+      await screen.findByText("This club isn't available."),
     ).toBeInTheDocument();
     expect(fetch).not.toHaveBeenCalled();
   });
@@ -140,7 +140,7 @@ describe("member experience", () => {
     render(
       <MemoryRouter>
         <AuthContext.Provider
-          value={auth({ error: "We couldn’t reach ClubOS.", retry })}
+          value={auth({ error: "We couldn't reach ClubOS.", retry })}
         >
           <App />
         </AuthContext.Provider>

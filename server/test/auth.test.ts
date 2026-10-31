@@ -65,7 +65,7 @@ describe("authentication and profiles", () => {
     expect(restored.status).toBe(200);
     expect(restored.body.user.id).toBe(result.body.user.id);
   });
-  it("rejects duplicate email, unknown fields, and passwords exceeding bcrypt’s byte limit", async () => {
+  it("rejects duplicate email, unknown fields, and passwords exceeding bcrypt's byte limit", async () => {
     const agent = request.agent(app);
     await signup(agent);
     expect((await signup(agent, "ALEX@example.com")).status).toBe(409);

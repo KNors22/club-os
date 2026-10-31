@@ -161,7 +161,7 @@ export function EventDetailPage() {
                       <span className="status status-active">
                         {event.registration.checkedInAt
                           ? "Checked in"
-                          : "You’re registered"}
+                          : "You're registered"}
                       </span>
                       {!closed && !event.registration.checkedInAt && (
                         <Button

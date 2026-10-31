@@ -65,7 +65,7 @@ test("administrator and member complete the isolated Foundation workflow", async
       ).status(),
     ).toBe(403);
     await member.goto(`/app/${otherClubId}/members`);
-    await expect(member.getByText("This club isn’t available.")).toBeVisible();
+    await expect(member.getByText("This club isn't available.")).toBeVisible();
     await member.goto("/profile");
     await member.getByLabel("Full name").fill("Jordan Updated");
     await member.getByRole("button", { name: "Save changes" }).click();

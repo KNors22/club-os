@@ -153,7 +153,7 @@ describe("downloadable membership cards", () => {
     const user = userEvent.setup();
     await user.click(screen.getByRole("button", { name: "Save card (PNG)" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      /couldn’t reach ClubOS/,
+      /couldn't reach ClubOS/,
     );
     expect(downloadMembershipCard).not.toHaveBeenCalled();
     vi.mocked(membershipCardPng).mockRejectedValueOnce(

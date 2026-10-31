@@ -43,7 +43,7 @@ function ClubBoundary() {
   if (!organization)
     return (
       <div className="empty-state">
-        <h1>This club isn’t available.</h1>
+        <h1>This club isn't available.</h1>
         <p>Choose one of your clubs to continue.</p>
         <Link to="/clubs" className="button button-primary">
           Back to your clubs
@@ -105,7 +105,7 @@ export function App() {
           <div className="full-screen-state">
             <Brand />
             <h1>Looks like a wrong turn.</h1>
-            <p>Let’s get you back to your community.</p>
+            <p>Let's get you back to your community.</p>
             <Link to="/clubs" className="button button-primary">
               Back to ClubOS
             </Link>

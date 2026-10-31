@@ -136,7 +136,7 @@ export function EventsPage() {
           <p>
             {organization.role === "admin"
               ? "Create an event and give your members something to look forward to."
-              : "Your club’s events will appear here when they are announced."}
+              : "Your club's events will appear here when they are announced."}
           </p>
         </div>
       )}

@@ -55,7 +55,7 @@ export function PublicDemoPanel({
         }}
       >
         <option value="">Choose a sample account</option>
-        {demo.accounts.map((account) => (
+        {demo.accounts.slice(0, 8).map((account) => (
           <option key={account.email} value={account.email}>
             {account.email} · {account.role}
           </option>

@@ -98,7 +98,7 @@ export function ErrorState({
   return (
     <div className="empty-state">
       <AlertCircle size={30} aria-hidden="true" />
-      <h2>Let’s try that again</h2>
+      <h2>Let's try that again</h2>
       <p>{message}</p>
       {retry && (
         <Button variant="secondary" onClick={retry}>

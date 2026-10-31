@@ -59,7 +59,7 @@ function AdminOverview() {
           <h1>
             A good day for your club<span className="heading-dot">.</span>
           </h1>
-          <p>Here’s how things are looking at {organization.name}.</p>
+          <p>Here's how things are looking at {organization.name}.</p>
         </div>
         <span className="role-pill role-admin">Administrator</span>
       </div>

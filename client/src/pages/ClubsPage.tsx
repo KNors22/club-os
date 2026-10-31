@@ -157,7 +157,7 @@ export function ClubsPage() {
           </div>
           <h2>Start something good.</h2>
           <p className="subtle">
-            Create a home for your club. You’ll be its administrator.
+            Create a home for your club. You'll be its administrator.
           </p>
           <form
             onSubmit={(event) => void submit(event, "create")}

@@ -43,7 +43,7 @@ describe("payment screens", () => {
     await user.click(screen.getByRole("checkbox"));
     await user.click(screen.getByRole("button", { name: "Record payment" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "couldn’t reach",
+      "couldn't reach",
     );
     await user.click(screen.getByRole("button", { name: "Record payment" }));
     await waitFor(() => expect(recorded).toHaveBeenCalledOnce());

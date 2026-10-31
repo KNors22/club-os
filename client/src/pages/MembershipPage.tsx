@@ -32,7 +32,7 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
       <NotificationBanner />
       <div className="page-heading">
         <div>
-          <span className="eyebrow">YOU’RE PART OF SOMETHING GOOD</span>
+          <span className="eyebrow">YOU'RE PART OF SOMETHING GOOD</span>
           <h1>
             {overview ? `Welcome to ${organization.name}` : "My membership"}
             <span className="heading-dot">.</span>
@@ -45,7 +45,7 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
       ) : resource.error ? (
         <ErrorState message={resource.error} retry={resource.reload} />
       ) : !membership ? (
-        <ErrorState message="We couldn’t find your membership. Try refreshing your clubs." />
+        <ErrorState message="We couldn't find your membership. Try refreshing your clubs." />
       ) : (
         <div className="membership-grid">
           <MembershipCardPanel
@@ -108,7 +108,7 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
                     ? "Contact your club administrator to confirm payment and activate your membership."
                     : membership.status === "expired"
                       ? "Ready for another chapter? Contact your administrator about renewing your membership."
-                      : "You’re all set. Your club administrator can help with any membership questions."}
+                      : "You're all set. Your club administrator can help with any membership questions."}
                 </p>
               </div>
             </section>

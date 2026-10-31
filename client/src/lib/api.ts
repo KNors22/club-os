@@ -28,7 +28,7 @@ export async function api<T>(
     throw new ApiError(
       0,
       "NETWORK_ERROR",
-      "We couldn’t reach ClubOS. Check your connection and try again.",
+      "We couldn't reach ClubOS. Check your connection and try again.",
     );
   }
   if (response.status === 204) return undefined as T;

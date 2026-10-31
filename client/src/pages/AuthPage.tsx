@@ -56,7 +56,7 @@ export function AuthPage({ register = false }: { register?: boolean }) {
             More <em>belonging.</em>
           </h1>
           <p>
-            A home for your club, your members, and everything you’re building
+            A home for your club, your members, and everything you're building
             together.
           </p>
           <div className="community-art" aria-hidden="true">
@@ -168,7 +168,7 @@ export function AuthPage({ register = false }: { register?: boolean }) {
           )}
           <p className="auth-form-note">
             <ShieldCheck size={15} />
-            Your club’s information stays within your club.
+            Your club's information stays within your club.
           </p>
         </div>
         <AppFooter variant="auth" />
