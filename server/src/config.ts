@@ -110,7 +110,13 @@ export function parseConfig(environment: Record<string, unknown>): AppConfig {
       throw new Error(
         "Invalid environment: DEMO_PASSWORD must contain 10–72 characters and fit within 72 UTF-8 bytes.",
       );
-    validateDemoDatabase(env.MONGODB_URI);
+    try {
+      validateDemoDatabase(env.MONGODB_URI);
+    } catch {
+      throw new Error(
+        "Invalid environment: MONGODB_URI must select the exact ClubOS-DB database in public demo mode.",
+      );
+    }
   }
   if (
     !["http:", "https:"].includes(url.protocol) ||
@@ -121,11 +127,11 @@ export function parseConfig(environment: Record<string, unknown>): AppConfig {
     url.hash
   ) {
     throw new Error(
-      "APP_URL must be an HTTP(S) origin without a path, credentials, or query",
+      "Invalid environment: APP_URL must be an HTTP(S) origin without a path, credentials, or query",
     );
   }
   if (env.NODE_ENV === "production" && url.protocol !== "https:") {
-    throw new Error("Production APP_URL must use HTTPS");
+    throw new Error("Invalid environment: production APP_URL must use HTTPS");
   }
   return {
     nodeEnv: env.NODE_ENV,

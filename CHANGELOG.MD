@@ -8,7 +8,26 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 - Verify real confirmation delivery to the demo inbox with private Resend credentials.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.2...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.3...HEAD)
+
+## [0.6.0-rc.3] - 2026-10-31
+
+**Live Render verification and safe startup diagnostics.**
+
+### Fixed
+
+- Startup logs identify configuration, MongoDB connection, demo initialization, and session-storage failures instead of reporting only a generic exit.
+- MongoDB authentication, authorization, network/server-selection, URI-format, and reserved-account errors provide actionable diagnostics without printing raw driver messages, connection strings, or passwords.
+- HTTPS-origin and public-demo database validation errors retain their safe configuration field names in startup logs.
+
+### Verification
+
+- After configuring Render's private `SESSION_SECRET` and allowing its outbound IP ranges in Atlas, the public service returned HTTP 200.
+- Live administrator/member login, seeded membership/history, secure cookies, logout, and the public-demo frontend were verified at `https://andreys-club-os.onrender.com`.
+- 75 component/API tests and both compiled production/startup-restart smoke checks passed locally. Seven new failure-path tests cover classification and credential redaction.
+- Public demo credentials remain unchanged: `ClubOSDemo2026!` for the five reserved accounts. Real inbox delivery remains a separate verification step.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.2...v0.6.0-rc.3)
 
 ## [0.6.0-rc.2] - 2026-10-31
 

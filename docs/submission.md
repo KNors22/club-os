@@ -11,7 +11,7 @@
 | Local test and browser evidence | [Validation](validation.md) and [GitHub checks](https://github.com/KNors22/club-os/actions/workflows/ci.yml) |
 | Demonstration records and public credentials | [Public demo accounts and seed behavior](demo-data.md) |
 | Important release tags and notes | [Changelog](../CHANGELOG.MD) |
-| Live application URL | [Andrey's ClubOS](https://andreys-club-os.onrender.com); see the Render guide for startup and verification |
+| Live application URL | [Andrey's ClubOS](https://andreys-club-os.onrender.com), health and seeded administrator/member login verified October 31, 2026 |
 | Live two-account workflow and real email confirmations | **Pending:** deployment and private Resend/demo-recipient configuration |
 
 The implementation and local evidence are prepared for review. Live application acceptance remains incomplete until the pending rows above have actual results. This document is a submission package; it has not been sent to an instructor or submission portal.

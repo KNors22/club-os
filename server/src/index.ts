@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
 import { loadConfig } from "./config.js";
 import { createSessionStore } from "./database.js";
+import { startupStep, startupErrorMessage } from "./services/startup-error.js";
 import { prepareDatabase } from "./services/startup.js";
 import { createApp } from "./app.js";
 
 async function main() {
-  const config = loadConfig();
+  const config = await startupStep("configuration", loadConfig);
   await prepareDatabase(config);
-  const store = createSessionStore(config);
-  await store.collectionP;
+  const store = await startupStep("session storage", async () => {
+    const store = createSessionStore(config);
+    await store.collectionP;
+    return store;
+  });
   const app = createApp(config, store);
   const server = app.listen(config.port, "0.0.0.0", () =>
     console.log(`ClubOS API listening on port ${config.port}`),
@@ -30,10 +34,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(
-    error instanceof Error && error.message.startsWith("Invalid environment")
-      ? error.message
-      : "Startup failed. Check environment settings and MongoDB connectivity.",
-  );
+  console.error(startupErrorMessage(error));
   process.exit(1);
 });

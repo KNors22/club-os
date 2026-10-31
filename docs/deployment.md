@@ -84,3 +84,16 @@ Render Free services sleep after 15 minutes without inbound traffic and can take
 - [Render deployment and CI behavior](https://render.com/docs/deploys)
 - [Render Free service limitations](https://render.com/docs/free)
 - [Render Blueprint specification](https://render.com/docs/blueprint-spec)
+
+
+## Diagnosing startup failures
+
+If the build succeeds but `npm start` exits, read the application error immediately above npm's summary. Startup diagnostics identify the failed stage and give fixed, credential-free guidance.
+
+- `Invalid environment: SESSION_SECRET`: in the existing Render service's Environment tab, add a private random value of at least 32 characters, then choose Save and deploy. Blueprint-generated secrets apply to Blueprint-managed services; a manually created service needs this setting explicitly.
+- `MongoDB connection failed or timed out`: copy all ranges from this Render service's **Connect → Outbound** tab into Atlas **Network Access**. A local Atlas connection only verifies your computer's access. Also verify the cluster is available and the service uses the intended URI.
+- `MongoDB authentication failed`: verify the database username/password and authentication settings in the private URI.
+- `MongoDB authorization failed`: grant the database user read/write/index permissions for `ClubOS-DB`.
+- Exact database/origin validation errors: use `/ClubOS-DB` in the URI, and an HTTPS `APP_URL` or Render's automatic origin.
+
+The October 31 deployment was verified healthy after the missing session secret and Atlas network-access settings were corrected. Both public demo accounts signed in successfully; the member's active membership/history and deployed frontend were verified. Real Resend inbox delivery is still separate.

@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v0.6.0-rc.2 Render public-demo candidate.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v0.6.0-rc.3 verified Render public demo.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -96,7 +96,7 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The Render release passes 68 component/API tests, eight Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The Render release passes 75 component/API tests, eight Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
 
 ## Technologies Used
 

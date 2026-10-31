@@ -134,3 +134,14 @@ if (config.publicDemo) {
 ![Published demo credential controls](screenshots/public-demo-login.png)
 
 The public service URL is [Andrey's ClubOS](https://andreys-club-os.onrender.com). Private database/session/email credentials remain outside source control. Release tag: `v0.6.0-rc.2`.
+
+
+#### October 31 — deployment diagnosis and successful live verification
+
+The first hosted run of the new release identified a missing `SESSION_SECRET`. A private random value was prepared outside the repository and configured through Render. The next run built successfully but failed during startup after roughly 14 seconds. Render's outbound IP ranges were then added to Atlas Network Access, and the redeployment became healthy.
+
+**Live result:** `https://andreys-club-os.onrender.com` returned HTTP 200. Both public demo accounts authenticated with `ClubOSDemo2026!`; the administrator could access the seeded club, the member's active membership/payment history loaded, secure cookies and logout worked, and the compiled frontend contained the demo controls. Actual hosted Chrome verification also passed administrator settings and mobile member history with no runtime errors or horizontal overflow. No club data was reset by verification.
+
+**Code follow-up:** startup diagnostics now identify the stage and classify MongoDB authentication, authorization, connection/selection, URI-format, and reserved-account failures. They emit fixed safe messages instead of raw driver errors that could contain credentials. Seven failure-path tests bring the component/API total to 75; both compiled production and startup/restart checks pass. Workspace versions and changelog align at `v0.6.0-rc.3`.
+
+**Learning:** successful local database access does not establish a hosted service's Atlas access, and generic process-exit messages hide the actionable cause. Deployment verification must include the actual public origin and authenticated seeded data. Real email inbox delivery remains unverified.

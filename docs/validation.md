@@ -50,3 +50,8 @@ The compiled-server smoke test covers the full manual-payment/fee/event workflow
 - Real Resend inbox delivery is still separate from application/provider-mock verification.
 
 ![Public demo sign-in](screenshots/public-demo-login.png)
+
+
+### October 31 — hosted verification and diagnostic follow-up
+
+After Render's private session secret and Atlas network-access entries were configured, live health, public administrator/member login, secure cookies/logout, seeded membership/history, and the deployed frontend passed verification. The diagnostic follow-up adds seven failure-path tests (75 component/API tests total) and retains passing production/startup-restart smoke checks. Browser behavior is unchanged from the eight verified Chrome/Firefox scenarios. Actual hosted Chrome checks also passed administrator settings and mobile member history without runtime errors or horizontal overflow. Actual Resend inbox delivery remains separate.
