@@ -74,18 +74,6 @@ Use `alex@clubos` to open Riverside Running Club, then find **Maya Desai** under
 
 See the [sample-data guide](docs/sample-data.md), [populated dashboard](docs/screenshots/sample-data-dashboard.png), and [historical payments](docs/screenshots/sample-data-history.png). Shared `@clubos` addresses are sign-in identities, not mailboxes; seeding sends no email.
 
-### Demo email setup
-
-Set these optional root `.env` values and restart the API:
-
-```dotenv
-RESEND_API_KEY=your_private_resend_api_key
-EMAIL_DEMO_TO=your_verified_account_owner_email
-EMAIL_FROM=onboarding@resend.dev
-```
-
-Set both the key and recipient, or leave both empty to disable delivery. Resend's default test sender delivers to the account owner's inbox. The application displays a demo-mode notice and always sends to `EMAIL_DEMO_TO`, even when a member has a different address. A successful payment or registration persists before the bounded email request. Disabled, failed, or timed-out delivery produces a notice without undoing the action; there are no automatic retries. Payment-request retries do not send again. Provider behavior is covered with mocks; real inbox delivery still needs verification with your credentials.
-
 ### Save a membership card
 
 Sign in as a member, open the club, then choose **My membership → Save card (PNG)**. Your browser downloads a 2160×1360 image containing your current name, club, membership ID, validity, and exact expiration in Eastern time. You can save it on your device or print it.
