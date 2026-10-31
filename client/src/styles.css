@@ -1473,86 +1473,85 @@ fieldset {
   gap: 25px;
   max-width: 1050px;
 }
-.membership-card {
-  background: #234935;
-  color: #eff6e6;
-  border-radius: 14px;
-  padding: 29px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 340px;
+.card-download-panel {
+  min-width: 0;
+  padding: 24px;
+  align-self: start;
 }
-.membership-card:before {
-  content: "";
-  position: absolute;
-  width: 290px;
-  height: 290px;
-  border: 1px solid #d0e7a922;
-  border-radius: 50%;
-  right: -160px;
-  bottom: -100px;
-  box-shadow:
-    0 0 0 40px #d0e7a908,
-    0 0 0 80px #d0e7a905;
+.card-download-heading h2 {
+  margin: 7px 0;
+  font-size: 20px;
 }
-.membership-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  color: #c8dfab;
-}
-.membership-card-label {
-  font-size: 8px;
-  letter-spacing: 2px;
-}
-.membership-card-person {
-  padding: 30px 0;
-  flex: 1;
-}
-.membership-card-person .avatar {
-  background: #d7eea8;
-  color: #436237;
-}
-.membership-card-person h2 {
-  font-size: 25px;
-  font-weight: 500;
-  letter-spacing: -0.8px;
-  overflow-wrap: anywhere;
-  margin-top: 19px;
-}
-.membership-card-person p {
-  font-size: 11px;
-  color: #c3d4b8;
-  margin-top: 7px;
-}
-.membership-card-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-.membership-card-bottom > span:first-child {
-  font-size: 7px;
-  letter-spacing: 1.4px;
-  color: #b8cca8;
-}
-.membership-card-bottom strong {
-  font-family: "DM Sans", sans-serif;
-  display: block;
+.card-download-heading > p {
+  color: #707e61;
   font-size: 12px;
-  letter-spacing: 0.1px;
-  font-weight: 400;
-  color: #e6f1db;
-  margin-top: 7px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
-.card-symbol {
-  font-size: 45px;
-  line-height: 1;
-  color: #c4de9f;
-  font-family: Arial, sans-serif;
+.membership-card-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1080 / 680;
+  border-radius: 12px;
+  background: #234935;
+  box-shadow: 0 8px 22px #23493516;
+}
+.card-summary {
+  margin: 20px 0;
+  font-size: 12px;
+}
+.card-summary > div {
+  padding: 9px 0;
+}
+.card-summary dt {
+  color: #707e61;
+  margin-bottom: 5px;
+}
+.card-summary dd {
+  margin: 0;
+  color: #304a2d;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.card-summary .card-membership-id {
+  font-family: monospace;
+  font-size: 12px;
+}
+.card-summary .card-expired-label {
+  color: #a24025;
+  font-weight: 600;
+}
+.card-download-panel .button {
+  width: 100%;
+}
+.card-download-panel .notice {
+  margin-bottom: 15px;
+}
+.card-download-note {
+  margin-top: 12px;
+  color: #707e61;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.card-unavailable {
+  padding: 32px 18px;
+  border: 1px dashed #c8d3b5;
+  border-radius: 12px;
+  background: #f6f8ef;
+  text-align: center;
+  color: #61734e;
+}
+.card-unavailable h3 {
+  font-size: 16px;
+  margin: 12px 0 8px;
+}
+.card-unavailable p {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.card-unavailable + .button {
+  margin-top: 20px;
 }
 .membership-details {
   padding: 26px;
@@ -1778,10 +1777,6 @@ fieldset {
   .membership-grid {
     grid-template-columns: 1fr;
   }
-  .membership-card {
-    min-height: 310px;
-    max-width: 500px;
-  }
   .member-toolbar {
     flex-wrap: wrap;
   }
@@ -1968,12 +1963,6 @@ fieldset {
   .membership-grid {
     grid-template-columns: 1fr 1fr;
     gap: 19px;
-  }
-  .membership-card {
-    padding: 24px;
-  }
-  .membership-card-person h2 {
-    font-size: 23px;
   }
   .membership-details {
     padding: 22px;
@@ -2162,19 +2151,6 @@ fieldset {
   }
   .membership-grid {
     grid-template-columns: 1fr;
-  }
-  .membership-card {
-    max-width: none;
-    min-height: 310px;
-  }
-  .membership-card-person h2 {
-    font-size: 27px;
-  }
-  .membership-card-person p {
-    font-size: 13px;
-  }
-  .membership-card-bottom strong {
-    font-size: 12px;
   }
   .detail-list dt,
   .detail-list dd {

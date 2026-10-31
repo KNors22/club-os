@@ -9,7 +9,8 @@ import { Navigate } from "react-router-dom";
 import { useOrganization } from "../contexts/clubs-context";
 import { useAuth } from "../contexts/auth-context";
 import { useResource } from "../hooks/useResource";
-import { Avatar, ErrorState, Loading, StatusBadge } from "../components/ui";
+import { ErrorState, Loading, StatusBadge } from "../components/ui";
+import { MembershipCardPanel } from "../components/MembershipCardPanel";
 import { PaymentHistory } from "../components/PaymentHistory";
 import { NotificationBanner } from "../components/NotificationBanner";
 import { date, money } from "../lib/format";
@@ -47,25 +48,16 @@ export function MembershipPage({ overview = false }: { overview?: boolean }) {
         <ErrorState message="We couldn’t find your membership. Try refreshing your clubs." />
       ) : (
         <div className="membership-grid">
-          <section className="membership-card">
-            <div className="membership-card-top">
-              <span className="membership-card-label">CLUB MEMBERSHIP</span>
-              <ShieldCheck size={28} />
-            </div>
-            <div className="membership-card-person">
-              <Avatar name={user!.name} large />
-              <h2>{user!.name}</h2>
-              <p>{organization.name}</p>
-            </div>
-            <div className="membership-card-bottom">
-              <span>
-                MEMBER SINCE<strong>{date(membership.joinedAt)}</strong>
-              </span>
-              <span className="card-symbol" aria-hidden="true">
-                ✳
-              </span>
-            </div>
-          </section>
+          <MembershipCardPanel
+            key={membership.id}
+            organizationId={organization.id}
+            clubName={organization.name}
+            memberName={user!.name}
+            membership={membership}
+            onMembershipUpdated={(updated) =>
+              resource.update(() => ({ membership: updated }))
+            }
+          />
           <section className="panel membership-details">
             <div className="panel-heading compact">
               <h2>Your membership</h2>

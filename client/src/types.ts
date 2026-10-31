@@ -22,6 +22,15 @@ export interface Membership {
   status: MembershipStatus;
   payments?: Payment[];
 }
+export interface MembershipCardData {
+  memberName: string;
+  clubName: string;
+  membershipId: string;
+  startsAt: string | null;
+  expiresAt: string;
+  status: "active" | "expired";
+  issuedAt: string;
+}
 export interface Payment {
   id: string;
   requestId: string;
