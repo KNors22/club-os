@@ -6,6 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Added
 
+- Chrome/Firefox acceptance now verifies real PNG signatures/dimensions, downloads after a concurrent renewal, refreshed page dates, expired status, long names, unpaid-card disabling, and mobile layout. Actual card and desktop/mobile captures accompany compiled-server card checks.
 - Members can preview and save a crisp PNG card showing their name, full club name, membership ID, validity, exact Eastern-time expiration, and status. Saving fetches a fresh authenticated snapshot and refreshes the page; unpaid cards are unavailable and expired cards are marked. Accessible text, retry states, route-change cancellation, and five component tests accompany the download.
 - Authenticated membership-card snapshots use the current member name, club, validity, expiration, status, and issue time. Cards require activation, retain expired status honestly, and restrict access to the signed-in member. Four API tests cover activation, renewal/profile freshness, expiration, and organization/account isolation.
 

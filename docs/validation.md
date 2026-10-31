@@ -68,3 +68,14 @@ The analytics integration tests cover Eastern-time month boundaries, prior-windo
 
 
 **V1 release checks:** 79 component/API tests (21 frontend and 58 backend) pass, together with compilation and both production/startup-restart smoke checks. All ten browser scenarios pass in Chrome and Firefox. Every implementation checkpoint was verified from a separate prospective-commit snapshot, with the existing staged LICENSE and documentation edits kept separate.
+
+
+## Version 1.1 membership cards
+
+The existing Chrome/Firefox public-demo workflow now downloads actual PNGs and verifies their file signature and 2160×1360 dimensions. A disposable-data administrator renewal happens while the member's page is stale; saving fetches the new expiration and refreshes the page. An expired-response fixture verifies the warning, expired filename, and complete long member/club names. The navigation workflow checks that unpaid cards remain disabled. Mobile checks cover overflow and reachable save controls. Visual inspection confirms readable dates and full names in the exported images. Compiled-server smoke checks now cover pending-card rejection, renewed card dates, cache policy, and club/member restrictions.
+
+- [Saved PNG card](screenshots/membership-card.png)
+- [Member page on desktop](screenshots/membership-card-desktop.png)
+- [Member page on mobile](screenshots/membership-card-mobile.png)
+
+Cards contain static membership information and expiration, with no scan flow. Final release checks and live verification are recorded separately after they run.

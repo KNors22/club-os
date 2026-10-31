@@ -114,6 +114,7 @@ try {
     await api(member, "get", `${path}/memberships/me`).expect(200)
   ).body.membership;
   assert.equal(membership.status, "pending");
+  await api(member, "get", `${path}/memberships/me/card`).expect(409);
   await api(member, "patch", path, {
     feeCents: 2550,
     expectedFeeCents: 2000,
@@ -141,6 +142,19 @@ try {
     amountCents: 2550,
   }).expect(201);
   assert.equal(renewal.body.membership.payments.length, 2);
+  const card = await api(member, "get", `${path}/memberships/me/card`).expect(
+    200,
+  );
+  assert.equal(card.headers["cache-control"], "no-store");
+  assert.equal(card.body.card.membershipId, membership.id);
+  assert.equal(card.body.card.status, "active");
+  assert.equal(card.body.card.expiresAt, renewal.body.membership.expiresAt);
+  await api(admin, "get", `${path}/memberships/me/card`).expect(404);
+  await api(
+    member,
+    "get",
+    `/organizations/${other.id}/memberships/me/card`,
+  ).expect(404);
   assert.equal(
     new Date(renewal.body.membership.expiresAt) -
       new Date(paid.body.membership.expiresAt),
@@ -182,7 +196,7 @@ try {
   await api(member, "post", "/auth/logout", {}).expect(204);
   await api(member, "get", "/auth/me").expect(401);
   console.log(
-    "Production smoke passed: compiled assets/routes, secure cookies, scoped accounts, fee updates, payments/renewals, registration/cancellation, idempotent check-in, dashboard, and logout.",
+    "Production smoke passed: compiled assets/routes, secure cookies, scoped accounts, fee updates, payments/renewals, current membership cards, registration/cancellation, idempotent check-in, dashboard, and logout.",
   );
 } finally {
   if (mongoose.connection.readyState === 1) {

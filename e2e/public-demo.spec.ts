@@ -1,6 +1,8 @@
 import { mkdirSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import { test, expect } from "@playwright/test";
-test("public visitors can discover demo credentials and sign in as administrator or member", async ({
+test("public visitors can sign in, save current membership cards, and identify expired cards", async ({
   page,
   browser,
 }, testInfo) => {
@@ -63,6 +65,139 @@ test("public visitors can discover demo credentials and sign in as administrator
     await expect(
       member.getByRole("link", { name: "Club settings", exact: true }),
     ).toHaveCount(0);
+
+    const membershipPath =
+      "/api/organizations/c10000000000000000000001/memberships/me";
+    const before = (await (await member.request.get(membershipPath)).json())
+      .membership;
+    const club = (
+      await (
+        await page.request.get("/api/organizations/c10000000000000000000001")
+      ).json()
+    ).organization;
+    // Disposable QA data only: renew while the member's page still has the old dates.
+    const payment = await page.request.post(
+      `/api/organizations/${club.id}/memberships/${before.id}/payments`,
+      {
+        headers: { Origin: new URL(page.url()).origin },
+        data: {
+          requestId: randomUUID(),
+          amountCents: club.feeCents,
+          method: "cash",
+          reference: "Browser card freshness",
+          paidAt: new Date().toISOString(),
+        },
+      },
+    );
+    expect(payment.status()).toBe(201);
+    const renewed = (await payment.json()).membership;
+    expect(renewed.expiresAt).not.toBe(before.expiresAt);
+    const cardPanel = member.getByRole("region", {
+      name: "Membership card",
+      exact: true,
+    });
+    const [download, snapshotResponse] = await Promise.all([
+      member.waitForEvent("download"),
+      member.waitForResponse((response) =>
+        response.url().endsWith(`${membershipPath}/card`),
+      ),
+      cardPanel.getByRole("button", { name: "Save card (PNG)" }).click(),
+    ]);
+    const snapshot = await snapshotResponse.json();
+    expect(snapshot.card.expiresAt).toBe(renewed.expiresAt);
+    await expect(cardPanel.locator("time")).toHaveAttribute(
+      "datetime",
+      renewed.expiresAt,
+    );
+    expect(download.suggestedFilename()).toMatch(/^clubos-.*-active\.png$/);
+    expect(await download.failure()).toBeNull();
+    const image = await readFile((await download.path())!);
+    expect([...image.subarray(0, 8)]).toEqual([
+      137, 80, 78, 71, 13, 10, 26, 10,
+    ]);
+    expect(image.readUInt32BE(16)).toBe(2160);
+    expect(image.readUInt32BE(20)).toBe(1360);
+    expect(image.length).toBeGreaterThan(1000);
+    await expect(cardPanel.getByRole("status")).toContainText(
+      "Your PNG is ready",
+    );
+    const captureCard =
+      process.env.CAPTURE_CARDS === "1" && testInfo.project.name === "chrome";
+    if (captureCard) {
+      mkdirSync("docs/screenshots", { recursive: true });
+      await download.saveAs("docs/screenshots/membership-card.png");
+      await member.evaluate(() => window.scrollTo(0, 0));
+      await member.screenshot({
+        path: "docs/screenshots/membership-card-desktop.png",
+        fullPage: true,
+      });
+    }
+    await member.setViewportSize({ width: 390, height: 844 });
+    await expect
+      .poll(async () => {
+        const bounds = await member.locator("#workspace-nav").boundingBox();
+        return bounds ? bounds.x + bounds.width : 0;
+      })
+      .toBeLessThanOrEqual(1);
+    expect(
+      await member.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    await cardPanel
+      .getByRole("button", { name: "Save card (PNG)" })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      cardPanel.getByRole("button", { name: "Save card (PNG)" }),
+    ).toBeInViewport();
+    if (captureCard) {
+      await member.evaluate(() => window.scrollTo(0, 0));
+      await member.screenshot({
+        path: "docs/screenshots/membership-card-mobile.png",
+        fullPage: true,
+      });
+    }
+
+    // Expiration can change between viewing and saving. Render the server's new status.
+    const expired = {
+      ...snapshot.card,
+      status: "expired",
+      startsAt: "2024-10-01T12:00:00Z",
+      expiresAt: "2025-10-01T12:00:00Z",
+      memberName: "Alexandria " + "Gonzalez".repeat(11),
+      clubName: "Community " + "Adventure".repeat(10),
+    };
+    await member.route(`**${membershipPath}/card`, (route) =>
+      route.fulfill({
+        json: {
+          card: expired,
+          membership: {
+            ...renewed,
+            status: "expired",
+            startsAt: expired.startsAt,
+            expiresAt: expired.expiresAt,
+          },
+        },
+      }),
+    );
+    const expiredDownloadPromise = member.waitForEvent("download");
+    await cardPanel.getByRole("button", { name: "Save card (PNG)" }).click();
+    const expiredDownload = await expiredDownloadPromise;
+    expect(await expiredDownload.failure()).toBeNull();
+    expect(expiredDownload.suggestedFilename()).toMatch(/-expired\.png$/);
+    await expect(
+      cardPanel.getByText("Expired membership", { exact: true }),
+    ).toBeVisible();
+    await expect(cardPanel.getByRole("img")).toHaveAccessibleName(
+      new RegExp(expired.memberName),
+    );
+    await expect(
+      cardPanel.getByRole("button", { name: "Save expired card (PNG)" }),
+    ).toBeEnabled();
+    if (captureCard)
+      await expiredDownload.saveAs(
+        testInfo.outputPath("expired-long-names-card.png"),
+      );
   } finally {
     await context.close();
   }

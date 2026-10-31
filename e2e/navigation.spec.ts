@@ -84,6 +84,16 @@ test("seeded accounts support keyboard navigation, responsive settings, error re
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();
   await page.goto(`/app/${clubId}/settings`);
   await expect(page).toHaveURL(new RegExp(`/app/${clubId}$`));
+  const membershipCard = page.getByRole("region", {
+    name: "Membership card",
+    exact: true,
+  });
+  await expect(
+    membershipCard.getByRole("heading", { name: "Available after activation" }),
+  ).toBeVisible();
+  await expect(
+    membershipCard.getByRole("button", { name: "Save card (PNG)" }),
+  ).toBeDisabled();
   await expect(
     page.getByRole("link", { name: "Club settings", exact: true }),
   ).toHaveCount(0);
