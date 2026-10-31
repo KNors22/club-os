@@ -4,6 +4,9 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Added
+
+- The administrator dashboard now supplies twelve Eastern-time calendar months of joins, membership totals, attendance, and received payments, plus the next four events with capacity counts. Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
 ### Planned
 
 - Verify real confirmation delivery to the demo inbox with private Resend credentials.

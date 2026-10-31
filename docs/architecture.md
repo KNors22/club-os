@@ -118,3 +118,8 @@ Phase 2 screens add member detail/payment forms, personal history, event creatio
 ## Administrator fee changes
 
 `PATCH /api/organizations/:orgId` accepts only `{ feeCents, expectedFeeCents }` from the club administrator. Both are positive integer CAD cents up to 1,000,000. A conditional organization update rejects stale settings with 409. Other members receive 403 and unrelated accounts receive 404. Updating the fee never changes existing membership validity or historical payments. Subsequent new payment requests use the club fee read for that request; retrying an already-saved request still returns its original result even after a fee change. Administrators edit the fee under Club settings. Successful saves update shared club state immediately; stale edits offer a refresh action. Member routes redirect away from settings.
+
+
+## Version 1 dashboard analytics
+
+The administrator-only dashboard response includes twelve zero-filled calendar months in `America/Toronto`: recorded joins, cumulative membership records (including the pre-window baseline), actual check-in timestamps, and payments grouped by received date. These are joined-record totals rather than a reconstruction of historical active status. Current membership status still derives from expiration at request time. Upcoming events are the next four future events with registration counts/capacity; participant identities are omitted. All facets begin with the same organization filter. The next UI checkpoint introduces charts over this response.

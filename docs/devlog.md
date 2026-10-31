@@ -145,3 +145,10 @@ The first hosted run of the new release identified a missing `SESSION_SECRET`. A
 **Code follow-up:** startup diagnostics now identify the stage and classify MongoDB authentication, authorization, connection/selection, URI-format, and reserved-account failures. They emit fixed safe messages instead of raw driver errors that could contain credentials. Seven failure-path tests bring the component/API total to 75; both compiled production and startup/restart checks pass. Workspace versions and changelog align at `v0.6.0-rc.3`.
 
 **Learning:** successful local database access does not establish a hosted service's Atlas access, and generic process-exit messages hide the actionable cause. Deployment verification must include the actual public origin and authenticated seeded data. Real email inbox delivery remains unverified.
+
+
+### October 31, 2026 — Version 1 dashboard and navigation
+
+The release extends the existing club data and preserves membership/payment workflows. Each checkpoint is verified before publication.
+
+- **V1 checkpoint 1:** The administrator dashboard now supplies twelve Eastern-time calendar months of joins, membership totals, attendance, and received payments, plus the next four events with capacity counts. Aggregation tests cover timezone boundaries, prior-member baselines, empty months, chronological limits, and cross-club isolation.
