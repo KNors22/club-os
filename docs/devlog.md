@@ -188,3 +188,23 @@ let totalMembers = [...joins]
 - **Card checkpoint 2:** Members can preview and save a crisp PNG card showing their name, full club name, membership ID, validity, exact Eastern-time expiration, and status. Saving fetches a fresh authenticated snapshot and refreshes the page; unpaid cards are unavailable and expired cards are marked. Accessible text, retry states, route-change cancellation, and five component tests accompany the download. The PNG uses a native canvas at 2160×1360 with system fonts and vector paths, so saving needs no remote assets or new dependency. Long names wrap and reduce font size without ellipses. Browser verification follows in checkpoint 3.
 
 - **Card checkpoint 3:** Chrome/Firefox acceptance now verifies real PNG signatures/dimensions, downloads after a concurrent renewal, refreshed page dates, expired status, long names, unpaid-card disabling, and mobile layout. Actual card and desktop/mobile captures accompany compiled-server card checks. Browser assertions scroll to controls on small screens and captures wait for the drawer transition; this avoids treating a control below the fold or an in-progress transition as a layout defect. Renewal writes occur only in disposable QA data.
+
+
+#### Version 1.1 milestone — October 31
+
+**Progress:** members can save proof of membership directly from their membership page. The card shows their name, club, full membership ID, validity, expiration with Eastern-time precision, and active-at-issue or expired status. Unpaid memberships become eligible after activation. Saved cards remain static; every new save requests the latest authenticated record, including renewals and profile changes. No scanning is involved.
+
+**Challenges and solutions:** a page may remain open during an administrator's renewal, so exporting its cached data would produce outdated proof. The save action fetches a fresh server snapshot and refreshes the page before exporting. Native canvas drawing uses system fonts and paths to avoid cross-origin asset failures. Long names wrap without ellipses. Accessible HTML repeats the dates/ID, failures allow retry, and leaving the route cancels pending preparation. Mobile screenshot captures wait for navigation transitions and return to the top of the page.
+
+**Verification:** 88 component/API tests (26 frontend and 62 backend), lint, type checks, production builds, and compiled production/Render startup-restart smoke checks pass. All ten Chrome/Firefox scenarios pass, including real PNG signatures/dimensions, stale-page renewal downloads, unpaid/expired handling, and mobile layouts. The expired long-name browser fixture is separate from the real API expiration tests. Each implementation commit was validated from an isolated snapshot. User-staged LICENSE/document changes remain separate. Versions align at 1.1.0; live verification follows publication.
+
+```ts
+const issuedAt = new Date();
+const status = membershipStatus(membership.expiresAt, issuedAt);
+```
+
+**Learning:** a saved card is a snapshot, so its data freshness and explicit expiration matter as much as its appearance. Browser verification must test the actual downloaded file, not just a rendered preview.
+
+![Membership page with a save control](screenshots/membership-card-desktop.png)
+
+![Saved membership card](screenshots/membership-card.png)

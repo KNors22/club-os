@@ -21,7 +21,7 @@ The implementation and local evidence are prepared for review. Live application 
 Use two browser sessions with the public administrator/member accounts and password `ClubOSDemo2026!`, or register separate fictional accounts. Public demo startup seeds missing records and synchronizes only reserved demo passwords; it preserves existing records. If running locally, explicitly seed `ClubOS-DB` as described in the demo guide.
 
 1. **Create and join:** the administrator creates a club with a CAD 20 fee and 365-day term, then copies its join code. The member joins and sees **Awaiting payment**.
-2. **Activate:** the administrator opens **Members**, selects the member, and records a full received payment with method/reference. The member refreshes **My membership** to see active validity and payment history.
+2. **Activate:** the administrator opens **Members**, selects the member, and records a full received payment with method/reference. The member refreshes **My membership** to see active validity and payment history. Choose **Save card (PNG)** to download current membership proof and expiration.
 3. **Edit the fee and renew:** the administrator opens **Club settings**, changes the fee to CAD 25.50, then records a renewal. Show the old CAD 20 history row, the CAD 25.50 renewal row, and the extended expiration.
 4. **Register:** the administrator creates an upcoming event with capacity 1. The active member registers, cancels, and registers again. A pending member cannot register; unrelated clubs remain inaccessible.
 5. **Attend:** the administrator checks in the member from the event's participant list. Refresh the member's event screen to show checked-in status. Refresh the overview to show CAD 45.50 received, one registration, and one attendance record.
@@ -45,6 +45,6 @@ After deploying the reviewed main-branch commit and configuring Resend privately
 
 ## Agreed scope
 
-The MVP includes authentication, club creation/joining, one CAD membership plan, administrator fee editing, received-payment recording, renewals/history, events, capacity-limited registration/cancellation, manual attendance, scoped dashboards, and demo-inbox email integration.
+The MVP includes authentication, club creation/joining, one CAD membership plan, administrator fee editing, received-payment recording, renewals/history, downloadable membership cards, events, capacity-limited registration/cancellation, manual attendance, scoped dashboards, and demo-inbox email integration.
 
-QR cards/scanning, multiple membership types, online payments, exports, announcements, scheduled reminders, password recovery, and administrator invitations remain deferred. These were agreed scope reductions from the broader project document and are not claimed as implemented.
+QR scanning, multiple membership types, online payments, exports, announcements, scheduled reminders, password recovery, and administrator invitations remain deferred. These were agreed scope reductions from the broader project document and are not claimed as implemented.

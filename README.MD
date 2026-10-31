@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v1.0.0 club insights and readable navigation.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v1.1.0 downloadable membership cards.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -14,6 +14,7 @@ ClubOS is a student club management application inspired by administrative workf
 - Administrator dashboard with membership-status, member-growth, attendance/payment charts, upcoming-event capacity, and searchable member records.
 - Membership status filters: active, expired, and awaiting payment.
 - Personal membership details and profile-name updates.
+- Downloadable PNG membership cards with the member name, full club name, membership ID, validity dates, expiration time, and status.
 - Club-scoped permissions, a wider sidebar with wrapping club names, accessible responsive navigation, and author/year/GitHub footer credits.
 - Administrator recording of received payments, membership activation/renewal, and payment history.
 - Events with capacity limits, active-member registration, cancellation, and manual check-in.
@@ -58,7 +59,7 @@ For the public demo, sign in as **`admin@clubos.example`** or **`member@clubos.e
 1. Register an administrator, choose **Create club**, and set its name, fee, and term.
 2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
 3. As administrator, open **Members**, select the member, and record the received payment, method, date, and optional reference. Confirm that you received the full fee.
-4. Refresh the member's **Membership** page to see active status and payment history. Optionally update the fee under **Club settings**, then record a renewal at the new fee. Historical payments and current validity remain unchanged by the fee edit itself.
+4. Refresh the member's **Membership** page to see active status and payment history. Choose **Save card (PNG)** to keep a membership card. Optionally update the fee under **Club settings**, then record a renewal at the new fee. Historical payments and current validity remain unchanged by the fee edit itself.
 5. As administrator, open **Events** and create an upcoming event with a capacity.
 6. As member, open the event and register. Try cancellation and registration again.
 7. As administrator, open the event's participant list and choose **Check in**. Refresh the overview to see payment, membership, registration, and attendance totals.
@@ -75,6 +76,14 @@ EMAIL_FROM=onboarding@resend.dev
 ```
 
 Set both the key and recipient, or leave both empty to disable delivery. Resend's default test sender delivers to the account owner's inbox. The application displays a demo-mode notice and always sends to `EMAIL_DEMO_TO`, even when a member has a different address. A successful payment or registration persists before the bounded email request. Disabled, failed, or timed-out delivery produces a notice without undoing the action; there are no automatic retries. Payment-request retries do not send again. Provider behavior is covered with mocks; real inbox delivery still needs verification with your credentials.
+
+### Save a membership card
+
+Sign in as a member, open the club, then choose **My membership → Save card (PNG)**. Your browser downloads a 2160×1360 image containing your current name, club, membership ID, validity, and exact expiration in Eastern time. You can save it on your device or print it.
+
+Cards become available after the administrator activates membership. Expired memberships have a clearly marked **Save expired card (PNG)** option. Saving fetches the latest information and refreshes the page, so a renewal is reflected even if the page was already open. Saved cards are static copies: save a fresh card after renewal. There is no scanning step.
+
+See the [sample PNG](docs/screenshots/membership-card.png) and [member page](docs/screenshots/membership-card-desktop.png).
 
 ### Dashboard charts
 
@@ -141,7 +150,7 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 ## Future Improvements
 
 - Verification of real demo-inbox delivery with Resend credentials.
-- QR cards/check-in, exports, announcements, scheduled reminders, and multiple plans.
+- QR scanning/check-in, exports, announcements, scheduled reminders, and multiple plans.
 - Administrator invitations and password recovery.
 
 ## Author and Acknowledgements

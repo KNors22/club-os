@@ -79,3 +79,6 @@ The existing Chrome/Firefox public-demo workflow now downloads actual PNGs and v
 - [Member page on mobile](screenshots/membership-card-mobile.png)
 
 Cards contain static membership information and expiration, with no scan flow. Final release checks and live verification are recorded separately after they run.
+
+
+**V1.1 release checks:** 88 component/API tests (26 frontend, 62 backend), lint, type checks, production builds, and both compiled production and Render startup/restart smoke checks pass. All ten browser scenarios pass in installed Chrome and Firefox. Workspace/lockfile versions align at 1.1.0. Live rollout verification follows publication.

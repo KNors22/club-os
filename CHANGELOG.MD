@@ -4,17 +4,29 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ## [Unreleased]
 
+### Planned
+
+- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.1.0...HEAD)
+
+## [1.1.0] - 2026-10-31
+
+**Downloadable membership cards.**
+
 ### Added
 
 - Chrome/Firefox acceptance now verifies real PNG signatures/dimensions, downloads after a concurrent renewal, refreshed page dates, expired status, long names, unpaid-card disabling, and mobile layout. Actual card and desktop/mobile captures accompany compiled-server card checks.
 - Members can preview and save a crisp PNG card showing their name, full club name, membership ID, validity, exact Eastern-time expiration, and status. Saving fetches a fresh authenticated snapshot and refreshes the page; unpaid cards are unavailable and expired cards are marked. Accessible text, retry states, route-change cancellation, and five component tests accompany the download.
 - Authenticated membership-card snapshots use the current member name, club, validity, expiration, status, and issue time. Cards require activation, retain expired status honestly, and restrict access to the signed-in member. Four API tests cover activation, renewal/profile freshness, expiration, and organization/account isolation.
 
-### Planned
+### Release and verification
 
-- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+- Root, client, server, and lockfile versions align at 1.1.0; usage instructions, API architecture, screenshots, submission walkthrough, and dated devlog describe membership cards.
+- 88 component/API tests (26 frontend and 62 backend), lint, type checks, production builds, both compiled production/startup-restart smoke checks, and ten Chrome/Firefox scenarios pass from isolated commit snapshots. Live verification follows publication.
+- The changelog removes a duplicated paragraph and comparison link left beneath the 1.0.0 release.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v1.0.0...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v1.0.0...v1.1.0)
 
 ## [1.0.0] - 2026-10-31
 
