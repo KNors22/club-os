@@ -53,6 +53,14 @@ describe("account forms", () => {
     ).toBeInTheDocument();
   });
   it("shows a login error and allows another attempt without clearing input", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ notifications: { mode: "disabled" } })),
+        ),
+    );
     const login = vi
       .fn()
       .mockRejectedValue(new Error("Email or password is incorrect."));
@@ -81,5 +89,68 @@ describe("account forms", () => {
     expect(
       screen.getByRole("button", { name: /sign in to clubos/i }),
     ).toBeEnabled();
+  });
+});
+
+describe("public demo sign-in", () => {
+  it("fills public credentials and uses the normal login flow", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            publicDemo: {
+              password: "ClubOSDemo2026!",
+              accounts: [
+                { email: "admin@clubos.example", role: "Administrator" },
+                { email: "member@clubos.example", role: "Member" },
+              ],
+            },
+          }),
+        ),
+      ),
+    );
+    const login = vi.fn().mockResolvedValue(undefined);
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={auth({ login })}>
+          <AuthPage />
+        </AuthContext.Provider>
+      </MemoryRouter>,
+    );
+    await userEvent.click(
+      await screen.findByRole("button", { name: "Try administrator" }),
+    );
+    expect(screen.getByLabelText("Email address")).toHaveValue(
+      "admin@clubos.example",
+    );
+    expect(screen.getByLabelText("Password")).toHaveValue("ClubOSDemo2026!");
+    await userEvent.click(
+      screen.getByRole("button", { name: /sign in to clubos/i }),
+    );
+    expect(login).toHaveBeenCalledWith(
+      "admin@clubos.example",
+      "ClubOSDemo2026!",
+    );
+  });
+  it("keeps public credentials hidden when the service disables demo mode", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ notifications: { mode: "disabled" } })),
+        ),
+    );
+    render(
+      <MemoryRouter>
+        <AuthContext.Provider value={auth()}>
+          <AuthPage />
+        </AuthContext.Provider>
+      </MemoryRouter>,
+    );
+    expect(
+      screen.queryByRole("region", { name: "Public demo accounts" }),
+    ).not.toBeInTheDocument();
   });
 });

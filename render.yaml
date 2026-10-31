@@ -1,6 +1,7 @@
 services:
   - type: web
-    name: clubos
+    name: andreys-club-os
+    branch: main
     runtime: node
     plan: free
     region: ohio
@@ -17,5 +18,7 @@ services:
         generateValue: true
       - key: MONGODB_URI
         sync: false
-      - key: APP_URL
-        sync: false
+      - key: DEMO_MODE
+        value: "true"
+      - key: DEMO_PASSWORD
+        value: ClubOSDemo2026!

@@ -9,16 +9,16 @@
 | Architecture, relationships, permissions, and wireframes | [Architecture](architecture.md) |
 | Weekly progress, challenges/solutions, learnings, screenshots, code snippets | [Devlog](devlog.md) |
 | Local test and browser evidence | [Validation](validation.md) and [GitHub checks](https://github.com/KNors22/club-os/actions/workflows/ci.yml) |
-| Demonstration records and credentials procedure | [Explicit demo seed](demo-data.md) |
+| Demonstration records and public credentials | [Public demo accounts and seed behavior](demo-data.md) |
 | Important release tags and notes | [Changelog](../CHANGELOG.MD) |
-| Live application URL | **Pending:** Render/Atlas accounts are not connected and no public URL has been verified |
+| Live application URL | [Andrey's ClubOS](https://andreys-club-os.onrender.com); see the Render guide for startup and verification |
 | Live two-account workflow and real email confirmations | **Pending:** deployment and private Resend/demo-recipient configuration |
 
 The implementation and local evidence are prepared for review. Live application acceptance remains incomplete until the pending rows above have actual results. This document is a submission package; it has not been sent to an instructor or submission portal.
 
 ## Five-minute demonstration
 
-Use two browser sessions: an administrator and a member. Register new fictional accounts, or run the explicit seed against `clubos_demo` and use its generated/private password. The seed never runs on startup and never resets existing records.
+Use two browser sessions with the public administrator/member accounts and password `ClubOSDemo2026!`, or register separate fictional accounts. Public demo startup seeds missing records and synchronizes only reserved demo passwords; it preserves existing records. If running locally, explicitly seed `ClubOS-DB` as described in the demo guide.
 
 1. **Create and join:** the administrator creates a club with a CAD 20 fee and 365-day term, then copies its join code. The member joins and sees **Awaiting payment**.
 2. **Activate:** the administrator opens **Members**, selects the member, and records a full received payment with method/reference. The member refreshes **My membership** to see active validity and payment history.
@@ -32,9 +32,9 @@ These payment records demonstrate manual bookkeeping of received funds; ClubOS d
 
 ## Final live acceptance
 
-After connecting Render and Atlas and configuring Resend privately:
+After deploying the reviewed main-branch commit and configuring Resend privately:
 
-- Record the real HTTPS application URL in this file and README.
+- Verify the documented HTTPS URL, or update it if the Render service address changes.
 - Wait for GitHub checks to pass; deploy the reviewed source with the provided [Render blueprint](../render.yaml).
 - Follow [deployment setup](deployment.md), including Atlas access for Render outbound addresses and exact `APP_URL`.
 - Run `npm run verify:live -- <https-origin>` for read-only readiness checks.

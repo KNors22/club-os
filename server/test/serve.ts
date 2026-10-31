@@ -3,7 +3,10 @@ import { existsSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import { seedDemoData } from "../src/services/demo-data.js";
+import {
+  PUBLIC_DEMO_PASSWORD,
+  seedDemoData,
+} from "../src/services/demo-data.js";
 import { createApp } from "../src/app.js";
 import { connectDatabase, createSessionStore } from "../src/database.js";
 
@@ -17,13 +20,14 @@ const database = await MongoMemoryServer.create({
 });
 const config = {
   nodeEnv: "test" as const,
+  publicDemo: { password: PUBLIC_DEMO_PASSWORD },
   port: 3100,
   mongoUri: database.getUri("clubos_browser_test"),
   appUrl: "http://127.0.0.1:5174",
   sessionSecret: randomBytes(32).toString("hex"),
 };
 await connectDatabase(config.mongoUri);
-await seedDemoData("Browser-Only-Demo-2026!");
+await seedDemoData(PUBLIC_DEMO_PASSWORD);
 const store = createSessionStore(config);
 await store.collectionP;
 const server = createApp(config, store).listen(config.port, "127.0.0.1", () =>

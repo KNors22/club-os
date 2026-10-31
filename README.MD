@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v0.6.0-rc.1 validation and submission candidate.** Club workflows, administrator fee editing, and local validation are implemented. The [GitHub repository](https://github.com/KNors22/club-os) is public. Live Render/Atlas hosting and actual demo-inbox delivery remain pending connected accounts; no production URL is claimed. See the [submission guide](docs/submission.md) and [validation evidence](docs/validation.md).
+**Status: v0.6.0-rc.2 Render public-demo candidate.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -39,7 +39,7 @@ npm ci
 npm run setup
 ```
 
-Setup creates an ignored root `.env` with a random session secret and leaves any existing file unchanged. Set `MONGODB_URI` if not using `mongodb://127.0.0.1:27017/clubos`. See [.env.example](.env.example) for the other settings.
+Setup creates an ignored root `.env` with a random session secret and leaves any existing file unchanged. Set `MONGODB_URI` if not using `mongodb://127.0.0.1:27017/ClubOS-DB`. See [.env.example](.env.example) for the other settings.
 
 Start MongoDB using your installed database service, then run:
 
@@ -49,11 +49,11 @@ npm run dev
 
 Open **http://localhost:5173** or **http://127.0.0.1:5173**. Vite proxies `/api` to Express on port 3000. In development, a local `APP_URL` permits both hostnames with the same scheme and port. Use one consistently: browsers keep their sessions separate. Other origins are rejected, and production requires the exact configured `APP_URL`. `GET http://localhost:3000/api/health` checks database connectivity.
 
-Startup connects to MongoDB and creates required indexes before listening. It never seeds or resets application data.
+Startup connects to MongoDB and creates indexes before listening. Public demo mode also inserts missing fictional demo records and synchronizes only reserved demo-account passwords; it preserves edited records and ordinary accounts. Public demo mode defaults on in Render and is opt-in locally through `DEMO_MODE=true`.
 
 ## Usage
 
-Register two accounts to try both roles, or create the optional [fictional demo accounts](docs/demo-data.md). There is no shared default password; the explicit seed command generates one or uses your private `DEMO_PASSWORD`.
+For the public demo, sign in as **`admin@clubos.example`** or **`member@clubos.example`**, both with **`ClubOSDemo2026!`**. The login page provides role shortcuts. These are shared fictional accounts; visitor edits are shared. See [all demo accounts](docs/demo-data.md). You can also register separate accounts to try both roles:
 
 1. Register an administrator, choose **Create club**, and set its name, fee, and term.
 2. Copy the join code from the overview. In a private browser window, register another account and join with that code.
@@ -82,7 +82,7 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 | --- | --- |
 | `npm run setup` | Create a local environment file without overwriting one |
 | `npm run dev` | Run the API and frontend with reload support |
-| `npm run seed:demo` | Explicitly seed fictional data in the dedicated `clubos_demo` database |
+| `npm run seed:demo` | Explicitly seed fictional data in the `ClubOS-DB` database |
 | `npm run lint` | Lint application, test, and configuration code |
 | `npm run typecheck` | Check both TypeScript workspaces |
 | `npm test` | Run component and API tests |
@@ -96,7 +96,7 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. Local verification passed 59 component/API tests and six Chrome/Firefox scenarios. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The Render release passes 68 component/API tests, eight Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
 
 ## Technologies Used
 
@@ -124,9 +124,9 @@ club-os/
 
 ## Deployment
 
-Prepared for one Render Free service and MongoDB Atlas Free. Production requires an HTTPS application URL, MongoDB URI, and random session secret. Express serves the built frontend and API together, including direct client-route links.
+Configured for one Render Free web service and MongoDB Atlas. Production requires a private MongoDB URI selecting `ClubOS-DB` and a random session secret. The app uses Render's supplied HTTPS URL unless `APP_URL` explicitly overrides it. Express serves the built frontend and API together, including direct client-route links.
 
-Follow the [deployment guide](docs/deployment.md), then run the read-only readiness probe and live browser workflow. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
+Follow the [deployment guide](docs/deployment.md), then run the readiness probe and live browser workflow against `https://andreys-club-os.onrender.com`. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
 
 ## Development Notes
 
@@ -134,7 +134,7 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 
 ## Future Improvements
 
-- Live Render/Atlas hosting and verification of demo-inbox delivery.
+- Verification of real demo-inbox delivery with Resend credentials.
 - QR cards/check-in, exports, announcements, scheduled reminders, and multiple plans.
 - Administrator invitations and password recovery.
 

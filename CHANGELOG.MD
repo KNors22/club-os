@@ -6,10 +6,34 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Planned
 
-- Live Render/Atlas deployment, a verified public application URL, and production workflow checks.
-- Real confirmation delivery to the demo inbox using configured Resend credentials.
+- Verify real confirmation delivery to the demo inbox with private Resend credentials.
 
-[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.1...HEAD)
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.2...HEAD)
+
+## [0.6.0-rc.2] - 2026-10-31
+
+**Render public demo.**
+
+### Added
+
+- Render public demo mode initializes missing fictional accounts, clubs, memberships, payment history, events, and attendance in the application's `ClubOS-DB` before accepting requests.
+- A static public `DEMO_PASSWORD` of `ClubOSDemo2026!`, with administrator/member shortcuts and a shared-account notice on the login page.
+- Scoped synchronization restores only reserved demo-account passwords and preserves ordinary accounts, edited records, validity, payment history, event registrations, and attendance.
+- Compiled-process startup/restart verification and additional API/component/browser coverage for Render configuration and public demo login.
+
+### Changed
+
+- The seed targets `ClubOS-DB`, matching the application's database and current setup examples.
+- Production origin configuration falls back to Render's `RENDER_EXTERNAL_URL`; an explicit HTTPS `APP_URL` supports custom domains.
+- The Render blueprint specifies the existing `andreys-club-os` service, main branch, public demo settings, compiled start command, and installation of build dependencies.
+- Root/client/server and lockfile versions align at `0.6.0-rc.2`; README, deployment guide, demo instructions, submission notes, and devlog document the public service and credentials.
+
+### Verification
+
+- 68 component/API tests, production builds, compiled production and Render startup/restart smoke checks, and eight Chrome/Firefox scenarios passed locally.
+- The configured Atlas demo records/passwords were synchronized without resetting club records. Live deployment verification is performed after publication; real inbox delivery remains separate.
+
+[Full Changelog](https://github.com/KNors22/club-os/compare/v0.6.0-rc.1...v0.6.0-rc.2)
 
 ## [0.6.0-rc.1] - 2026-10-30
 

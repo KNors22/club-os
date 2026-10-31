@@ -39,6 +39,7 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run smoke -w server
+      - run: npm run smoke:render -w server
 
       - name: Install browser dependencies
         run: npx playwright install --with-deps chromium firefox

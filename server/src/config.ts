@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import {
+  PUBLIC_DEMO_PASSWORD,
+  validateDemoDatabase,
+} from "./services/demo-data.js";
+import { registerSchema } from "./validation.js";
 
 const environmentSchema = z
   .object({
@@ -8,7 +13,23 @@ const environmentSchema = z
       .enum(["development", "test", "production"])
       .default("development"),
     PORT: z.coerce.number().int().min(1).max(65535).default(3000),
-    APP_URL: z.url().default("http://localhost:5173"),
+    APP_URL: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.url().optional(),
+    ),
+    RENDER_EXTERNAL_URL: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.url().optional(),
+    ),
+    RENDER: z.string().optional(),
+    DEMO_MODE: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.enum(["true", "false"]).optional(),
+    ),
+    DEMO_PASSWORD: z.preprocess(
+      (value) => (value === "" ? undefined : value),
+      z.string().optional(),
+    ),
     MONGODB_URI: z
       .string()
       .regex(/^mongodb(?:\+srv)?:\/\//, "Use a MongoDB connection URI"),
@@ -57,6 +78,7 @@ export interface AppConfig {
   mongoUri: string;
   sessionSecret: string;
   email?: EmailConfig;
+  publicDemo?: { password: string };
 }
 
 export function loadConfig(): AppConfig {
@@ -64,7 +86,11 @@ export function loadConfig(): AppConfig {
     path: fileURLToPath(new URL("../../.env", import.meta.url)),
     quiet: true,
   });
-  const result = environmentSchema.safeParse(process.env);
+  return parseConfig(process.env);
+}
+
+export function parseConfig(environment: Record<string, unknown>): AppConfig {
+  const result = environmentSchema.safeParse(environment);
   if (!result.success) {
     // Report field names, never connection strings or secret values.
     throw new Error(
@@ -72,7 +98,20 @@ export function loadConfig(): AppConfig {
     );
   }
   const env = result.data;
-  const url = new URL(env.APP_URL);
+  const url = new URL(
+    env.APP_URL ?? env.RENDER_EXTERNAL_URL ?? "http://localhost:5173",
+  );
+  const demoEnabled =
+    env.DEMO_MODE === "true" ||
+    (env.DEMO_MODE === undefined && env.RENDER === "true");
+  const demoPassword = env.DEMO_PASSWORD ?? PUBLIC_DEMO_PASSWORD;
+  if (demoEnabled) {
+    if (!registerSchema.shape.password.safeParse(demoPassword).success)
+      throw new Error(
+        "Invalid environment: DEMO_PASSWORD must contain 10–72 characters and fit within 72 UTF-8 bytes.",
+      );
+    validateDemoDatabase(env.MONGODB_URI);
+  }
   if (
     !["http:", "https:"].includes(url.protocol) ||
     url.username ||
@@ -93,6 +132,7 @@ export function loadConfig(): AppConfig {
     port: env.PORT,
     appUrl: url.origin,
     mongoUri: env.MONGODB_URI,
+    ...(demoEnabled ? { publicDemo: { password: demoPassword } } : {}),
     sessionSecret: env.SESSION_SECRET,
     ...(env.RESEND_API_KEY && env.EMAIL_DEMO_TO
       ? {

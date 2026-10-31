@@ -65,12 +65,16 @@ describe("explicit fictional demonstration data", () => {
     expect(await User.countDocuments()).toBe(1);
     expect(await Organization.countDocuments()).toBe(0);
   });
-  it("restricts the command to a dedicated database and validates demo passwords", async () => {
-    expect(
-      validateDemoDatabase("mongodb://127.0.0.1:27017/clubos_demo"),
-    ).toContain("clubos_demo");
+  it("requires the exact ClubOS-DB database name and validates demo passwords", async () => {
+    for (const uri of [
+      "mongodb://127.0.0.1:27017/ClubOS-DB",
+      "mongodb+srv://demo:password@cluster.example.mongodb.net/ClubOS-DB?retryWrites=true&w=majority",
+    ])
+      expect(validateDemoDatabase(uri)).toBe(uri);
     for (const uri of [
       "mongodb://localhost/clubos",
+      "mongodb://localhost/clubos-db",
+      "mongodb://localhost/ClubOS-DB-backup",
       "mongodb://localhost/admin",
       "mongodb://localhost/",
       "not-a-uri",
@@ -78,5 +82,54 @@ describe("explicit fictional demonstration data", () => {
       expect(() => validateDemoDatabase(uri)).toThrow();
     await expect(seedDemoData("short")).rejects.toThrow();
     expect(await User.countDocuments()).toBe(0);
+  });
+});
+
+describe("public demo password synchronization", () => {
+  it("synchronizes only reserved accounts while preserving normal accounts and all demo records", async () => {
+    const { PUBLIC_DEMO_PASSWORD } = await import(
+      "../src/services/demo-data.js"
+    );
+    await seedDemoData("PreviousDemoPassword2026!");
+    await User.create({
+      name: "Private Test Account",
+      email: "private-test@example.com",
+      passwordHash: await import("bcryptjs").then(({ hash }) =>
+        hash("PrivateAccount2026!", 12),
+      ),
+    });
+    const before = await Membership.find().lean();
+    await Organization.updateOne(
+      { name: "Demo Running Club" },
+      { $set: { feeCents: 2550 } },
+    );
+    const sync = await seedDemoData(PUBLIC_DEMO_PASSWORD, new Date(), {
+      syncPasswords: true,
+    });
+    expect(sync.updatedPasswords).toBe(5);
+    expect(sync.createdUsers).toBe(0);
+    for (const account of demoAccounts) {
+      const user = await User.findById(account.id).select("+passwordHash");
+      expect(await compare(PUBLIC_DEMO_PASSWORD, user!.passwordHash)).toBe(
+        true,
+      );
+    }
+    const privateUser = await User.findOne({
+      email: "private-test@example.com",
+    }).select("+passwordHash");
+    expect(
+      await compare("PrivateAccount2026!", privateUser!.passwordHash),
+    ).toBe(true);
+    expect(await Membership.find().lean()).toEqual(before);
+    expect(
+      (await Organization.findOne({ name: "Demo Running Club" }))!.feeCents,
+    ).toBe(2550);
+    expect(
+      (
+        await seedDemoData(PUBLIC_DEMO_PASSWORD, new Date(), {
+          syncPasswords: true,
+        })
+      ).updatedPasswords,
+    ).toBe(0);
   });
 });

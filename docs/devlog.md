@@ -110,3 +110,27 @@ const updated = await Organization.findOneAndUpdate(
 **Submission state:** README sections, demo walkthrough, validation evidence, and release notes are ready for review. The live application link, production browser results, and real membership/event confirmation receipts must be added after connected-account deployment; they are not recorded as completed.
 
 - **Checkpoint 7:** The submission guide links required deliverables, records the five-minute administrator/member and fee-change walkthrough, and separates verified local evidence from pending hosting/inbox acceptance. README setup/usage, fictional-account instructions, example seed settings, screenshots, and the truthful weekly devlog are complete; local documentation links are validated.
+
+
+### October 31, 2026 — Render public demo release
+
+**Request and scope:** prepare a new main-branch commit/tag for Render, align the seed with the existing `ClubOS-DB` changes, and publish a static password for visitors. Public-demo initialization on Render now supersedes the earlier manual-only seeding policy; local startup remains opt-in.
+
+**Changes:** Render supplies the default HTTPS origin and assigned port. The compiled server initializes missing fictional data before listening and synchronizes only reserved demo-account passwords to the configured public value (`ClubOSDemo2026!` by default). The login page advertises the administrator/member credentials through the normal authentication flow. Fees, validity, histories, events, attendance, ordinary accounts, and their passwords are preserved. The Render blueprint, environment example, README, deployment guide, and submission instructions agree on the database and runtime settings.
+
+**Verification:** 68 component/API tests, builds, compiled production smoke checks, and a real compiled-process startup/restart test passed. The restart check verifies Mongo session persistence, predictable demo passwords, and preserved ordinary accounts/edited data. Eight browser scenarios passed in installed Chrome and Firefox. The configured Atlas demo data/passwords were synchronized explicitly without resetting club records. Initial requests to the supplied public URL timed out; post-publication live verification is recorded separately, and real email delivery is not claimed.
+
+**Challenge and solution:** a seed targeting a separate database would leave the web application empty. Hosted initialization now uses the same `MONGODB_URI` as API requests and validates the exact `ClubOS-DB` target. Existing demo password hashes are updated only after ID/email checks, while an unchanged configured password avoids repeat updates.
+
+**Learning:** test the compiled entrypoint with actual environment variables and a real restart; route-only tests cannot establish that deployment initialization and persistent sessions work together.
+
+```ts
+await connectDatabase(config.mongoUri);
+if (config.publicDemo) {
+  await seedDemoData(config.publicDemo.password, new Date(), { syncPasswords: true });
+}
+```
+
+![Published demo credential controls](screenshots/public-demo-login.png)
+
+The public service URL is [Andrey's ClubOS](https://andreys-club-os.onrender.com). Private database/session/email credentials remain outside source control. Release tag: `v0.6.0-rc.2`.

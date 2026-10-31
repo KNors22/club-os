@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import { loadConfig } from "./config.js";
-import { connectDatabase, createSessionStore } from "./database.js";
+import { createSessionStore } from "./database.js";
+import { prepareDatabase } from "./services/startup.js";
 import { createApp } from "./app.js";
 
 async function main() {
   const config = loadConfig();
-  await connectDatabase(config.mongoUri);
+  await prepareDatabase(config);
   const store = createSessionStore(config);
   await store.collectionP;
   const app = createApp(config, store);

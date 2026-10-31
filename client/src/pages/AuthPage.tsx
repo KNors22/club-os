@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
+import { PublicDemoPanel } from "../components/PublicDemoPanel";
 import { Brand } from "../components/Brand";
 import { Button, Field, Notice } from "../components/ui";
 import { errorMessage } from "../lib/api";
@@ -16,6 +17,8 @@ export function AuthPage({ register = false }: { register?: boolean }) {
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   if (auth.user) return <Navigate to="/clubs" replace />;
@@ -122,6 +125,8 @@ export function AuthPage({ register = false }: { register?: boolean }) {
               />
             )}
             <Field
+              value={emailValue}
+              onChange={(event) => setEmailValue(event.target.value)}
               name="email"
               label="Email address"
               type="email"
@@ -131,6 +136,8 @@ export function AuthPage({ register = false }: { register?: boolean }) {
               maxLength={254}
             />
             <Field
+              value={passwordValue}
+              onChange={(event) => setPasswordValue(event.target.value)}
               name="password"
               label="Password"
               type="password"
@@ -149,6 +156,15 @@ export function AuthPage({ register = false }: { register?: boolean }) {
               <ArrowRight size={18} />
             </Button>
           </form>
+          {!register && (
+            <PublicDemoPanel
+              onChoose={(email, password) => {
+                setEmailValue(email);
+                setPasswordValue(password);
+                setError("");
+              }}
+            />
+          )}
           <p className="auth-form-note">
             <ShieldCheck size={15} />
             Your club’s information stays within your club.

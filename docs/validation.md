@@ -38,4 +38,15 @@ Live hosting, Atlas network/credential configuration, and real demo-inbox delive
 
 ## Production checks
 
-The compiled-server smoke test covers the full manual-payment/fee/event workflow with production settings, scoped cleanup, and secure-cookie checks. The public `verify:live` command checks readiness without writes. `test:live` runs the two-account browser workflows against an explicitly provided HTTPS origin and creates fictional records; it never reuses local seeded credentials. Neither live command has been run against a public service yet because no service connection/URL is configured.
+The compiled-server smoke test covers the full manual-payment/fee/event workflow with production settings, scoped cleanup, and secure-cookie checks. The public `verify:live` command checks readiness without writes. `test:live` runs the two-account browser workflows against an explicitly provided HTTPS origin and creates fictional records; it never reuses local seeded credentials. At the initial validation milestone no public service URL was configured. The October 31 entry and current Render guide describe the supplied live URL and subsequent verification.
+
+
+## October 31, 2026 — Render public demo
+
+- 68 component/API tests passed (19 frontend and 49 backend), including Render URL/port settings, explicit demo opt-out, reserved-account password synchronization, and public credential discovery through the normal login flow.
+- Eight scenarios passed across installed Chrome and Firefox, including public administrator/member login and responsive credential controls.
+- The compiled Render-style process starts with a disposable `ClubOS-DB`, seeds before accepting requests, preserves Mongo-backed sessions across a real process restart, restores only reserved demo passwords, and preserves ordinary accounts and edited fees/history.
+- The configured Atlas database was seeded/synchronized explicitly with the public demo password; no club records were reset. The service URL is `https://andreys-club-os.onrender.com`. Live deployment verification follows publication; the initial public health requests timed out.
+- Real Resend inbox delivery is still separate from application/provider-mock verification.
+
+![Public demo sign-in](screenshots/public-demo-login.png)

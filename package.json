@@ -1,6 +1,6 @@
 {
   "name": "club-os",
-  "version": "0.6.0-rc.1",
+  "version": "0.6.0-rc.2",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -20,8 +20,8 @@
     "test": "npm run test --workspaces --if-present",
     "dev:qa": "npm run dev:qa -w server",
     "test:browser": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run smoke -w server",
-    "test:production": "npm run build && npm run smoke -w server",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run smoke -w server && npm run smoke:render -w server",
+    "test:production": "npm run build && npm run smoke -w server && npm run smoke:render -w server",
     "seed:demo": "npm run seed:demo -w server",
     "verify:live": "node scripts/verify-live.mjs",
     "test:live": "playwright test --config playwright.live.config.ts"

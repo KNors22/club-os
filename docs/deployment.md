@@ -1,95 +1,86 @@
-# ClubOS deployment
+# Render deployment and public demo
 
-## Current state
+The application is configured for [Andrey's ClubOS web service](https://andreys-club-os.onrender.com), one Node web service serving both the Express API and compiled React frontend. The `main` branch and release tag identify the reviewed source. A configured URL is distinct from a successful live verification; actual results are recorded in the devlog.
 
-Production build, GitHub Actions, Render blueprint, and frontend route serving are prepared. **A Render service and Atlas database have not been provisioned from this workspace.** Source contains no production credentials.
+## Existing service settings
 
-## Atlas setup
-
-1. Create a free cluster and database user with read/write access to `clubos`.
-2. Set Render's `MONGODB_URI` to the Node.js connection URI with `/clubos` before the query string. URL-encode special password characters.
-3. Allow your development IP if connecting locally. Add the Render service's outbound IP ranges from its dashboard to Atlas network access for hosting.
-
-Records and sessions live in MongoDB, independent of Render's ephemeral filesystem. Startup creates required unique indexes and the session TTL index. The additive schema changes need no application-data migration and never automatically resets/seeds data.
-
-## Source and CI
-
-Commit the reviewed files and dependency lockfile to the existing public repository, excluding `.env`, credentials, caches, and build output. Keep unrelated local edits outside release commits. The workflow checks installation, linting, TypeScript, tests, and builds on main pushes and pull requests, using Node 24 and a MongoDB test service.
-
-## Render setup
-
-Connect Render to GitHub and create a Blueprint using `render.yaml`, or a free Node web service with:
+For a manually created service, match these settings in Render. Committing `render.yaml` configures Blueprint-managed services; it does not automatically replace settings on an unrelated manually created service.
 
 | Setting | Value |
 | --- | --- |
-| Root directory | Repository root |
-| Build | `npm ci --include=dev && npm run build` |
-| Start | `npm start` |
+| Repository | `KNors22/club-os` |
+| Branch | `main` |
+| Root directory | Repository root; leave blank |
+| Runtime | Node |
+| Build command | `npm ci --include=dev && npm run build` |
+| Start command | `npm start` |
 | Health check | `/api/health` |
-| Node | `24.21.0` |
+| Node version | `24.21.0` |
 | Auto deploy | After CI Checks Pass |
 
-The blueprint specifies `autoDeployTrigger: checksPass`. Use the GitHub provider integration so Render can observe checks; a bare public repository URL does not provide this integration.
+The start command runs compiled JavaScript. TypeScript and Vite are available during the build through `--include=dev`; no `tsx` or development server is required at runtime. Express listens on `0.0.0.0` using Render's assigned `PORT`.
 
-| Environment variable | Value |
+## Environment and Atlas
+
+| Variable | Value |
 | --- | --- |
 | `NODE_ENV` | `production` |
 | `NODE_VERSION` | `24.21.0` |
-| `APP_URL` | Actual assigned HTTPS origin; no path or query |
-| `MONGODB_URI` | Private Atlas connection URI |
-| `SESSION_SECRET` | Random secret of at least 32 characters; blueprint generates one |
-| `PORT` | Render supplies it; server listens on `0.0.0.0` |
-| `RESEND_API_KEY` | Optional private Resend API key; configure with `EMAIL_DEMO_TO` |
-| `EMAIL_DEMO_TO` | Optional account-owner inbox; all confirmations route here |
-| `EMAIL_FROM` | Optional sender; defaults to `onboarding@resend.dev` |
+| `MONGODB_URI` | Private Atlas URI selecting `/ClubOS-DB` before any query string |
+| `SESSION_SECRET` | Private random value of at least 32 characters; the blueprint generates one |
+| `APP_URL` | Optional exact HTTPS custom origin; otherwise the app uses `RENDER_EXTERNAL_URL` |
+| `DEMO_MODE` | `true` for this public demo; defaults on when Render sets `RENDER=true`; set `false` to disable startup seeding and the credential panel |
+| `DEMO_PASSWORD` | `ClubOSDemo2026!` — intentionally public demo password |
+| `RESEND_API_KEY` / `EMAIL_DEMO_TO` | Optional private pair for demo-inbox confirmations |
+| `EMAIL_FROM` | Optional; defaults to `onboarding@resend.dev` |
 
-Set `APP_URL` to the service's final assigned HTTPS origin before smoke testing, then redeploy if it changed after creation. An incorrect origin blocks write requests. Production requires HTTPS for secure session cookies behind Render's TLS proxy.
+Render supplies `RENDER_EXTERNAL_URL` and `PORT`; do not copy localhost development settings into a production `APP_URL`. Explicit origins must use HTTPS and contain no path, credentials, or query string. Keep `SESSION_SECRET` stable across deploys so MongoDB-backed sessions remain valid.
 
-## Live smoke test
+Create an Atlas database user with read/write access to `ClubOS-DB`. Add this Render service's outbound addresses to the Atlas network access list. A successful local Atlas connection does not establish that Render's outbound addresses are allowed. Store database credentials and session/email secrets only in private environment settings.
 
-1. Verify `/api/health` returns 200 and `database: connected`.
-2. Load `/register` directly, register an administrator, and create a club.
-3. In a private browser, register a member and join using the code.
-4. Reload the member's club page; verify the session persists and membership awaits payment.
-5. Search the member list and confirm the administrator dashboard updates.
-6. Create a second club and verify the member cannot access it.
-7. Load `/app/<club-id>/members` directly as administrator to verify SPA routing.
-8. Update the fee in **Club settings**, confirm a member cannot access settings, then record a full payment from member details; verify activation, history, dashboard totals, and a demo-inbox confirmation when configured. Repeat with a renewal and check the extended expiration.
-9. Create an upcoming event, register the member, cancel, and register again. Check in the member from the administrator participant list; verify attendance and membership restrictions.
-10. Confirm email-disabled/provider-failure notices preserve changes. Verify real inbox delivery separately; local mocked tests do not prove this.
-11. Sign out and check protected-page redirects. Redeploy and confirm stored records/sessions survive.
+## Seeded public accounts
 
-Add the live URL to the README and record deployment success only after this test. Passing local checks alone does not prove hosting works.
+In public demo mode, startup connects to MongoDB, creates indexes, and seeds missing fictional records **before listening**. This works with a Free web service's normal start command; it does not depend on a paid pre-deploy command or interactive shell. The same `MONGODB_URI` is used for both seeding and API requests.
 
-Render Free sleeps after 15 minutes without traffic and can take about a minute to resume. Document the first-load delay for the capstone. Resend email delivery uses HTTPS because free services block SMTP ports.
+Use these credentials at `/login`:
+
+| Email | Role |
+| --- | --- |
+| `admin@clubos.example` | Demo Running Club administrator |
+| `member@clubos.example` | Active member |
+| `pending@clubos.example` | Awaiting payment |
+| `expired@clubos.example` | Expired member |
+| `other-admin@clubos.example` | Separate Demo Art Club administrator |
+
+**Password for all five: `ClubOSDemo2026!`.** The login page provides administrator/member shortcuts when public demo mode is enabled. All visitors share the fictional accounts and their edits.
+
+Restarts insert only missing demo records and restore the configured password only for the reserved demo account IDs/emails. They preserve fees, membership dates/history, event dates, registrations, attendance, and ordinary account passwords. Reserved-address collisions with unrelated accounts fail instead of changing those accounts. Turning demo mode off does not delete existing demo records. No seed emails are sent.
+
+A local explicit seed uses the same target database. To synchronize existing demo passwords, run `DEMO_MODE=true npm run seed:demo` with the intended private `MONGODB_URI` configured. The compiled equivalent is `DEMO_MODE=true node server/dist/seed.js`. `DEMO_DATABASE_URI` affects only that explicit command; hosted startup always seeds the application's `MONGODB_URI`.
+
+## Verification
+
+```bash
+npm run check
+PLAYWRIGHT_FIREFOX=1 npm run test:browser
+npm run verify:live -- https://andreys-club-os.onrender.com
+```
+
+`npm run check` includes a compiled-process Render startup/restart test with a disposable MongoDB instance. It verifies automatic origin selection, seeded account login, Mongo-backed session persistence, preserved edits, and demo-only password synchronization. The public readiness command checks health, direct routes, assets, and API errors without writes.
+
+For the full two-account live workflow:
+
+```bash
+APP_LIVE_URL=https://andreys-club-os.onrender.com PLAYWRIGHT_FIREFOX=1 npm run test:live
+```
+
+This creates fictional clubs, payments, registrations, and attendance on the live application. It never resets existing records. Confirm actual membership/event emails separately when Resend is configured.
+
+Render Free services sleep after 15 minutes without inbound traffic and can take about a minute to resume. The readiness probe allows a longer health-check timeout. Data and sessions persist in Atlas, independent of Render's ephemeral filesystem. Email uses HTTPS rather than SMTP.
 
 ## References
 
-- [Render Express deployment](https://render.com/docs/deploy-node-express-app)
-- [Render blueprint fields](https://render.com/docs/blueprint-spec)
-- [Render CI integration](https://render.com/docs/deploys)
-- [Render Free limitations](https://render.com/docs/free)
-- [Atlas Free limitations](https://www.mongodb.com/docs/atlas/reference/free-shared-limitations/)
-
-
-## Executable deployment verification
-
-After deployment and CI success, run the read-only public readiness probe:
-
-```bash
-npm run verify:live -- https://your-assigned-app.onrender.com
-```
-
-It checks database health, notification mode, direct frontend routes, built assets, CSP, and JSON API errors. Its health timeout allows for a sleeping free service. It does not create data or prove account workflows/inbox delivery.
-
-For the same two-account workflow used locally, run against the actual HTTPS origin:
-
-```bash
-APP_LIVE_URL=https://your-assigned-app.onrender.com PLAYWRIGHT_FIREFOX=1 npm run test:live
-```
-
-This explicitly creates fictional accounts, clubs, received-payment records, and events on that application; it does not reset existing data. Email confirmations follow the server's demo-inbox configuration. Live acceptance excludes the local seeded-account test because public hosting does not share the disposable QA database. Confirm receipt of both membership and registration messages in the demo inbox separately, then record the actual URL/date/result in the submission notes.
-
-`npm run test:production` builds and tests the compiled production application against isolated MongoDB data. It now verifies secure-cookie attributes behind a simulated HTTPS proxy, account/session persistence, organization isolation, fee changes, payments/renewals, registration/cancellation, repeated check-in, dashboard totals, and logout, in addition to compiled frontend routes and assets. Only records created by that smoke run are cleaned up.
-
-Optional Resend credentials remain hosting environment variables. Leave both `RESEND_API_KEY` and `EMAIL_DEMO_TO` unset to disable delivery, or configure both together. Do not add private values to the blueprint or repository. The seed command is manual; select a dedicated `clubos_demo` database if using it for the live demonstration.
+- [Render default environment variables](https://render.com/docs/environment-variables)
+- [Render deployment and CI behavior](https://render.com/docs/deploys)
+- [Render Free service limitations](https://render.com/docs/free)
+- [Render Blueprint specification](https://render.com/docs/blueprint-spec)

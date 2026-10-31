@@ -1,10 +1,12 @@
-import { hash } from "bcryptjs";
+import { compare, hash } from "bcryptjs";
 import { Types } from "mongoose";
 import { User } from "../models/User.js";
 import { Organization } from "../models/Organization.js";
 import { Membership } from "../models/Membership.js";
 import { Event } from "../models/Event.js";
 import { registerSchema } from "../validation.js";
+
+export const PUBLIC_DEMO_PASSWORD = "ClubOSDemo2026!";
 
 export const demoAccounts = [
   {
@@ -43,26 +45,29 @@ export function validateDemoDatabase(uri: string) {
   try {
     url = new URL(uri);
   } catch {
-    throw new Error(
-      "Use a MongoDB URI selecting the dedicated clubos_demo database.",
-    );
+    throw new Error("Use a MongoDB URI selecting the ClubOS-DB database.");
   }
   if (
     !["mongodb:", "mongodb+srv:"].includes(url.protocol) ||
-    url.pathname !== "/clubos_demo"
+    url.pathname !== "/ClubOS-DB"
   )
-    throw new Error("Demo data must use the dedicated clubos_demo database.");
+    throw new Error("Demo data must use the ClubOS-DB database.");
   return uri;
 }
 const oid = (id: string) => new Types.ObjectId(id);
 const day = 86400000;
-export async function seedDemoData(password: string, now = new Date()) {
+export async function seedDemoData(
+  password = PUBLIC_DEMO_PASSWORD,
+  now = new Date(),
+  options: { syncPasswords?: boolean } = {},
+) {
   registerSchema.shape.password.parse(password);
+  const existingAccounts = new Map<string, { passwordHash: string }>();
   // Reserved addresses cannot be used to take over an unrelated existing account.
   for (const account of demoAccounts) {
     const existing = await User.findOne({
       $or: [{ _id: account.id }, { email: account.email }],
-    }).select("_id email");
+    }).select("_id email +passwordHash");
     if (
       existing &&
       (existing.id !== account.id || existing.email !== account.email)
@@ -70,9 +75,12 @@ export async function seedDemoData(password: string, now = new Date()) {
       throw new Error(
         "A reserved demo account conflicts with an existing account. No existing credentials were changed.",
       );
+    if (existing)
+      existingAccounts.set(account.id, { passwordHash: existing.passwordHash });
   }
   const passwordHash = await hash(password, 12);
   let createdUsers = 0;
+  let updatedPasswords = 0;
   for (const account of demoAccounts) {
     const result = await User.updateOne(
       { _id: account.id },
@@ -88,6 +96,23 @@ export async function seedDemoData(password: string, now = new Date()) {
       { upsert: true, runValidators: true, timestamps: false },
     );
     createdUsers += result.upsertedCount;
+    const existing = existingAccounts.get(account.id);
+    if (
+      options.syncPasswords &&
+      existing &&
+      !(await compare(password, existing.passwordHash))
+    ) {
+      const update = await User.updateOne(
+        {
+          _id: account.id,
+          email: account.email,
+          passwordHash: existing.passwordHash,
+        },
+        { $set: { passwordHash } },
+        { timestamps: false },
+      );
+      updatedPasswords += update.modifiedCount;
+    }
   }
   const clubId = oid("c10000000000000000000001");
   await Organization.updateOne(
@@ -213,6 +238,7 @@ export async function seedDemoData(password: string, now = new Date()) {
   }
   return {
     createdUsers,
+    updatedPasswords,
     accounts: demoAccounts.map(({ email, role }) => ({ email, role })),
   };
 }

@@ -3,6 +3,7 @@ import session, { type Store } from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import { fileURLToPath } from "node:url";
+import { demoAccounts } from "./services/demo-data.js";
 import type { AppConfig } from "./config.js";
 import { AppError, errorHandler } from "./errors.js";
 import { authRouter, sessionCookieName } from "./routes/auth.js";
@@ -41,9 +42,20 @@ export function createApp(config: AppConfig, store: Store) {
     });
   });
   app.get("/api/config", (_req, res) => {
-    res
-      .set("Cache-Control", "no-store")
-      .json({ notifications: { mode: config.email ? "demo" : "disabled" } });
+    res.set("Cache-Control", "no-store").json({
+      notifications: { mode: config.email ? "demo" : "disabled" },
+      ...(config.publicDemo
+        ? {
+            publicDemo: {
+              password: config.publicDemo.password,
+              accounts: demoAccounts.map(({ email, role }) => ({
+                email,
+                role,
+              })),
+            },
+          }
+        : {}),
+    });
   });
   app.use("/api", (_req, res, next) => {
     res.set("Cache-Control", "no-store");

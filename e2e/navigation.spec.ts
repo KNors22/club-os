@@ -7,7 +7,7 @@ test("seeded accounts support keyboard navigation, responsive settings, error re
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/login");
   await page.getByLabel("Email address").fill("admin@clubos.example");
-  await page.getByLabel("Password").fill("Browser-Only-Demo-2026!");
+  await page.getByLabel("Password").fill("ClubOSDemo2026!");
   await page.getByLabel("Password").press("Enter");
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();
   const clubId = "c10000000000000000000001";
@@ -79,7 +79,7 @@ test("seeded accounts support keyboard navigation, responsive settings, error re
   ).toBeVisible();
   await page.getByRole("button", { name: "Sign out" }).click();
   await page.getByLabel("Email address").fill("pending@clubos.example");
-  await page.getByLabel("Password").fill("Browser-Only-Demo-2026!");
+  await page.getByLabel("Password").fill("ClubOSDemo2026!");
   await page.getByLabel("Password").press("Enter");
   await expect(page.getByRole("heading", { name: /Your clubs/ })).toBeVisible();
   await page.goto(`/app/${clubId}/settings`);

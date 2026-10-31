@@ -1,6 +1,6 @@
 {
   "name": "@clubos/server",
-  "version": "0.6.0-rc.1",
+  "version": "0.6.0-rc.2",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "smoke": "node test/smoke-production.mjs",
-    "seed:demo": "tsx src/seed.ts"
+    "seed:demo": "tsx src/seed.ts",
+    "smoke:render": "node test/smoke-render.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
