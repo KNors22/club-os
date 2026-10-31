@@ -4,17 +4,17 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v0.6.0-rc.3 verified Render public demo.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v1.0.0 club insights and readable navigation.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render guide](docs/deployment.md), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
 - Account registration, password login, logout, and MongoDB-backed sessions.
 - Club creation with one paid CAD membership plan and configurable term length. Administrators can update future membership fees under **Club settings** without changing historical payments or current validity.
 - Joining multiple clubs through administrator-provided codes.
-- Administrator dashboard counts and searchable, paginated member records.
+- Administrator dashboard with membership-status, member-growth, attendance/payment charts, upcoming-event capacity, and searchable member records.
 - Membership status filters: active, expired, and awaiting payment.
 - Personal membership details and profile-name updates.
-- Club-scoped permissions and responsive, accessible navigation.
+- Club-scoped permissions, a wider sidebar with wrapping club names, accessible responsive navigation, and author/year/GitHub footer credits.
 - Administrator recording of received payments, membership activation/renewal, and payment history.
 - Events with capacity limits, active-member registration, cancellation, and manual check-in.
 - Club-scoped payment, renewal, event, and attendance dashboard summaries.
@@ -76,6 +76,12 @@ EMAIL_FROM=onboarding@resend.dev
 
 Set both the key and recipient, or leave both empty to disable delivery. Resend's default test sender delivers to the account owner's inbox. The application displays a demo-mode notice and always sends to `EMAIL_DEMO_TO`, even when a member has a different address. A successful payment or registration persists before the bounded email request. Disabled, failed, or timed-out delivery produces a notice without undoing the action; there are no automatic retries. Payment-request retries do not send again. Provider behavior is covered with mocks; real inbox delivery still needs verification with your credentials.
 
+### Dashboard charts
+
+Administrators can select the last six or twelve calendar months, switch attendance/payment activity, focus or point to chart values, and expand the monthly data tables. Membership status and active share reflect current validity. The member-growth line counts joined records over time, including members from before the displayed period. Attendance uses recorded check-in dates; payment trends use received dates. Monthly totals use Eastern Time. Upcoming-event rows show the next four events and their registration capacity. Empty clubs show explicit zero-data states.
+
+See [desktop](docs/screenshots/v1-dashboard-desktop.png) and [mobile](docs/screenshots/v1-dashboard-mobile.png) screenshots.
+
 ## Development and Testing
 
 | Command | Purpose |
@@ -96,7 +102,7 @@ Set both the key and recipient, or leave both empty to disable delivery. Resend'
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The Render release passes 75 component/API tests, eight Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The v1 release passes 79 component/API tests, ten Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
 
 ## Technologies Used
 
@@ -130,7 +136,7 @@ Follow the [deployment guide](docs/deployment.md), then run the readiness probe 
 
 ## Development Notes
 
-See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlog.md), and [release history](CHANGELOG.MD). Entries record actual work and verification, without inventing separate development evenings or deployment results.
+See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlog.md), [v1 release notes](docs/releases/v1.0.0.md), and [release history](CHANGELOG.MD). Entries record actual work and verification, without inventing separate development evenings or deployment results.
 
 ## Future Improvements
 

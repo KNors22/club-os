@@ -158,3 +158,24 @@ The release extends the existing club data and preserves membership/payment work
 - **V1 checkpoint 3:** The sidebar is wider on desktop and wraps complete club names, including long unbroken text, with a scrollable mobile drawer. Workspace and sign-in footers now credit Andrey Gonzalez with the current year and GitHub profile, and header names wrap without truncation.
 
 - **V1 checkpoint 4:** Ten Chrome/Firefox scenarios verify chart metrics and periods, accessible tables, upcoming capacity, author credits, long-name wrapping, mobile overflow, and navigation focus. Actual desktop/mobile screenshots and validation notes document the v1 behavior.
+
+
+#### Version 1 milestone — October 31
+
+**Progress:** the administrator dashboard now combines four summary cards, attendance/payment trends, membership status, cumulative member growth, and upcoming-event capacity. Six/twelve-month selection, focus/hover readouts, and expandable tables make the native SVG charts useful without a chart dependency. The sidebar is 288px on desktop, remains roomy on smaller screens, and wraps full names. Shared sign-in/workspace footers credit Andrey Gonzalez, the current year, and the GitHub profile.
+
+**Challenges and solutions:** historical membership totals need a pre-window baseline; analytics retain that baseline while grouping received payments/check-ins by Eastern-time month. Integration fixtures override immutable creation timestamps explicitly to test historical records. ResizeObserver keeps chart axes readable at the actual card width; zero-filled months keep empty datasets finite. Long club names wrap even without spaces, and the mobile drawer can scroll without losing keyboard access.
+
+**Verification:** 79 component/API tests, clean-snapshot builds, and both compiled production/startup-restart smoke checks pass. Ten Chrome/Firefox scenarios cover the complete workflows and the new charts, names, footer, responsive layout, and focus behavior. Screenshots show actual seeded/empty-club states. Monthly growth reflects joined records, while active membership status is a current snapshot. Live verification follows publication.
+
+```ts
+let totalMembers = [...joins]
+  .filter(([month]) => month < months[0])
+  .reduce((total, [, value]) => total + value, 0);
+```
+
+![V1 administrator overview](screenshots/v1-dashboard-desktop.png)
+
+![Full long club name in the mobile drawer](screenshots/v1-sidebar-mobile.png)
+
+- **V1 checkpoint 5:** Version 1.0.0 aligns workspace/lockfile versions and publishes the chart, navigation, and author-footer milestone with release notes, usage guidance, screenshots, and a dated devlog. Final checks cover 79 component/API tests, production/startup-restart smoke tests, and ten Chrome/Firefox acceptance scenarios.

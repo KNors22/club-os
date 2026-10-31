@@ -65,3 +65,6 @@ The analytics integration tests cover Eastern-time month boundaries, prior-windo
 - [Desktop dashboard](screenshots/v1-dashboard-desktop.png)
 - [Mobile dashboard](screenshots/v1-dashboard-mobile.png)
 - [Mobile sidebar with a long club name](screenshots/v1-sidebar-mobile.png)
+
+
+**V1 release checks:** 79 component/API tests (21 frontend and 58 backend) pass, together with compilation and both production/startup-restart smoke checks. All ten browser scenarios pass in Chrome and Firefox. Every implementation checkpoint was verified from a separate prospective-commit snapshot, with the existing staged LICENSE and documentation edits kept separate.
