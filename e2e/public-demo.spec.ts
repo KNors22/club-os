@@ -11,7 +11,24 @@ test("public visitors can sign in, save current membership cards, and identify e
   await expect(demo).toContainText("ClubOSDemo2026!");
   await expect(
     demo.getByLabel("Explore another account").locator("option"),
-  ).toHaveCount(49);
+  ).toHaveCount(9);
+  expect(
+    await demo
+      .getByLabel("Explore another account")
+      .locator("option")
+      .evaluateAll((options) =>
+        options.slice(1).map((option) => (option as HTMLOptionElement).value),
+      ),
+  ).toEqual([
+    "alex@clubos",
+    "jordan@clubos",
+    "taylor@clubos",
+    "morgan@clubos",
+    "maya@clubos",
+    "noah@clubos",
+    "olivia@clubos",
+    "ethan@clubos",
+  ]);
   const capture =
     process.env.CAPTURE_PUBLIC_DEMO === "1" &&
     testInfo.project.name === "chrome";

@@ -6,6 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Added
 
+- The public configuration advertises only alex, jordan, taylor, morgan, maya, noah, olivia and ethan with @clubos addresses. The seed retains its full member dataset. Chrome/Firefox acceptance checks cover all four dashboard actions, active-filter refresh, payment-chart focus/scroll and the exact eight-account selector.
 - Administrator summary cards open all members, active-only members and upcoming events. Payments received selects the payments graph, moves focus to Club insights and scrolls it into view with reduced-motion support. Member search, status and pagination are URL-based for sharing, refresh and Back navigation.
 
 ### Planned

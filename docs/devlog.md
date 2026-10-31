@@ -252,3 +252,5 @@ const state = await SeedState.findOneAndUpdate(
 ### October 31, 2026 — Version 1.3 actionable overview
 
 - **Navigation checkpoint 1:** The four overview cards now open scoped member/event views or select and scroll to the payments graph. Active-member filtering is carried in the URL, alongside search/pagination; changes reset pagination and browser Back restores earlier filters. Native links/buttons provide keyboard access, focus moves to insights for the payments action, and reduced-motion preferences are respected. Existing staged wording edits remain separate.
+
+- **Navigation checkpoint 2:** The public configuration advertises only alex, jordan, taylor, morgan, maya, noah, olivia and ethan with @clubos addresses. The seed retains its full member dataset. Chrome/Firefox acceptance checks cover all four dashboard actions, active-filter refresh, payment-chart focus/scroll and the exact eight-account selector. The v1.2 code was observed on the public service while work continued. The seed expansion and the selected sign-in choices are now separate concerns; restricting the advertised list does not remove club records.

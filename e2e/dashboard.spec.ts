@@ -21,6 +21,63 @@ test("v1 charts, full club names, and author credits work on desktop and mobile"
   await expect(
     page.getByRole("img", { name: "Attendance trend", exact: true }),
   ).toBeVisible();
+  const summaries = page.getByRole("region", {
+    name: "Club workflow summaries",
+  });
+  await summaries
+    .getByRole("link", { name: "Total members", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/app\/c10000000000000000000001\/members$/);
+  await expect(page.getByLabel("Status", { exact: true })).toHaveValue("all");
+  await page.goBack();
+  await summaries
+    .getByRole("link", { name: "Active members", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/members\?status=active$/);
+  await expect(page.getByLabel("Status", { exact: true })).toHaveValue(
+    "active",
+  );
+  await expect(
+    page.locator(".member-table tbody .status").first(),
+  ).toBeVisible();
+  expect(
+    (await page.locator(".member-table tbody .status").allTextContents()).every(
+      (status) => status.trim() === "Active",
+    ),
+  ).toBe(true);
+  await page.reload();
+  await expect(page.getByLabel("Status", { exact: true })).toHaveValue(
+    "active",
+  );
+  await page.goBack();
+  await summaries
+    .getByRole("link", { name: "Upcoming events", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/app\/c10000000000000000000001\/events$/);
+  await expect(
+    page.getByRole("heading", { name: "Events.", exact: true }),
+  ).toBeVisible();
+  await page.goBack();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const payments = summaries.getByRole("button", {
+    name: "Payments received",
+    exact: true,
+  });
+  await payments.focus();
+  await page.keyboard.press("Enter");
+  await expect(
+    page.getByRole("combobox", { name: "Activity metric" }),
+  ).toHaveValue("revenueCents");
+  await expect(
+    page.getByRole("region", { name: "Club insights", exact: true }),
+  ).toBeFocused();
+  await expect(
+    page.getByRole("heading", { name: "Club insights", exact: true }),
+  ).toBeInViewport();
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeGreaterThan(100);
   const activity = page.getByRole("region", { name: "Monthly activity" });
   await page
     .getByRole("combobox", { name: "Activity metric" })
@@ -66,6 +123,15 @@ test("v1 charts, full club names, and author credits work on desktop and mobile"
   await expect(
     page.getByRole("region", { name: "Member growth" }),
   ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Payments received", exact: true })
+    .click();
+  await expect(
+    page.getByRole("combobox", { name: "Activity metric" }),
+  ).toHaveValue("revenueCents");
+  await expect(
+    page.getByRole("heading", { name: "Club insights", exact: true }),
+  ).toBeInViewport();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

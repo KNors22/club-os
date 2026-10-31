@@ -17,9 +17,11 @@ A fresh seed anchored on October 31, 2026 contains **48 people, six clubs, 212 m
 
 ## Sign in
 
-The public login page offers **Try administrator**, **Try member**, and **Explore another account**. Use `alex@clubos` to manage Riverside Running Club, `jordan@clubos` for its active member, `taylor@clubos` for unpaid membership, or `casey@clubos` for expired membership. Open Maya Desai from the administrator's member list to see renewals dating to 2010. Maya, Noah, Olivia, Ethan, and Morgan administer the other clubs.
+The public login page offers **Try administrator**, **Try member**, and **Explore another account**. The selector offers only **alex, jordan, taylor, morgan, maya, noah, olivia, and ethan**. Use `alex@clubos` to manage Riverside Running Club, `jordan@clubos` for its active member, `taylor@clubos` for unpaid membership, for the unpaid scenario. Open Maya Desai from the administrator's member list to see renewals dating to 2010. Maya, Noah, Olivia, Ethan, and Morgan administer the other clubs.
 
 The existing configured public password remains **`ClubOSDemo2026!`** unless overridden by `DEMO_PASSWORD`. Environment names retain compatibility with the existing Render service. Shared fictional accounts and visitor edits are public; ordinary accounts retain their own credentials.
+
+The full seeded member catalog is listed below; it is separate from the eight login-page choices.
 
 | Account | Name | Role |
 | --- | --- | --- |

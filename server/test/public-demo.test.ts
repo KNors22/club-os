@@ -3,9 +3,9 @@ import { describe, it, expect } from "vitest";
 import { createApp } from "../src/app.js";
 import {
   PUBLIC_DEMO_PASSWORD,
-  demoAccounts,
   seedDemoData,
 } from "../src/services/demo-data.js";
+import { publicSampleAccounts } from "../src/services/sample-data.js";
 import { app, config, store, origin } from "./setup.js";
 describe("public demo account discovery", () => {
   it("exposes only intentionally public demo credentials and supports normal authenticated login", async () => {
@@ -18,8 +18,25 @@ describe("public demo account discovery", () => {
     expect(response.headers["cache-control"]).toBe("no-store");
     expect(response.body.publicDemo).toEqual({
       password: PUBLIC_DEMO_PASSWORD,
-      accounts: demoAccounts.map(({ email, role }) => ({ email, role })),
+      accounts: publicSampleAccounts.map(({ email, role }) => ({
+        email,
+        role,
+      })),
     });
+    expect(
+      response.body.publicDemo.accounts.map(
+        (account: { email: string }) => account.email,
+      ),
+    ).toEqual([
+      "alex@clubos",
+      "jordan@clubos",
+      "taylor@clubos",
+      "morgan@clubos",
+      "maya@clubos",
+      "noah@clubos",
+      "olivia@clubos",
+      "ethan@clubos",
+    ]);
     expect(response.body).not.toHaveProperty("sessionSecret");
     expect(response.body).not.toHaveProperty("mongoUri");
     const admin = request.agent(publicApp);

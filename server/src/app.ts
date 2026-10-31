@@ -3,7 +3,7 @@ import session, { type Store } from "express-session";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import { fileURLToPath } from "node:url";
-import { demoAccounts } from "./services/demo-data.js";
+import { publicSampleAccounts } from "./services/sample-data.js";
 import type { AppConfig } from "./config.js";
 import { AppError, errorHandler } from "./errors.js";
 import { authRouter, sessionCookieName } from "./routes/auth.js";
@@ -48,7 +48,7 @@ export function createApp(config: AppConfig, store: Store) {
         ? {
             publicDemo: {
               password: config.publicDemo.password,
-              accounts: demoAccounts.map(({ email, role }) => ({
+              accounts: publicSampleAccounts.map(({ email, role }) => ({
                 email,
                 role,
               })),

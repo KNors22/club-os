@@ -118,7 +118,7 @@ try {
   await boot();
   const config = await (await api("GET", "/config")).json();
   assert.equal(config.publicDemo.password, PUBLIC_DEMO_PASSWORD);
-  assert.equal(config.publicDemo.accounts.length, 48);
+  assert.equal(config.publicDemo.accounts.length, 8);
   const cookie = await login("alex@clubos");
   await login("jordan@clubos");
   await mongoose.connect(mongoUri);

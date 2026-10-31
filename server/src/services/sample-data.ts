@@ -103,6 +103,19 @@ export const sampleAccounts = people.map(([first, last], index) => ({
     ? { legacyEmail: legacyEmails[index], legacyName: legacyNames[index] }
     : {}),
 }));
+const publicSampleEmails = new Set([
+  "alex@clubos",
+  "jordan@clubos",
+  "taylor@clubos",
+  "morgan@clubos",
+  "maya@clubos",
+  "noah@clubos",
+  "olivia@clubos",
+  "ethan@clubos",
+]);
+export const publicSampleAccounts = sampleAccounts.filter((account) =>
+  publicSampleEmails.has(account.email),
+);
 export const sampleClubs = [
   {
     name: "Riverside Running Club",
