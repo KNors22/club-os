@@ -31,14 +31,14 @@ Screenshots are actual browser captures:
 
 GitHub Actions runs the same checks plus Chromium/Firefox acceptance and retains browser reports/traces as artifacts. Local installed Chrome verification complements CI's Chromium engine run.
 
-## Acceptance still requiring connected accounts
+## October 30 acceptance checkpoint (historical)
 
-Live hosting, Atlas network/credential configuration, and real demo-inbox delivery have not been verified. Local provider mocks prove application behavior, not delivery to a real inbox. Complete the live workflow in the deployment and submission guides after connecting hosting/email services. Do not represent these pending checks as passed.
+At this October 30 checkpoint, live hosting, Atlas network/credential configuration, and real demo-inbox delivery had not been verified. Subsequent October 31 entries record the completed hosting checks; the final-review section below lists the remaining acceptance items. Local provider mocks prove application behavior, not delivery to a real inbox. Complete the live workflow using the README deployment instructions and submission guide after connecting hosting/email services. Do not represent these pending checks as passed.
 
 
 ## Production checks
 
-The compiled-server smoke test covers the full manual-payment/fee/event workflow with production settings, scoped cleanup, and secure-cookie checks. The public `verify:live` command checks readiness without writes. `test:live` runs the two-account browser workflows against an explicitly provided HTTPS origin and creates fictional records; it never reuses local seeded credentials. At the initial validation milestone no public service URL was configured. The October 31 entry and current Render guide describe the supplied live URL and subsequent verification.
+The compiled-server smoke test covers the full manual-payment/fee/event workflow with production settings, scoped cleanup, and secure-cookie checks. The public `verify:live` command checks readiness without writes. `test:live` runs the two-account browser workflows against an explicitly provided HTTPS origin and creates fictional records; it never reuses local seeded credentials. At the initial validation milestone no public service URL was configured. The October 31 entries and README deployment instructions describe the supplied live URL and subsequent verification.
 
 
 ## October 31, 2026 — Render public demo
@@ -92,3 +92,16 @@ Cards contain static membership information and expiration, with no scan flow. F
 ## Version 1.3 dashboard actions
 
 100 component/API tests (28 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass. Checks cover all four card actions, active-filter requests and reload/Back behavior, invalid URL filters, payments graph selection/focus/scroll, keyboard operation, reduced motion, mobile layout and exactly eight advertised sample identities. Atlas has the expanded 48-person/six-club dataset; a private backup confirms 212 memberships, 465 events, 1,150 payments and 2010 history. Live UI verification follows publication.
+
+
+## October 31, 2026 — Final review
+
+The initial default `npm run check` passed 99 of 100 tests but failed the notification configuration test because `loadConfig()` read `DEMO_MODE=true` from the developer's private `.env` while the test selected `clubos_test`. An environment-isolated rerun passed all 100 tests, lint, types, builds and both compiled smoke checks. The correction replaces that test's environment loading with explicit `parseConfig()` fixtures; it does not change runtime configuration. Both five-test targeted runs passed with sample mode enabled and disabled. The default full command then passed all 100 tests, lint, types, builds and both compiled smoke checks without environment overrides.
+
+All ten Chrome/Firefox browser scenarios passed on the reviewed v1.3.0 implementation with tracked screenshot regeneration disabled. They cover the complete disposable administrator/member workflow, cards, fees, events, navigation, URL filters, graph actions and eight advertised identities. Screenshot artifacts from older milestones remain historical captures.
+
+The read-only live probe passed for `https://andreys-club-os.onrender.com`: database readiness, production assets, direct SPA routes, security headers and API 404 behavior. Earlier October 31 authenticated live checks verified the four dashboard actions, active-filter reload, payments selection/scroll, mobile overflow, the eight sample choices, six accessible clubs and Maya’s 17 payments beginning in 2010. These are read-only UI results, not a claim that the full create/pay/register/check-in walkthrough has been performed against production. Live notifications report `disabled`; actual inbox delivery remains unverified.
+
+A read-only check of the configured local `ClubOS-DB` confirmed 48 users, six clubs, 212 memberships, 465 events and 1,150 payments. The local URI is `mongodb://127.0.0.1:27017/ClubOS-DB`; local and hosted databases are independent unless explicitly configured to share a URI. Tests use disposable data and do not reset either application database.
+
+**Dependency audit:** `npm audit` reported 12 moderate development-tooling findings in the ESLint/TypeScript-ESLint/minimatch dependency chain. `npm audit --omit=dev` reported zero production findings; there were no high or critical findings. Dependency versions were not changed in this cleanup, and the development findings remain outstanding.

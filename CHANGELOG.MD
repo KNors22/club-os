@@ -6,6 +6,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Fixed
 
+- Final documentation now reflects v1.3 validation counts, local MongoDB setup, public configuration and scoped APIs, current deployment evidence, and the remaining live acceptance and development-dependency audit findings. The obsolete deployment-guide link is corrected.
 - Notification configuration tests use explicit parser fixtures instead of loading a developer's private `.env`, so enabling local sample mode no longer breaks the test-database validation.
 
 ### Planned
@@ -27,7 +28,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 - Root/client/server and lockfile versions align at 1.3.0. README, release notes and devlog describe the actions and login choices.
 - 100 component/API tests (28 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass from isolated snapshots.
-- The v1.2 dataset is present in Atlas: 48 people, six clubs, 212 memberships, 465 events and 1,150 payments, beginning in 2010. Local access and a private backup were verified. Version 1.3 changes the advertised account list without removing these records. Live UI verification follows publication.
+- The v1.2 dataset is present in Atlas: 48 people, six clubs, 212 memberships, 465 events and 1,150 payments, beginning in 2010. Local access and a private backup were verified. Version 1.3 changes the advertised account list without removing these records. Post-publication authenticated checks on October 31 verified dashboard actions, active-filter refresh, payments selection/scroll, eight sample choices, mobile layout, six clubs and 2010 history. The read-only readiness probe also passes; full production-write acceptance and actual inbox delivery remain unverified.
 
 [Full Changelog](https://github.com/KNors22/club-os/compare/v1.2.0...v1.3.0)
 

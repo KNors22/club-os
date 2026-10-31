@@ -74,6 +74,15 @@ Use `alex@clubos` to open Riverside Running Club, then find **Maya Desai** under
 
 See the [sample-data guide](docs/sample-data.md), [populated dashboard](docs/screenshots/sample-data-dashboard.png), and [historical payments](docs/screenshots/sample-data-history.png). Shared `@clubos` addresses are sign-in identities, not mailboxes; seeding sends no email.
 
+For an independent local database, use these root `.env` settings and restart `npm run dev`:
+
+```dotenv
+MONGODB_URI=mongodb://127.0.0.1:27017/ClubOS-DB
+DEMO_MODE=true
+```
+
+`DEMO_MODE=true` displays the eight sample sign-in choices and enables missing-record initialization. The local MongoDB database and the hosted Atlas database are separate unless you deliberately configure the same URI.
+
 ### Save a membership card
 
 Sign in as a member, open the club, then choose **My membership → Save card (PNG)**. Your browser downloads a 2160×1360 image containing your current name, club, membership ID, validity, and exact expiration in Eastern time. You can save it on your device or print it.
@@ -110,7 +119,9 @@ See [desktop](docs/screenshots/v1-dashboard-desktop.png) and [mobile](docs/scree
 
 API tests use disposable MongoDB data. On Homebrew macOS they use an installed `mongod`; otherwise `mongodb-memory-server` downloads a binary on first run. Set `MONGOMS_SYSTEM_BINARY` to use an existing binary. CI uses a MongoDB service via `TEST_MONGODB_URI`, which must select the database `clubos_test` to prevent deletion of application data.
 
-Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. The v1 release passes 79 component/API tests, ten Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
+Browser tests start their own disposable database and servers. QA uses API port 3100 and frontend port 5174, separately from normal development on 3000/5173; keep the QA ports free. Chrome must be installed. Alternatively, run `npx playwright install chromium` and set `PLAYWRIGHT_CHANNEL=chromium`. For Firefox, run `npx playwright install firefox`, then `PLAYWRIGHT_FIREFOX=1 npm run test:browser`. Set `CAPTURE_SCREENSHOTS=1` to regenerate the documented desktop/mobile screenshots. Version 1.3.0 passes 100 component/API tests (28 frontend and 72 backend), ten Chrome/Firefox scenarios, and compiled production/startup-restart smoke checks. GitHub Actions also runs Chromium/Firefox acceptance and retains reports/traces as artifacts. The [validation guide](docs/validation.md) records coverage and remaining live checks.
+
+The final review found 12 moderate development-tooling audit findings in the ESLint/TypeScript-ESLint/minimatch chain. `npm audit --omit=dev` reports zero production findings; no high or critical findings were reported. See the dated [validation evidence](docs/validation.md) for the audit scope and outstanding live acceptance.
 
 ## Technologies Used
 
@@ -129,8 +140,8 @@ club-os/
 │   ├── src/                # Routes, services, validation, models, configuration
 │   └── test/               # API tests and disposable browser QA server
 ├── e2e/                    # Complete browser workflow
-├── docs/                   # Architecture, wireframes, deployment, devlog
-├── scripts/                # Environment setup
+├── docs/                   # Architecture, sample data, validation, releases, devlog
+├── scripts/                # Environment setup and live readiness
 ├── .github/workflows/      # CI checks
 ├── .env.example
 └── render.yaml
@@ -140,11 +151,13 @@ club-os/
 
 Configured for one Render Free web service and MongoDB Atlas. Production requires a private MongoDB URI selecting `ClubOS-DB` and a random session secret. The app uses Render's supplied HTTPS URL unless `APP_URL` explicitly overrides it. Express serves the built frontend and API together, including direct client-route links.
 
-Follow the [Render configuration](render.yaml), then run the readiness probe and live browser workflow against `https://andreys-club-os.onrender.com`. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
+Use the repository root as the service root, build with `npm ci --include=dev && npm run build`, start with `npm start`, and use `/api/health` as the health check. Configure `MONGODB_URI` and `SESSION_SECRET` privately in the service; the session secret needs at least 32 characters. Allow the service's outbound addresses in Atlas Network Access. The [Render configuration](render.yaml) supplies the remaining defaults and requests deployment after successful GitHub checks. A manually created service must have matching settings.
+
+Run `npm run verify:live -- https://andreys-club-os.onrender.com` for a read-only readiness probe. `APP_LIVE_URL=<https-origin> npm run test:live` creates fictional records and should be run deliberately against the intended service. The [submission guide](docs/submission.md) includes the demo script and the remaining live acceptance steps. Hosting credentials and email secrets belong in private environment variables.
 
 ## Development Notes
 
-See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlog.md), [v1 release notes](docs/releases/v1.0.0.md), and [release history](CHANGELOG.MD). Entries record actual work and verification, without inventing separate development evenings or deployment results.
+See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlog.md), [latest release notes](docs/releases/v1.3.0.md), and [release history](CHANGELOG.MD). Entries record actual work and verification, without inventing separate development evenings or deployment results.
 
 ## Future Improvements
 

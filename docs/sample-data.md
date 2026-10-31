@@ -17,7 +17,7 @@ A fresh seed anchored on October 31, 2026 contains **48 people, six clubs, 212 m
 
 ## Sign in
 
-The public login page offers **Try administrator**, **Try member**, and **Explore another account**. The selector offers only **alex, jordan, taylor, morgan, maya, noah, olivia, and ethan**. Use `alex@clubos` to manage Riverside Running Club, `jordan@clubos` for its active member, `taylor@clubos` for unpaid membership, for the unpaid scenario. Open Maya Desai from the administrator's member list to see renewals dating to 2010. Maya, Noah, Olivia, Ethan, and Morgan administer the other clubs.
+The public login page offers **Try administrator**, **Try member**, and **Explore another account**. The selector offers only **alex, jordan, taylor, morgan, maya, noah, olivia, and ethan**. Use `alex@clubos` to manage Riverside Running Club, `jordan@clubos` for its active member, and `taylor@clubos` for unpaid membership. Open Maya Desai from the administrator's member list to see renewals dating to 2010. Maya, Noah, Olivia, Ethan, and Morgan administer the other clubs.
 
 The existing configured public password remains **`ClubOSDemo2026!`** unless overridden by `DEMO_PASSWORD`. Environment names retain compatibility with the existing Render service. Shared fictional accounts and visitor edits are public; ordinary accounts retain their own credentials.
 
@@ -77,7 +77,7 @@ The full seeded member catalog is listed below; it is separate from the eight lo
 ## Seed the local project or hosted database
 
 1. Run `npm ci` and `npm run setup`.
-2. Set the ignored root `.env` variable `MONGODB_URI` to a reachable database selecting exactly `ClubOS-DB`. The existing local project uses Atlas; when local and hosted configurations select that same database, both see the same records.
+2. Set the ignored root `.env` variable `MONGODB_URI` to a reachable database selecting exactly `ClubOS-DB`. For a local MongoDB instance, use `mongodb://127.0.0.1:27017/ClubOS-DB`. Render uses its separately configured Atlas database. Use an Atlas URI locally only when you deliberately want to share those hosted records.
 3. Run **`npm run seed`**, then `npm run dev`. The earlier `npm run seed:demo` command remains an alias.
 4. On Render, the existing public mode automatically runs the same seed before serving requests. `DEMO_MODE=true` enables it locally; `DEMO_MODE=false` disables automatic initialization.
 

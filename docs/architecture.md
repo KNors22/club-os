@@ -2,7 +2,7 @@
 
 ## Goal and boundaries
 
-Prove the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. Phase 2 extends this flow with received payments, renewals, capacity-limited events, manual attendance, and optional demo-inbox notifications.
+The application implements the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. The implemented club workflows include received payments, renewals, capacity-limited events, manual attendance, and optional demo-inbox notifications.
 
 ## Architecture and state
 
@@ -40,9 +40,11 @@ erDiagram
 | Membership | Organization/user references, validity dates, embedded payment/renewal history, timestamps; unique `(organizationId, userId)` |
 | Event | Organization/creator references, details, start time, capacity, embedded registrations and check-in timestamps |
 
-Clubs have one paid plan, with positive fees up to CAD 10,000 and terms of 1–1095 days. Creation does not enroll the administrator as a paid member. Joining inserts a pending membership. Null expiration means pending; expiration later than now means active; expiration at or before now means expired. Timestamps use UTC; dates display in the browser's time zone.
+Clubs have one paid plan, with positive fees up to CAD 10,000 and terms of 1–1095 days. Creation does not enroll the administrator as a paid member. Joining inserts a pending membership. Null expiration means pending; expiration later than now means active; expiration at or before now means expired. Timestamps use UTC. Ordinary date displays use the browser's time zone; monthly analytics and membership-card expiration displays explicitly use Eastern time.
 
-Club creation and joining each require one document write. Database indexes prevent concurrent duplicate registrations and joins. Payments and validity changes share one membership document. Registrations and attendance share one event document. These additive fields default to empty arrays for existing records; startup does not reset data.
+Club creation and joining each require one document write. Unique indexes prevent duplicate account emails and club/user memberships. Conditional single-document updates prevent duplicate event registrations and enforce capacity atomically. Payments and validity changes share one membership document. Registrations and attendance share one event document. These additive fields default to empty arrays for existing records; startup does not reset data.
+
+The internal `SeedState` model stores the versioned sample-data reference date. The seed uses fixed IDs, preflight identity/ownership checks and insert-only writes to preserve edits, histories and dates on repeat runs. Mongo-backed sessions are stored separately from the domain records.
 
 ## API and authorization
 
@@ -57,11 +59,13 @@ Club creation and joining each require one document write. Database indexes prev
 | `POST /api/organizations` | Create club using name, description, feeCents, termDays |
 | `POST /api/organizations/join` | Join with joinCode |
 | `GET /api/organizations/:orgId` | Return authorized club; join code only for administrator |
+| `PATCH /api/organizations/:orgId` | Administrator fee update with expected-fee concurrency protection |
 | `GET /api/organizations/:orgId/memberships/me` | Own membership; null for un-enrolled administrator |
+| `GET /api/organizations/:orgId/memberships/me/card` | Current own card snapshot and refreshed membership; unpaid cards receive 409 |
 | `GET /api/organizations/:orgId/memberships` | Administrator-only search/status/page/limit listing |
-| `GET /api/organizations/:orgId/dashboard` | Administrator-only total/active/expired/pending counts |
+| `GET /api/organizations/:orgId/dashboard` | Administrator-only membership, payment, renewal and event summaries, monthly analytics, and upcoming events |
 | `GET /api/health` | Database readiness |
-| `GET /api/config` | Public notification mode only; no secrets or recipient address |
+| `GET /api/config` | Notification mode and, when public sample mode is enabled, the intentionally shared password and eight advertised identities; private secrets and email recipient are excluded |
 | `GET /api/organizations/:orgId/memberships/:membershipId` | Administrator member details and payment history |
 | `POST /api/organizations/:orgId/memberships/:membershipId/payments` | Administrator records a received full-fee payment with request ID |
 | `GET/POST /api/organizations/:orgId/events` | Authorized paginated listing / administrator creation |
@@ -72,7 +76,7 @@ Club creation and joining each require one document write. Database indexes prev
 
 Every scoped read checks organization ownership/membership on the server. Unrelated accounts receive 404; known members requesting administrator information receive 403. Owning one club grants no privileges in another. Member responses exclude other members' records and join codes.
 
-Success responses use named objects: `{ user }`, `{ organization }`, `{ membership }`, `{ memberships, pagination }`, or `{ counts }`. Errors use `{ error: { code, message, fields? } }`. Strict body schemas reject unknown privileged fields. Search text is escaped before use in regular expressions.
+Success responses use named objects: `{ user }`, `{ organization }`, `{ membership }`, `{ memberships, pagination }`, or `{ counts }`. Dashboard responses also include `payments`, `renewals`, `events`, `analytics` and `upcomingEvents`; card snapshots return `{ card, membership }`. Errors use `{ error: { code, message, fields? } }`. Strict body schemas reject unknown privileged fields. Search text is escaped before use in regular expressions.
 
 Sessions live in MongoDB for seven days. Cookies are HttpOnly, SameSite=Lax, and Secure in production. Authentication regenerates and explicitly saves the session before responding. Production trusts the single Render reverse-proxy hop. Unsafe API requests require the configured Origin and JSON content. Authentication is limited to 20 attempts per IP per 15 minutes. Helmet supplies browser security headers; API responses are not cached. Passwords use bcrypt with both character and UTF-8 byte limits validated.
 
@@ -110,9 +114,9 @@ Registration requires current active membership and an upcoming event. One condi
 
 Dashboard aggregates are scoped by organization. They include confirmed payment totals, pending initial fees, active memberships expiring within 30 days, event registrations, and attendance. Pending initial fees do not assume expired members owe a renewal.
 
-Notification services run after persistence and send plain-text HTTPS requests to Resend with a five-second timeout. The server overrides recipients with the configured demo inbox and uses persisted action identifiers as provider idempotency keys. Failure is returned as a separate delivery notice. Public configuration exposes only demo/disabled mode. Background queues, automatic retries, and delivery tracking are deferred.
+Notification services run after persistence and send plain-text HTTPS requests to Resend with a five-second timeout. The server overrides recipients with the configured demo inbox and uses persisted action identifiers as provider idempotency keys. Failure is returned as a separate delivery notice. Public configuration exposes demo/disabled notification mode and optional public sample credentials; it excludes private email settings. Background queues, automatic retries, and delivery tracking are deferred.
 
-Phase 2 screens add member detail/payment forms, personal history, event creation/browsing/details, participant check-in, dashboard summaries, and notification notices. Browser QA covers both administrator and member roles on desktop and mobile in Chrome and Firefox using disposable data and separate QA ports.
+The implemented club-workflow screens include member detail/payment forms, personal history, event creation/browsing/details, participant check-in, dashboard summaries, and notification notices. Browser QA covers both administrator and member roles on desktop and mobile in Chrome and Firefox using disposable data and separate QA ports.
 
 
 ## Administrator fee changes
@@ -130,3 +134,8 @@ The administrator-only dashboard response includes twelve zero-filled calendar m
 `GET /api/organizations/:orgId/memberships/me/card` requires an authenticated club member and reads only that user's membership. It returns `{ card, membership }` with the current profile name, club name, membership ID, validity dates, current status, and issue time. The refreshed membership includes its existing payment history for the page; the card DTO excludes email, join codes, and payment information. Unpaid memberships receive 409 until activated; expired memberships retain their real dates and expired status. Administrators without a membership receive 404. Responses inherit API `Cache-Control: no-store`.
 
 The member page renders a native canvas preview and an accessible text summary. Saving fetches a new authenticated snapshot, updates the page with its latest validity/history, and generates a 2160×1360 PNG using only system fonts and vector paths. Full names wrap without ellipses; dates include Eastern-time precision, and the image marks active-at-issue or expired status. Unpaid downloads are disabled. Static cards must be saved again after renewal. Requests/downloads are cancelled when leaving the page, repeated clicks are blocked, and network/image failures remain retryable. No scanning or QR code is needed.
+
+
+## Overview navigation and member URL state
+
+The four administrator cards use native links/buttons: Total members opens the member list, Active members adds `?status=active`, Upcoming events opens events, and Payments received selects the payments metric and scrolls/focuses Club insights. Reduced motion uses immediate scrolling. Member search, status and page are URL state; search/status changes reset pagination and browser history restores previous filters. These shortcuts retain the same server-side club authorization as direct page visits.
