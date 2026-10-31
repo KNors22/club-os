@@ -1,5 +1,7 @@
 # Validation evidence
 
+**Current email status:** Email integration is an incomplete future feature and is not part of the delivered MVP. Preliminary transport code and mocked provider tests do not constitute a completed integration. Live notifications are disabled. Historical notification results below describe prototype/mocked behavior only.
+
 ## October 30, 2026 — local validation
 
 All checks use disposable data. No real membership database was reset or seeded during verification.
@@ -11,7 +13,7 @@ All checks use disposable data. No real membership database was reset or seeded 
 | Memberships and money | Pending/active/expired boundaries, full payments, early/expired renewals, duplicate/concurrent submissions, history, and changed-fee renewals |
 | Fee editing | Administrator-only updates, integer CAD bounds, stale concurrent edits, retained form input, shared club state, unchanged historical amounts/validity |
 | Events | Duplicate registration, last-place concurrency, cancellation, repeated check-in, and cancellation/check-in races |
-| Notifications | Mocked demo recipient, successful provider response, timeout/failure persistence, no duplicate payment resend, and credential-free public configuration |
+| Email prototype (incomplete) | Mocked provider responses, recipient override, timeout/failure persistence and duplicate suppression; these tests do not demonstrate completed email integration |
 | Demo records | Dedicated database guard, useful scenarios, non-destructive reruns with unchanged timestamps, unchanged passwords, and reserved-address collision rejection |
 | UI | Loading/empty/failure states, form labels, account redirects, mobile overflow, keyboard focus containment, Escape, direct routes, and unknown routes |
 
@@ -100,7 +102,7 @@ The initial default `npm run check` passed 99 of 100 tests but failed the notifi
 
 All ten Chrome/Firefox browser scenarios passed on the reviewed v1.3.0 implementation with tracked screenshot regeneration disabled. They cover the complete disposable administrator/member workflow, cards, fees, events, navigation, URL filters, graph actions and eight advertised identities. Screenshot artifacts from older milestones remain historical captures.
 
-The read-only live probe passed for `https://andreys-club-os.onrender.com`: database readiness, production assets, direct SPA routes, security headers and API 404 behavior. Earlier October 31 authenticated live checks verified the four dashboard actions, active-filter reload, payments selection/scroll, mobile overflow, the eight sample choices, six accessible clubs and Maya’s 17 payments beginning in 2010. These are read-only UI results, not a claim that the full create/pay/register/check-in walkthrough has been performed against production. Live notifications report `disabled`; actual inbox delivery remains unverified.
+The read-only live probe passed for `https://andreys-club-os.onrender.com`: database readiness, production assets, direct SPA routes, security headers and API 404 behavior. Earlier October 31 authenticated live checks verified the four dashboard actions, active-filter reload, payments selection/scroll, mobile overflow, the eight sample choices, six accessible clubs and Maya’s 17 payments beginning in 2010. These are read-only UI results, not a claim that the full create/pay/register/check-in walkthrough has been performed against production. Live notifications report `disabled`; email integration is a future feature and has not been completed.
 
 A read-only check of the configured local `ClubOS-DB` confirmed 48 users, six clubs, 212 memberships, 465 events and 1,150 payments. The local URI is `mongodb://127.0.0.1:27017/ClubOS-DB`; local and hosted databases are independent unless explicitly configured to share a URI. Tests use disposable data and do not reset either application database.
 

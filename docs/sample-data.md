@@ -89,4 +89,4 @@ The first run saves a reference date in `seedstates`. Relative membership/event 
 
 The five original starter IDs are retained. Their known old addresses become `alex@clubos`, `jordan@clubos`, `taylor@clubos`, `casey@clubos`, and `morgan@clubos`. Only exact original default names, club/event labels, and payment references are renamed; edited names and existing histories survive. Existing joined relationships are reused. Reserved identity, join-code, and ownership collisions stop initialization before unrelated records or credentials can be changed.
 
-There is no reset or delete-data command. Keep database credentials and backups outside source control. Production email operations still send only to the privately configured recipient.
+There is no reset or delete-data command. Keep database credentials and backups outside source control. Email integration is an incomplete future feature; the preliminary notification prototype is not a completed production capability.

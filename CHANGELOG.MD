@@ -2,7 +2,13 @@
 
 All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/).
 
+**Email status:** email integration is an incomplete future feature. Historical notification entries describe preliminary transport and mocked tests, not a completed delivered integration.
+
 ## [Unreleased]
+
+### Changed
+
+- Documentation classifies email integration as an incomplete future feature, removes it from delivered features/MVP and the current demonstration, and distinguishes preliminary transport/mocked tests from a completed integration.
 
 ### Fixed
 
@@ -11,7 +17,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Planned
 
-- Verify real confirmation delivery to the demo inbox with private Resend credentials.
+- Complete email integration as a future feature; it has not been completed and is outside the delivered MVP.
 
 [Full Changelog](https://github.com/KNors22/club-os/compare/v1.3.0...HEAD)
 
@@ -28,7 +34,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 - Root/client/server and lockfile versions align at 1.3.0. README, release notes and devlog describe the actions and login choices.
 - 100 component/API tests (28 frontend, 72 backend), lint, types, builds, both compiled smoke checks and ten Chrome/Firefox scenarios pass from isolated snapshots.
-- The v1.2 dataset is present in Atlas: 48 people, six clubs, 212 memberships, 465 events and 1,150 payments, beginning in 2010. Local access and a private backup were verified. Version 1.3 changes the advertised account list without removing these records. Post-publication authenticated checks on October 31 verified dashboard actions, active-filter refresh, payments selection/scroll, eight sample choices, mobile layout, six clubs and 2010 history. The read-only readiness probe also passes; full production-write acceptance and actual inbox delivery remain unverified.
+- The v1.2 dataset is present in Atlas: 48 people, six clubs, 212 memberships, 465 events and 1,150 payments, beginning in 2010. Local access and a private backup were verified. Version 1.3 changes the advertised account list without removing these records. Post-publication authenticated checks on October 31 verified dashboard actions, active-filter refresh, payments selection/scroll, eight sample choices, mobile layout, six clubs and 2010 history. The read-only readiness probe also passes; full production-write acceptance remains unverified. Email integration is unfinished future work, not a completed capability.
 
 [Full Changelog](https://github.com/KNors22/club-os/compare/v1.2.0...v1.3.0)
 
@@ -167,7 +173,7 @@ All notable changes follow [Keep a Changelog](https://keepachangelog.com/en/1.0.
 
 ### Added
 
-- Membership activation/renewal and event-registration confirmations through Resend's HTTPS API, routed exclusively to the configured demo inbox after persistence.
+- Preliminary Resend HTTPS transport for membership/event confirmations, with a configured test recipient after persistence. This prototype and its mocked tests do not constitute completed email integration.
 - Bounded email timeouts, clear disabled/failure notices, and duplicate-payment confirmation suppression. Delivery failure preserves the successful payment or registration.
 - Chrome/Firefox acceptance tests for payment, renewal, registration, cancellation, attendance, and dashboard workflows, including desktop/mobile layouts and screenshots.
 - Separate disposable QA ports, updated usage/deployment instructions, architecture documentation, and dated devlog results.

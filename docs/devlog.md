@@ -1,5 +1,7 @@
 # ClubOS development log
 
+**Current email status:** Email integration is an incomplete future feature and is not part of the delivered MVP. Preliminary transport code and mocked provider tests do not constitute a completed integration. Historical notification notes describe preliminary prototype work; live notifications are disabled.
+
 ## Week of October 26, 2026
 
 ### October 29 — Foundation checkpoints
@@ -46,10 +48,10 @@ Changes were implemented and verified in focused commits:
 - Responsive event screens support event creation, paginated browsing, membership-aware registration, cancellation, and administrator participant lists with loading and failure states.
 - Administrators can check in registered participants from event details. Check-in retries preserve the original timestamp, and atomic updates keep cancellation and attendance consistent under concurrent requests.
 - Administrator dashboards show confirmed payment totals, initial fees awaiting confirmation, renewals due within 30 days, upcoming events, registrations, and attendance. Aggregations remain scoped to the selected club.
-- Membership payments and event registrations send Resend HTTPS confirmations to the configured demo inbox after persistence. Timeouts and provider failures return clear notices without rolling back records, duplicate payments do not resend, and public configuration exposes no credentials.
+- Preliminary notification scaffolding attempts Resend HTTPS confirmations after persistence when configured; email integration is not completed and remains future work. Timeouts and provider failures return clear notices without rolling back records, duplicate payments do not resend, and public configuration exposes no credentials.
 - Chrome and Firefox acceptance tests verify payment, renewal, registration, cancellation, attendance, and dashboard workflows on desktop and mobile. Isolated QA ports, screenshots, usage instructions, deployment notes, and the dated devlog document the completed behavior.
 
-Each code commit passes lint, TypeScript, unit/API tests, builds, and compiled-server smoke checks before it is committed. Provider delivery is tested with mocks; actual email requires the configured Resend API key and demo inbox.
+Each code commit passes lint, TypeScript, unit/API tests, builds, and compiled-server smoke checks before it is committed. Provider transport behavior is tested with mocks; end-to-end email integration has not been completed and is deferred to future work.
 
 **Browser verification:** Foundation and full club-workflow scenarios passed in installed Chrome and Firefox (four scenarios), including desktop/mobile layouts, payment, renewal, cancellation, registration, check-in, and dashboard totals. QA uses disposable data on ports 3100/5174.
 
@@ -277,3 +279,8 @@ const state = await SeedState.findOneAndUpdate(
 **Final evidence:** ten Chrome/Firefox scenarios passed during the review with screenshot regeneration disabled. The read-only live readiness probe passed and reported notifications disabled. A read-only local database check confirmed 48 users, six clubs, 212 memberships, 465 events and 1,150 payments. The two targeted configuration runs and default full check pass after the narrow test correction. `npm audit` reported 12 moderate development-tooling findings around ESLint/TypeScript-ESLint/minimatch, with zero production findings under `npm audit --omit=dev` and no high/critical findings. The development findings remain outstanding; dependency versions were not changed.
 
 Version stays at 1.3.0. The cleanup changes one test and documentation only; no application features, database migrations or new release tags are introduced. Publication uses the two focused test/documentation commits and the existing CI-gated Render deployment, followed by the read-only readiness probe.
+
+
+### October 31, 2026 — Email scope clarification
+
+Email integration is explicitly classified as a future feature that has not been completed. Preliminary Resend transport code, configuration validation and provider mocks are prototype work, not a delivered end-to-end capability. The live service reports notifications disabled. Documentation removes email integration from the current feature list, delivered MVP and demonstration, and records it as future completion work. This is a documentation clarification only; runtime code and configuration are unchanged.

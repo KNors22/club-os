@@ -2,7 +2,7 @@
 
 ## Goal and boundaries
 
-The application implements the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. The implemented club workflows include received payments, renewals, capacity-limited events, manual attendance, and optional demo-inbox notifications.
+The application implements the account → club → member workflow: an administrator creates a club, a second account joins, the administrator sees that member, and the member sees only their own membership. Another club remains inaccessible. The implemented club workflows include received payments, renewals, capacity-limited events, and manual attendance. Email integration is an incomplete future feature; preliminary notification scaffolding is not a delivered integration.
 
 ## Architecture and state
 
@@ -114,7 +114,11 @@ Registration requires current active membership and an upcoming event. One condi
 
 Dashboard aggregates are scoped by organization. They include confirmed payment totals, pending initial fees, active memberships expiring within 30 days, event registrations, and attendance. Pending initial fees do not assume expired members owe a renewal.
 
-Notification services run after persistence and send plain-text HTTPS requests to Resend with a five-second timeout. The server overrides recipients with the configured demo inbox and uses persisted action identifiers as provider idempotency keys. Failure is returned as a separate delivery notice. Public configuration exposes demo/disabled notification mode and optional public sample credentials; it excludes private email settings. Background queues, automatic retries, and delivery tracking are deferred.
+### Email integration prototype — future feature, not completed
+
+Email integration is unfinished and outside the delivered MVP. Preliminary transport code can attempt Resend HTTPS requests after persistence with a five-second timeout, a configured test recipient and provider idempotency keys. Mocked tests exercise that prototype and its failure notices; they do not establish a completed end-to-end email integration. The deployed service reports notifications disabled. Completing membership and event confirmation emails is future work.
+
+Public configuration still exposes the prototype's demo/disabled notification mode and optional public sample credentials; it excludes private email settings.
 
 The implemented club-workflow screens include member detail/payment forms, personal history, event creation/browsing/details, participant check-in, dashboard summaries, and notification notices. Browser QA covers both administrator and member roles on desktop and mobile in Chrome and Firefox using disposable data and separate QA ports.
 

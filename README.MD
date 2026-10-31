@@ -4,7 +4,7 @@
 
 ClubOS is a student club management application inspired by administrative workflows at the McGill Students Running Club. It gives executives and members a shared home for their communities.
 
-**Status: v1.3.0 actionable dashboard.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Real demo-inbox delivery remains a separate configuration/verification step. See the [Render configuration](render.yaml), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
+**Status: v1.3.0 actionable dashboard.** [Open ClubOS](https://andreys-club-os.onrender.com). The service uses Atlas-backed records and sessions; free-service startup can take about a minute. Email integration is a future feature that has not been completed. See the [Render configuration](render.yaml), [submission guide](docs/submission.md), and [validation evidence](docs/validation.md).
 
 ## Features
 
@@ -20,7 +20,6 @@ ClubOS is a student club management application inspired by administrative workf
 - Administrator recording of received payments, membership activation/renewal, and payment history.
 - Events with capacity limits, active-member registration, cancellation, and manual check-in.
 - Club-scoped payment, renewal, event, and attendance dashboard summaries.
-- Optional Resend confirmations routed exclusively to a configured demo inbox; delivery failures preserve successful changes.
 
 The creator is a club's sole administrator and is not automatically enrolled as a paid member. Joining creates an unpaid membership. An administrator records the full membership fee after receiving it. Active memberships extend from their expiration; pending or expired memberships start when the administrator records the payment. Each payment request has an identifier to prevent a retry from renewing twice. ClubOS records manual payments; it does not collect money online.
 
@@ -65,6 +64,10 @@ For the public sample data, sign in as **`alex@clubos`** or **`jordan@clubos`**,
 6. As member, open the event and register. Try cancellation and registration again.
 7. As administrator, open the event's participant list and choose **Check in**. Refresh the overview to see payment, membership, registration, and attendance totals.
 8. Update a name under **My account**. Create another club and confirm unrelated accounts cannot access its records.
+
+### Email integration — future feature, not completed
+
+Email integration has not been completed and is outside the delivered MVP. The repository contains preliminary notification transport code and mocked provider tests only. Membership activation/renewal and event-registration confirmation emails are future work; the live service has notifications disabled.
 
 ### Historical sample data
 
@@ -129,7 +132,7 @@ The final review found 12 moderate development-tooling audit findings in the ESL
 - **Backend:** Node.js, Express, Zod, bcryptjs, express-session, connect-mongo, Helmet, express-rate-limit.
 - **Database:** MongoDB and Mongoose, with unique account and membership indexes.
 - **Validation:** Vitest, Supertest, Testing Library, Playwright.
-- **Delivery:** Resend HTTPS API, GitHub Actions, and a Render deployment blueprint.
+- **Delivery:** GitHub Actions and a Render deployment blueprint.
 
 ## Project Structure
 
@@ -161,7 +164,7 @@ See the [architecture and wireframes](docs/architecture.md), [devlog](docs/devlo
 
 ## Future Improvements
 
-- Verification of real demo-inbox delivery with Resend credentials.
+- Complete email integration (future feature; not completed). Preliminary Resend transport code and mocked tests exist, but end-to-end confirmation emails are not a delivered capability.
 - QR scanning/check-in, exports, announcements, scheduled reminders, and multiple plans.
 - Administrator invitations and password recovery.
 
